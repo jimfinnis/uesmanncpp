@@ -9,6 +9,8 @@
 
 #include <math.h>
 
+#include "data.h"
+
 inline double sigmoid(double x){
     return 1.0/(1.0+exp(-x));
 }
@@ -72,7 +74,11 @@ protected:
     }
     
     
+    /**
+     * Train using stochastic gradient descent.
+     */
     
+//    void trainSGD(
 };    
     
     

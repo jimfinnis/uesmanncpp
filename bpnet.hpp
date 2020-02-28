@@ -271,6 +271,78 @@ protected:
             }
         }
     }
+    
+    /**
+     * Train a network for batch (or mini-batch) (or single example).
+     * All training will take place at 
+     * This will 
+     * - zero the average gradient variables for all weights and biases
+     * - zero the total error
+     * - for each example
+     *    - calculate the error with calcError() which itself calls update()
+     *    - add to the total mean squared error (see NOTE below)
+     * - for each weight and bias
+     *    - calculate the means across all provided examples
+     *    - apply the mean to the weight or bias
+     * - return the total of the mean squared errors (NOTE: different from original, which returned
+     *   mean absolute error) for each output.
+     * 
+     * \param num     number of examples. For a single example, you'd just use 1.
+     * \param in      for an array of pointers, one for each example. Each points to an array
+     *                of doubles which constitute the inputs. 
+     * \param out     an array of pointers to doubles to write the output layer on completion.
+     * \return        the mean squared error the output layer
+     */
+    
+    double trainBatch(int num,double **in, double **out) {
+        // zero average gradients
+        for(int j=0;j<numLayers;j++){
+            for(int k=0;k<layerSizes[j];k++)
+                gradAvgsBiases[j][k]=0;
+            for(int i=0;i<largestLayerSize*largestLayerSize;i++)
+                gradAvgsWeights[j][i]=0;
+        }
+        
+        // reset total error
+        double totalError=0;
+        // iterate over examples
+        for(int nn=0;nn<num;nn++){
+            // build errors for each example
+            calcError(in[nn],out[nn]);
+            
+            // accumulate errors
+            for(int l=1;l<numLayers;l++){
+                for(int i=0;i<layerSizes[l];i++){
+                    for(int j=0;j<layerSizes[l-1];j++)
+                        getavggradw(l,i,j) += errors[l][i]*outputs[l-1][j];
+                    gradAvgsBiases[l][i] += errors[l][i];
+                }
+            }
+            // count up the total error
+            int ol = numLayers-1;
+            for(int i=0;i<layerSizes[ol];i++){
+                double o = outputs[ol][i];
+                double e = (o-out[nn][i]);
+                totalError += e*e;
+            }
+        }
+        
+        // for calculating average error - 1/number of examples trained
+        double factor = 1.0/(double)num;
+        // we now have a full set of running averages. Time to apply them.
+        for(int l=1;l<numLayers;l++){
+            for(int i=0;i<layerSizes[l];i++){
+                for(int j=0;j<layerSizes[l-1];j++){
+                    double wdelta = eta*getavggradw(l,i,j)*factor;
+                    getw(l,i,j) -= wdelta;
+                }
+                double bdelta = eta*gradAvgsBiases[l][i]*factor;
+                biases[l][i] -= bdelta;
+            }
+        }
+        // and return total error - this is the SUM of the MSE of each output
+        return totalError*factor;
+    }
 };
 
 
