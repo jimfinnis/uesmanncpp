@@ -9,6 +9,12 @@
 
 #include "net.hpp"
 
+/**
+ * \brief The "basic" back-propagation network using a logistic sigmoid,
+ * as described by Rumelhart, Hinton and Williams (and many others).
+ * This class is used by output blending and h-as-input networks.
+ */
+
 class BPNet : public Net {
 public:
     /**
@@ -80,7 +86,9 @@ protected:
     int *layerSizes; //!< array of layer sizes
     int largestLayerSize; //!< number of nodes in largest layer
     
-    /// Weights stored as a square matrix, even though less than
+    /// \brief Array of weights as [tolayer][tonode+largestLayerSize*fromnode]
+    ///
+    /// Weights are stored as a square matrix, even though less than
     /// half is used. Less than that, if not all layers are the same
     /// size, since the dimension of the matrix must be the size of
     /// the largest layer. Each array has its own matrix,
@@ -91,7 +99,8 @@ protected:
     /// - j is the FROM neuron (the start)
     double **weights;
     
-    double **biases; // node biases [layer][i]
+    /// array of biases, stored as a rectangular array of [layer][node]
+    double **biases;
     
     // data generated during training and running
     
@@ -273,8 +282,9 @@ protected:
     }
     
     /**
+     * \brief
      * Train a network for batch (or mini-batch) (or single example).
-     * All training will take place at 
+     * 
      * This will 
      * - zero the average gradient variables for all weights and biases
      * - zero the total error
@@ -291,7 +301,7 @@ protected:
      * \param in      for an array of pointers, one for each example. Each points to an array
      *                of doubles which constitute the inputs. 
      * \param out     an array of pointers to doubles to write the output layer on completion.
-     * \return        the mean squared error the output layer
+     * \return        the sum of mean squared errors in the output layer
      */
     
     double trainBatch(int num,double **in, double **out) {

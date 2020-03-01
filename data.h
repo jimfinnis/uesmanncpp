@@ -11,6 +11,7 @@
 #include <stdint.h>
 
 /**
+ * \brief
  * A set of example data. Each datum consists of 
  * hormone (i.e. modulator value), inputs and outputs.
  */
@@ -39,6 +40,7 @@ public:
     
     
     /**
+     * \brief
      * Constructor - creates but doesn't fill in the data
      * and offset arrays
      * \param n    number of examples
@@ -70,6 +72,7 @@ public:
     }
     
     /**
+     * \brief
      * Destructor - deletes data and offset array
      */
     
@@ -79,6 +82,7 @@ public:
     }
     
     /**
+     * \brief
      * Shuffle the example using a PRNG and a Fisher-Yates shuffle
      * \param rd  pointer to a PRNG data block
      */
@@ -96,6 +100,7 @@ public:
     }
     
     /**
+     * \brief get the number of inputs in all examples
      * \return number of inputs into each example
      */
     int getInputCount(){
@@ -103,6 +108,7 @@ public:
     }
     
     /**
+     * \brief get the number of outputs in all examples
      * \return number of outputs from each example
      */
     int getOutputCount(){
@@ -110,6 +116,7 @@ public:
     }
     
     /**
+     * \brief get the number of examples
      * \return number of examples
      */
     int getCount(){
@@ -118,6 +125,7 @@ public:
     
     
     /**
+     * \brief
      * Get a pointer to the inputs for a given example, for reading or writing
      * \param example   index of the example
      */
@@ -128,6 +136,7 @@ public:
     }
     
     /**
+     * \brief
      * Get a pointer to the outputs for a given example, for reading or writing
      * \param example   index of the example
      */
@@ -138,6 +147,7 @@ public:
     }
     
     /**
+     * \brief
      * Get the h (modulator) for a given example
      * \param example   index of the example
      */
@@ -147,6 +157,7 @@ public:
     }
     
     /**
+     * \brief
      * Set the h (modulator) for a given example
      * \param example   index of the example
      * \param h         modulator to use

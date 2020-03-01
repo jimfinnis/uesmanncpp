@@ -4,6 +4,7 @@
  * methods are in each subclass.
  */
 
+
 #ifndef __NET_HPP
 #define __NET_HPP
 
@@ -11,15 +12,29 @@
 
 #include "data.h"
 
+/**
+ * Logistic sigmoid function, which is our activation function
+ */
+
 inline double sigmoid(double x){
     return 1.0/(1.0+exp(-x));
 }
+
+/**
+ * The derivative of the sigmoid function
+ */
 
 inline double sigmoidDiff(double x){
     double s = sigmoid(x);
     return (1.0-s)*s;
 }
 
+/**
+ * \brief 
+ * The abstract network type upon which all others are based.
+ * It's not pure virtual, in that it encapsulates some high
+ * level operations (such as the top-level training algorithm).
+ */
 class Net {
 protected:
     
@@ -76,9 +91,18 @@ protected:
     
     /**
      * Train using stochastic gradient descent.
+     * Note that cross-validation parameters are slightly different from those
+     * given in the thesis. Here we give the number of slices and number of examples
+     * per slice; in the thesis we give the total number of examples to be held out
+     * and the number of slices.
+     * 
      */
     
-//    void trainSGD(
+    void trainSGD(ExampleSet *training, //!< training set (including cross-validation data
+                  int nslices, //!< number of cross-val slices
+                  int nperslice //!< number of examples in each slice
+                  ){}
+                  
 };    
     
     

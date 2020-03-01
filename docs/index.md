@@ -1,3 +1,6 @@
+Main Page   {#mainpage}
+=========
+
 This is the new C++ implementation of UESMANN, based on the original
 code used in my thesis. That code was written as a ```.angso```
 library for the Angort language, and has evolved to become
@@ -14,3 +17,7 @@ in C++ with other languages and platforms as future work.
 
 Implementations of the other network types mentioned in the thesis
 are also included.
+
+The top level class is @ref Net, which is an virtual type describing the neural net interface
+and performing some basic operations. 
+
