@@ -65,7 +65,28 @@ public:
     
     virtual double *getOutputs() = 0;
     
+    /**
+     * \brief Run the network on some data.
+     * \param in pointer to the input double array
+     * \return pointer to the output double array
+     */
+    double *run(double *in){
+        setInputs(in);
+        update();
+        return getOutputs();
+    }
+        
+    
 protected:
+    
+    /**
+     * \brief Run a single update of the network
+     * \pre input layer must be filled with values
+     * \post output layer contains result
+     */
+    
+    virtual void update() = 0;
+        
     
     /**
      * \brief Constructor - protected because others inherit it and it's not used

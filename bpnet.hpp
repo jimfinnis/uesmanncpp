@@ -267,7 +267,7 @@ protected:
      * \post the output member will hold the output values
      */
     
-    void update(){
+    virtual void update(){
         for(int i=1;i<numLayers;i++){
             for(int j=0;j<layerSizes[i];j++){
                 double v = biases[i][j];
