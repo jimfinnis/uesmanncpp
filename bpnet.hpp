@@ -18,25 +18,15 @@
 class BPNet : public Net {
 public:
     /**
-     * \brief Constructor with initial range
-     * \param _eta the learning rate
-     * \param nlayers number of layers
-     * \param layerCounts array of layer counts
-     * \param initrange initial weight range [-n,n]
-     */
-    BPNet(double _eta,int nlayers,const int *layerCounts,double initrange) : Net(eta) {
-        init(nlayers,layerCounts,initrange);
-    }
-    
-    /**
-     * \brief Constructor for Bishop's rule weights
+     * \brief Constructor
      * \param _eta the learning rate
      * \param nlayers number of layers
      * \param layerCounts array of layer counts
      */
     BPNet(double _eta,int nlayers,const int *layerCounts) : Net(eta) {
-        init(nlayers,layerCounts,-1);
+        init(nlayers,layerCounts);
     }
+    
     
     /**
      * \brief destructor
@@ -115,10 +105,10 @@ protected:
     /**
      * \brief Default initialisation routine; other things may override it. 
      * Called from each net class' constructor because non-standard net types
-     * do strange things.
+     * do strange things. Does not initialise the weights; this is done as the
+     * first step in training.
      * \param nlayers number of layers
      * \param layerCounts array of layer counts
-     * \param initrange initial weight range [-n,n], or -ve for Bishop's rule.
      */
     
     virtual void init(int nlayers,const int *layerCounts,double initrange=-1){
@@ -149,7 +139,6 @@ protected:
             biases[i] = new double[n];
             gradAvgsBiases[i] = new double[n];
         }
-        initWeights(initrange);
     }
     
     /**
@@ -295,13 +284,19 @@ protected:
      *    - calculate the means across all provided examples
      *    - apply the mean to the weight or bias
      * - return the total of the mean squared errors (NOTE: different from original, which returned
-     *   mean absolute error) for each output.
+     *   mean absolute error) for each output. This is for all examples:
+     * \f[
+     * \sum_{e \in Examples} \sum_{i=0}^{N_{outs}} (e_o(i) - e_y(i))^2
+     * \f]
+     * where \f$e_o(i)\f$ is network's output \f$i\f$ for example \f$e\f$ and \f$e_y(i)\f$ is the desired output
+     * for the same example.
+     * 
      * 
      * \param num     number of examples. For a single example, you'd just use 1.
      * \param in      for an array of pointers, one for each example. Each points to an array
      *                of doubles which constitute the inputs. 
      * \param out     an array of pointers to doubles to write the output layer on completion.
-     * \return        the sum of mean squared errors in the output layer
+     * \return        the sum of mean squared errors in the output layer (see formula in method documentation)
      */
     
     double trainBatch(int num,double **in, double **out) {

@@ -83,11 +83,13 @@ public:
     
     /**
      * \brief
-     * Shuffle the example using a PRNG and a Fisher-Yates shuffle
+     * Shuffle the example using a PRNG and a Fisher-Yates shuffle.
      * \param rd  pointer to a PRNG data block
+     * \param preserveHAlternation if true, the data is fixed after the shuffle to preserve
+     * strict alternation between h=0 and h=1.
      */
     
-    void shuffle(drand48_data *rd){
+    void shuffle(drand48_data *rd,bool preserveHAlternation){
         Example tmp; // makes a copy of the structures
         for(int i=ct-1;i>=1;i--){
             long lr;
