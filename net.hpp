@@ -90,27 +90,31 @@ public:
      * h-as-input and output blending)
      * @param nSlices number of cross-val slices
      * @param nPerSlice number of examples in each slice
-     * @param nCV cross-validation interval (1 means CV every for every training example)
-     * @param initrange range of initial weights/biases [-n,n], or -1 for Bishop's rule.
+     * @param cvInterval cross-validation interval (1 means CV every for every training example)
+     * @param preserveHAlternation if true, the shuffled examples are rearranged so that
+     * they alternate h<0.5 and h>=0.5
      * @param selectBestWithCV if true, use the minimum CV error to find the best net,
      * otherwise use the training error. Note that if true, networks will only be tested
      * when the cross-validation runs.
+     * @param initrange range of initial weights/biases [-n,n], or -1 for Bishop's rule.
      */
     
-    void trainSGD(ExampleSet *training,
+    void trainSGD(ExampleSet *examples,
+                  int iterations,
                   int nSlices,
                   int nPerSlice,
-                  int nCV,
-                  double initrange=-1,
-                  bool selectBestWithCV=false
+                  int cvInterval,
+                  bool preserveHAlternation=true,
+                  bool selectBestWithCV=false,
+                  double initrange=-1
                   ){
         // separate out the training examples from the cross-validation samples
         int nCV = nSlices*nPerSlice;
         // it's an error if there are too many CV examples
-        if(nCV>=training->getCount())
+        if(nCV>=examples->getCount())
             throw std::out_of_range("Too many cross-validation examples");
         // get the number of actual training examples
-        int nTraining = training->getCount() - nCV;
+        int nExamples = examples->getCount() - nCV;
         
         // initialise the network
         initWeights(initrange);
@@ -129,18 +133,25 @@ public:
         // Need to give this some thought. It doesn't invalidate the work in the PhD
         // although this is one of those cases where I could have been clearer!
         
-        shuffle data
+        examples->shuffle(&rd,preserveHAlternation);
         
+        // now actually do the training
         
         for(int i=0;i<iterations;i++){
             // find the example number
-            int exampleIndex = i % nTraining;
+            int exampleIndex = i % nExamples;
             // get the inputs and outputs for this example
-            double *in = training->getInputs(exampleIndex);
-            double *out = training->getOutputs(exampleIndex);
+            double *in = examples->getInputs(exampleIndex);
+            double *out = examples->getOutputs(exampleIndex);
             
-            trainBatch(...)
-              }
+            // train here, just one example, no batching.
+            double trainingError = trainBatch(1,&in,&out);
+            
+            // now test the error and keep the best net. This works differently
+            // if we're doing this by cross-validation or training error.
+            
+            this is where I'm at.
+        }
         
     }
     
@@ -212,7 +223,7 @@ protected:
      * \return        the sum of mean squared errors in the output layer (see formula in method documentation)
      */
     
-    double trainBatch(int num,double **in, double **out) = 0;
+    virtual double trainBatch(int num,double **in, double **out) = 0;
     
 };    
 

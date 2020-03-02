@@ -10,6 +10,29 @@
 #include <assert.h>
 #include <stdint.h>
 
+template <class T,class TestFunc> void alternate(T *arr,int n,TestFunc f){
+    // for each item, if it is not the appropriate value,
+    // scan forward until we find one which is and swap with that.
+    // Leave if we can't find one.
+    for(int i=0;i<n;i++){
+        if(f(arr+i)!=(i%2==0)){
+            // doesn't match; swap.
+            for(int j=i;;j++){
+                if(j>n)return; // can't find a match, exit.
+                // scan for one that does
+                if(f(arr+j)==(i%2==0)){
+                    // and swap and leave loop
+                    T v=arr[i];
+                    arr[i]=arr[j];
+                    arr[j]=v;
+                    break;
+                }
+            }
+        }
+    }
+}
+
+
 /**
  * \brief
  * A set of example data. Each datum consists of 
@@ -98,6 +121,12 @@ public:
             tmp=x[i];
             x[i]=x[j];
             x[j]=tmp;
+        }
+        // if this flat is set, rearrange the shuffled data so that they go in the sequence
+        // h<0.5, h>=0.5, h>0.5 etc.
+        if(preserveHAlternation){
+            alternate<Example>(x,ct,
+                               [](Example *e){return e->h<0.5;});
         }
     }
     
