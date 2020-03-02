@@ -55,7 +55,7 @@ public:
      * \param d array of doubles, the size of the input layer
      */
     
-    virtual void setInputs(double *d){
+    virtual void setInputs(double *d) {
         for(int i=0;i<layerSizes[0];i++)
             outputs[0][i]=d[i];
     }
@@ -65,11 +65,71 @@ public:
      * \return pointer to the output layer outputs
      */
     
-    virtual double *getOutputs(){
+    virtual double *getOutputs() const {
         return outputs[numLayers-1];
     }
     
+    /**
+     * \brief Get the length of the serialised data block
+     * for this network.
+     * \return the size in bytes
+     */
+    virtual int getDataSize() const {
+        // number of weights+biases for each layer is
+        // the number of nodes in that layer (bias count)
+        // times the number of nodes in the previous layer.
+        int pc=0;
+        int total=0;
+        for(int i=0;i<numLayers;i++){
+            int c = layerSizes[i];
+            total += c*(1+pc);
+            pc = c;
+        }
+        return total;
+    }
     
+    /**
+     * \brief Serialize the data (not including any network type magic number or
+     * layer/node counts) to the given memory (which must be of sufficient size).
+     * \param buf the buffer to save the data, must be at least getDataSize() bytes
+     */
+    virtual void save(double *buf) const {
+        double *g=buf;
+        // data is ordered by layers, with nodes within
+        // layers, and each node is bias then weights.
+        for(int i=0;i<numLayers;i++){
+            for(int j=0;j<layerSizes[i];j++){
+                *g++ = biases[i][j];
+                if(i){
+                    for(int k=0;k<layerSizes[i-1];k++){
+                        *g++ = getw(i,j,k);
+                    }
+                }
+            }
+        }
+    }
+    
+    /**
+     * \brief Given that the pointer points to a data block of the correct size
+     * for the current network, copy the parameters from that data block into
+     * the current network overwriting the current parameters.
+     * \param buf the buffer to load the data from, must be at least getDataSize() bytes
+     */
+    virtual void load(double *buf){
+        double *g=buf;
+        // genome is ordered by layers, with nodes within
+        // layers, and each node is bias then weights.
+        for(int i=0;i<numLayers;i++){
+            for(int j=0;j<layerSizes[i];j++){
+                biases[i][j]=*g++;
+                if(i){
+                    for(int k=0;k<layerSizes[i-1];k++){
+                        getw(i,j,k) = *g++;
+                    }
+                }
+            }
+        }
+    }
     
 protected:
     int numLayers; //!< number of layers, including input and output
@@ -111,7 +171,7 @@ protected:
      * \param layerCounts array of layer counts
      */
     
-    virtual void init(int nlayers,const int *layerCounts,double initrange=-1){
+    virtual void init(int nlayers,const int *layerCounts){
         numLayers = nlayers;
         outputs = new double* [numLayers];
         errors = new double* [numLayers];
@@ -178,7 +238,7 @@ protected:
      * \param fromneuron the index of the source node
      */
     
-    inline double& getw(int tolayer,int toneuron,int fromneuron){
+    inline double& getw(int tolayer,int toneuron,int fromneuron) const {
         return weights[tolayer][toneuron+largestLayerSize*fromneuron];
     }
     
@@ -188,7 +248,7 @@ protected:
      * \param neuron  index of neuron within layer
      */
     
-    inline double& getb(int layer,int neuron){
+    inline double& getb(int layer,int neuron) const {
         return biases[layer][neuron];
     }
     
@@ -201,18 +261,18 @@ protected:
      * \param fromneuron the index of the source node
      */
     
-    inline double& getavggradw(int tolayer,int toneuron,int fromneuron){
+    inline double& getavggradw(int tolayer,int toneuron,int fromneuron) const {
         return gradAvgsWeights[tolayer][toneuron+largestLayerSize*fromneuron];
     }
     
     /**
      * \brief get the value of a bias gradient
      * \pre gradients must have been calculated as part of training step
-     * \param layer   index of layer
-     * \param neuron  index of neuron within layer
+     * \param l  index of layer
+     * \param n  index of neuron within layer
      */
     
-    inline double getavggradb(int l,int n){
+    inline double getavggradb(int l,int n) const {
         return gradAvgsBiases[l][n];
     }
     

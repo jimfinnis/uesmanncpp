@@ -10,6 +10,13 @@
 #include <assert.h>
 #include <stdint.h>
 
+/**
+ * \brief Ensure array has alternating values of boolean predicate.
+ * Given an array, this function will rearrange the values to ensure that
+ * the boolean predicate passed in has values true and false alternately.
+ * This is done in-place.
+ */
+
 template <class T,class TestFunc> void alternate(T *arr,int n,TestFunc f){
     // for each item, if it is not the appropriate value,
     // scan forward until we find one which is and swap with that.
@@ -125,8 +132,7 @@ public:
         // if this flat is set, rearrange the shuffled data so that they go in the sequence
         // h<0.5, h>=0.5, h>0.5 etc.
         if(preserveHAlternation){
-            alternate<Example>(x,ct,
-                               [](Example *e){return e->h<0.5;});
+            alternate<Example>(x, ct, [](Example *e){return e->h<0.5;});
         }
     }
     
@@ -193,9 +199,9 @@ public:
      * \param example   index of the example
      * \param h         modulator to use
      */
-    void setH(int example, double v){
+    void setH(int example, double h){
         assert(example<ct);
-        data[x[example].h]=v;
+        data[x[example].h]=h;
     }
         
 };

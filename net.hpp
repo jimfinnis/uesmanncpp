@@ -10,7 +10,7 @@
 
 #include <math.h>
 
-#include "data.h"
+#include "data.hpp"
 
 /**
  * Logistic sigmoid function, which is our activation function
@@ -45,7 +45,7 @@ public:
      * \brief get the learning rate
      */
     
-    double getEta() {
+    double getEta() const {
         return eta;
     }
     
@@ -63,14 +63,14 @@ public:
      * \return pointer to the output layer outputs
      */
     
-    virtual double *getOutputs() = 0;
+    virtual double *getOutputs() const = 0;
     
     /**
      * \brief Run the network on some data.
      * \param in pointer to the input double array
      * \return pointer to the output double array
      */
-    double *run(double *in){
+    double *run(double *in) {
         setInputs(in);
         update();
         return getOutputs();
@@ -85,12 +85,14 @@ public:
      * \pre Network has weights initialised to random values
      * \throws std::out_of_range Too many CV examples
      * 
-     * @param training training set (including cross-validation data)
+     * @param examples training set (including cross-validation data)
      * @param iterations number of training iterations (pair-presentations for UESMANN,
      * h-as-input and output blending)
      * @param nSlices number of cross-val slices
      * @param nPerSlice number of examples in each slice
      * @param cvInterval cross-validation interval (1 means CV every for every training example)
+     * @param bestNetData a buffer of at least getDataSize() bytes for the best network. If NULL,
+     * the best network is not saved.
      * @param preserveHAlternation if true, the shuffled examples are rearranged so that
      * they alternate h<0.5 and h>=0.5
      * @param selectBestWithCV if true, use the minimum CV error to find the best net,
@@ -104,10 +106,12 @@ public:
                   int nSlices,
                   int nPerSlice,
                   int cvInterval,
+                  double *bestNetData=NULL,
                   bool preserveHAlternation=true,
                   bool selectBestWithCV=false,
                   double initrange=-1
                   ){
+        
         // separate out the training examples from the cross-validation samples
         int nCV = nSlices*nPerSlice;
         // it's an error if there are too many CV examples
@@ -147,13 +151,41 @@ public:
             // train here, just one example, no batching.
             double trainingError = trainBatch(1,&in,&out);
             
-            // now test the error and keep the best net. This works differently
-            // if we're doing this by cross-validation or training error.
-            
-            this is where I'm at.
+            if(!selectBestWithCV){
+                // now test the error and keep the best net. This works differently
+                // if we're doing this by cross-validation or training error. Here
+                // we're using the training error.
+                if(minError < 0 || trainingError < minError){
+                    if(bestNetData)
+                        save(bestNetData);
+                    minError = trainingError;
+                }
+            }
         }
-        
     }
+    
+    /**
+     * \brief Get the length of the serialised data block
+     * for this network.
+     * \return the size in bytes
+     */
+    virtual int getDataSize() const = 0;
+    
+    /**
+     * \brief Serialize the data (not including any network type magic number or
+     * layer/node counts) to the given memory (which must be of sufficient size).
+     * \param buf the buffer to save the data, must be at least getDataSize() bytes
+     */
+    virtual void save(double *buf) const = 0;
+    
+    /**
+     * \brief Given that the pointer points to a data block of the correct size
+     * for the current network, copy the parameters from that data block into
+     * the current network overwriting the current parameters.
+     * \param buf the buffer to load the data from, must be at least getDataSize() bytes
+     */
+    virtual void load(double *buf) = 0;
+    
     
 protected:
     
