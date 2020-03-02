@@ -117,6 +117,8 @@ public:
         // it's an error if there are too many CV examples
         if(nCV>=examples->getCount())
             throw std::out_of_range("Too many cross-validation examples");
+        // get a pointer to the cross-validation examples, at the end of the set
+        Example *cvExamples = examples+nCV;
         // get the number of actual training examples
         int nExamples = examples->getCount() - nCV;
         
@@ -138,6 +140,11 @@ public:
         // although this is one of those cases where I could have been clearer!
         
         examples->shuffle(&rd,preserveHAlternation);
+        
+        // setup a countdown for when we cross-validate
+        int cvCountdown = cvInterval;
+        // and which slice we are doing
+        int cvSlice = 0;
         
         // now actually do the training
         
@@ -161,6 +168,16 @@ public:
                     minError = trainingError;
                 }
             }
+            
+            // is there cross-validation? If so, do it.
+            if(!--cvCountdown){
+                cvCountdown = cvInterval; // reset
+                // select the slice
+                Example *slice = cvExamples+cvSlice*nPerSlice;
+                
+                Should we shuffle the CV somehow?
+            }
+            
         }
     }
     
