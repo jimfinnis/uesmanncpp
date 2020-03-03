@@ -58,13 +58,22 @@ class ExampleSet {
         uint32_t outs; //!< offset to start of outputs
         uint32_t h; //!< offset to hormone (modulator)
     };
-        
+    
     Example *x; //!< pointer to array of examples
     double *data; //!< pointer to block of floats containing all example data
     
     int ninputs; //!< number of inputs 
     int noutputs; //!< number of outputs
     int ct; //!< number of examples
+    
+    /**
+     * \brief Does this set own its data?
+     * A little bit of a hack. An example set can be constructed as part of another
+     * set, in which case it shouldn't delete its memory. This is used in constructing
+     * cross-validation sets. If an example set is created in such a way, this
+     * should be false.
+     */
+    bool ownsData;
     
 public:
     
@@ -99,6 +108,25 @@ public:
             x[i].outs = x[i].ins+ninputs;
             x[i].h = x[i].outs+noutputs;
         }
+        ownsData = true;
+    }
+    
+    /**
+     * \brief Constructor for making a subset of another set.
+     * \param parent the set which holds our data.
+     * \param start the start index of the data in the parent.
+     * \param length the length of the subset.
+     */
+    ExampleSet(const ExampleSet &parent,int start,int length){
+        if(length > parent.ct - start || start<1 || length<1)
+            throw std::out_of_range("subset out of range");
+        
+        ownsData = false;
+        x = parent.x + start;
+        ninputs = parent.ninputs;
+        noutputs = parent.noutputs;
+        data = parent.data;
+        ct = length;
     }
     
     /**
@@ -107,8 +135,10 @@ public:
      */
     
     ~ExampleSet(){
-        delete [] x;
-        delete [] data;
+        if(ownsData){ // only delete the data if we aren't a subset
+            delete [] x;
+            delete [] data;
+        }
     }
     
     /**
@@ -203,7 +233,7 @@ public:
         assert(example<ct);
         data[x[example].h]=h;
     }
-        
+    
 };
 
 
