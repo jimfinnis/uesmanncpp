@@ -52,6 +52,16 @@ public:
     
     drand48_data rd; //!< PRNG data (thread safe)
     
+    /** 
+     * \brief Set this network's random number generator, which is
+     * used for weight initialisation done at the start of training.
+     */
+    
+    void setSeed(long seed){
+        srand48_r(seed,&rd);
+    }
+          
+    
     /**
      * \brief Set the inputs to the network before running or training
      * \param d array of doubles, the size of the input layer

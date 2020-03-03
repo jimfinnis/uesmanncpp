@@ -200,6 +200,48 @@ BOOST_AUTO_TEST_CASE(trainparams) {
     BOOST_REQUIRE(mse<0.005);
 }
 
+/**
+ * \brief another test without cross-validation which attempts to emulate the Angort
+ * test.ang program.
+ * \bug At the moment, test trainparams2 doesn't train as well as the original test.ang.
+ */
+
+BOOST_AUTO_TEST_CASE(trainparams2) {
+    const int NUMEXAMPLES=100;
+    ExampleSet e(NUMEXAMPLES*2,1,1); // 100 examples at 1 input, 1 output
+    
+    double recipNE = 1.0/(double)NUMEXAMPLES;
+    
+    for(double i=0;i<NUMEXAMPLES*2;i+=2){
+        double v = (i/2)*recipNE;
+        *(e.getInputs(i)) = v;
+        *(e.getOutputs(i)) = v;
+        *(e.getInputs(i+1)) = v;
+        *(e.getOutputs(i+1)) = v;
+        e.setH(i,0);
+        e.setH(i+1,1);
+    }
+    TestNet n(e,2);
+    
+    // eta=1, 10000000 iterations. No CV.
+    Net::SGDParams params(1,10000000);
+    params.storeBest(*n.n);
+    
+    // do the training and get the MSE of the best net.
+    double mse = n.n->trainSGD(e,params);
+    printf("%f\n",mse);
+    
+    for(double i=0;i<NUMEXAMPLES;i++){
+        double v = i*recipNE;
+        double o = *(n.n->run(&v));
+        printf("%f -> %f\n",v,o);
+    }
+    
+    // assert that it's a sensible value
+    BOOST_REQUIRE(mse>0);
+    BOOST_REQUIRE(mse<0.005);
+}
+
 
 /**
  * \brief Test mean sum squared error of outputs.
