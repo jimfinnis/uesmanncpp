@@ -47,12 +47,12 @@ public:
 class TestNet {
 public:
     BPNet *n;
-    TestNet(const ExampleSet& e) {
+    TestNet(const ExampleSet& e,int hnodes) {
         int layers[3];
         layers[0] = e.getInputCount();
-        layers[1] = 2;
+        layers[1] = hnodes;
         layers[2] = e.getOutputCount();
-        n = new BPNet(1,2,layers);
+        n = new BPNet(2,layers);
     }
     
     void zero(){
@@ -167,22 +167,37 @@ BOOST_AUTO_TEST_CASE(alt) {
  */
 
 BOOST_AUTO_TEST_CASE(trainparams) {
-    ExampleSet e(5000,1,1); // 1 input, 1 output
-    TestNet n(e);
-    for(double i=0;i<5000;i++){
-        *(e.getInputs(i)) = i*0.0002;
-        *(e.getOutputs(i)) = i*0.0002;
+    const int NUMEXAMPLES=1000;
+    ExampleSet e(NUMEXAMPLES,1,1); // 100 examples at 1 input, 1 output
+    
+    double recipNE = 1.0/(double)NUMEXAMPLES;
+    // generate examples of the identity function y=x, from 0 to 1.
+    // This will train but will be a bit iffy at the ends!
+    
+    for(double i=0;i<NUMEXAMPLES;i++){
+        double v = i*recipNE;
+        *(e.getInputs(i)) = v;
+        *(e.getOutputs(i)) = v;
         e.setH(i,0);
     }
-    printf("-- %f\n",
-    n.n->trainSGD(e,
-                  10000,
-                  5,
-                  200,
-                  100,
-                  NULL,false,false
-                  )
-           );
+    
+    // set up a net which conforms to those examples with 3 hidden nodes.
+    TestNet n(e,3);
+    
+    // eta=0.1, 10000 iterations
+    Net::SGDParams params(0.1,10000);
+    // use half of the data as CV examples, 1000 CV cycles, 3 slices.
+    // Don't shuffle the CV examples on epoch. Also, store the best net
+    // and make sure we end up with that.
+    params.crossValidation(e,0.5,1000,10,false).storeBest(*n.n);
+    
+    // do the training and get the MSE of the best net.
+    double mse = n.n->trainSGD(e,params);
+    printf("%f\n",mse);
+    
+    // assert that it's a sensible value
+    BOOST_REQUIRE(mse>0);
+    BOOST_REQUIRE(mse<0.005);
 }
 
 
@@ -198,7 +213,7 @@ BOOST_AUTO_TEST_CASE(trainparams) {
 BOOST_AUTO_TEST_CASE(testmse) {
     TestExampleSet e;
     // make a standard net
-    TestNet n(e);
+    TestNet n(e,2);
     // zero it so all the nodes produce 0.5 as their output
     n.zero();
     // get the MSE on all examples, given the example values

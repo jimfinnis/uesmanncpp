@@ -24,7 +24,7 @@ public:
      * \param nlayers number of layers
      * \param layerCounts array of layer counts
      */
-    BPNet(double _eta,int nlayers,const int *layerCounts) : Net(_eta) {
+    BPNet(int nlayers,const int *layerCounts) : Net() {
         numLayers = nlayers;
         outputs = new double* [numLayers];
         errors = new double* [numLayers];

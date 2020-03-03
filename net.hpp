@@ -38,7 +38,8 @@ inline double sigmoidDiff(double x){
 class Net {
 protected:
     
-    double eta; //!< learning rate
+    /// \brief learning rate, set up as part of each training function
+    double eta;
 public:
     
     /**
@@ -153,6 +154,175 @@ public:
         return mseSum / (num * examples.getOutputCount());
     }
     
+    /**
+     * \brief Training parameters for trainSGD().
+     * This structure holds the parameters for the trainSGD() method, and serves
+     * as a better way of passing them than a long parameter list. All values
+     * have defaults set up by the constructor, which are given as constants.
+     */
+    struct SGDParams {
+        
+        /// @brief default value of iterations
+        constexpr static int DEF_ITERATIONS=10000;
+        /**
+         * \brief number of iterations to run: an iteration is the presentation of a single example, NOT
+         * a pair-presentation as is the case in the thesis when discussing the modulatory network types.
+         */
+        int iterations;
+        
+        /**
+         * \brief The number of cross-validation slices to use
+         */
+        int nSlices;
+        
+        /**
+         * \brief the number of example per cross-validation slice
+         */
+        int nPerSlice;
+        
+        /**
+         * \brief how often to cross-validate given as the interval between CV events:
+         * 1 is every iteration, 2 is every other iteration and so on.
+         */
+        int cvInterval;
+        
+        /// @brief default value of preserveHAlternation (do preserve)
+        constexpr static bool DEF_PRESERVEHALTERNATION=true;
+        /**
+         * \brief if true, the shuffled examples are rearranged so that
+         * they alternate h<0.5 and h>=0.5
+         */
+        bool preserveHAlternation;
+        
+        /// @brief default value of selectBestWithCV (don't select with cross-validation;
+        /// there isn't any by default)
+        constexpr static bool DEF_SELECTBESTWITHCV=false;
+        /**
+         * \brief if true, use the minimum CV error to find the best net,
+         * otherwise use the training error. Note that if true, networks will only be tested
+         * when the cross-validation runs.
+         */
+        bool selectBestWithCV;
+        
+        /// @brief default value of cvShuffle (do shuffle)
+        constexpr static bool DEF_CVSHUFFLE=true;
+        /**
+         * \brief if true, shuffle the entire CV data set when all slices have been done so
+         * that the cross-validation has (effectively) a new set of slices each time.
+         */
+        bool cvShuffle = DEF_CVSHUFFLE;
+        
+        /**
+         * \brief range of initial weights/biases [-n,n], or -1 for Bishop's rule.
+         */
+        int initrange;
+        
+        /**
+         * \brief a buffer of at least getDataSize() bytes for the best network. If NULL,
+         * the best network is not saved.
+         */
+        double *bestNetData;
+        
+        /**
+         * \brief true if we own the best net data buffer bestNetData, and should delete
+         * it on destruction.
+         */
+        bool ownsBestNetData;
+        
+        /**
+         * The learning rate to use
+         */
+        double eta;
+        
+        /** \brief Constructor which sets up defaults with no information about examples - 
+         * cross-validation is not set up by default, but can be done by calling
+         * setupCrossValidation().
+         * \param _eta learning rate to use
+         * \param _iters number of iterations to run: an iteration is the presentation
+         * of a single example, NOT a pair-presentation as is the case in the thesis when
+         * discussing the modulatory network types.
+         */
+        
+        SGDParams(double _eta, int _iters) {
+            eta = _eta;
+            iterations = _iters;
+            initrange = -1;
+            bestNetData = NULL;
+            ownsBestNetData = false;
+            nSlices=0;
+            nPerSlice=0;
+            cvInterval=1;
+            preserveHAlternation=DEF_PRESERVEHALTERNATION;
+            selectBestWithCV=DEF_SELECTBESTWITHCV;
+            cvShuffle = DEF_CVSHUFFLE;
+        }
+        
+        /**
+         * \brief Destructor
+         */
+        
+        ~SGDParams(){
+            if(ownsBestNetData)delete[] bestNetData;
+        }
+        
+        /**
+         * \brief Set up the cross-validation parameters given the full training set,
+         * the proportion to be used for CV, the number of CV events in the training
+         * run, and the number of CV slices to use. 
+         * @param examples the example set we will train with
+         * @param propCV the proportion of the training set to use for cross-validation
+         * @param cvCount the desired number of cross-validation events across the training run
+         * @param cvSlices the desired number of cross-validation slices
+         * @param cvShuf should cvShuffle be true?
+         * @return a reference to this, so we can do fluent chains.
+         */
+        
+        SGDParams &crossValidation(const ExampleSet& examples,
+                                   double propCV,
+                                   int cvCount,
+                                   int cvSlices,
+                                   bool cvShuf=true
+                                   ){
+            cvShuffle = cvShuf;
+            // calculate the number of CV examples
+            int nCV = (int)round(propCV*examples.getCount());
+            if(nCV==0 || nCV>examples.getCount())
+                throw std::out_of_range("Bad cross-validation count");
+            if(cvSlices<=0)
+                throw std::out_of_range("Zero (or fewer) CV slices is a bad thing");
+            // calculate the number of examples per slice and check it's not zero.
+            // The resulting number of CV examples may not agree with nCV above due
+            // to the integer division
+            nPerSlice = nCV/cvSlices;
+            nSlices = cvSlices;
+            if(!nPerSlice)
+                throw std::logic_error("Too many slices");
+            // calculate the cvInterval
+            cvInterval = iterations/cvCount;
+            if(cvInterval<=0)
+                throw std::logic_error("Too many CV events");
+            // we want to pick the best network by CV rather than training error
+            selectBestWithCV=true;
+            
+            printf("Cross-validation: %d slices, %d items per slice, %d total\n",
+                   nSlices,nPerSlice,nSlices*nPerSlice);
+            return *this;
+        }
+        
+        /**
+         * \brief set up a "best net buffer" to store the best network found,
+         * to which the network will be set on completion of training.
+         * @return a reference to this, so we can do fluent chains.
+         */
+        
+        SGDParams &storeBest(const Net& net){
+            bestNetData = new double[net.getDataSize()];
+            ownsBestNetData = true;
+            return *this;
+        }
+    };
+        
+    
     
     /**
      * \brief Train using stochastic gradient descent.
@@ -167,42 +337,23 @@ public:
      * \throws std::logic_error Trying to select best by CV when there's no CV done
      * 
      * @param examples training set (including cross-validation data)
-     * @param iterations number of training iterations (pair-presentations for UESMANN,
-     * h-as-input and output blending)
-     * @param nSlices number of cross-val slices - if zero, no CV is done
-     * @param nPerSlice number of examples in each slice - if zero, no CV is done
-     * @param cvInterval cross-validation interval (1 means CV every for every training example)
-     * @param bestNetData a buffer of at least getDataSize() bytes for the best network. If NULL,
-     * the best network is not saved.
-     * @param preserveHAlternation if true, the shuffled examples are rearranged so that
-     * they alternate h<0.5 and h>=0.5
-     * @param selectBestWithCV if true, use the minimum CV error to find the best net,
-     * otherwise use the training error. Note that if true, networks will only be tested
-     * when the cross-validation runs.
-     * @param initrange range of initial weights/biases [-n,n], or -1 for Bishop's rule.
+     * @param params a filled-in SGDParams structure giving the parameters for the training.
      * @return If bestNetData is null, the MSE of the final network; otherwise the MSE
      * of the best network found. This is done across the entire
      * validation set if provided, or the entire training set if not.
      */
     
-    double trainSGD(ExampleSet &examples,
-                  int iterations,
-                  int nSlices,
-                  int nPerSlice,
-                  int cvInterval,
-                  double *bestNetData=NULL,
-                  bool preserveHAlternation=true,
-                  bool selectBestWithCV=false,
-                  double initrange=-1
-                  ){
+    double trainSGD(ExampleSet &examples,SGDParams& params){
+        // set up learning rate
+        eta = params.eta;
         
         // separate out the training examples from the cross-validation examples
-        int nCV = nSlices*nPerSlice;
+        int nCV = params.nSlices*params.nPerSlice;
         // it's an error if there are too many CV examples
         if(nCV>=examples.getCount())
             throw std::out_of_range("Too many cross-validation examples");
         
-        if(!nCV && selectBestWithCV)
+        if(!nCV && params.selectBestWithCV)
             throw std::logic_error("cannot use CV to select best when no CV is done");
         
         // shuffle before getting the cross-validation examples
@@ -218,7 +369,7 @@ public:
         int nExamples = examples.getCount() - nCV;
         
         // initialise the network
-        initWeights(initrange);
+        initWeights(params.initrange);
         
         // initialise minimum error to rogue value
         double minError = -1;
@@ -234,10 +385,10 @@ public:
         // Need to give this some thought. It doesn't invalidate the work in the PhD
         // although this is one of those cases where I could have been clearer!
         
-        examples.shuffle(&rd,preserveHAlternation);
+        examples.shuffle(&rd,params.preserveHAlternation);
         
         // setup a countdown for when we cross-validate
-        int cvCountdown = cvInterval;
+        int cvCountdown = params.cvInterval;
         // and which slice we are doing
         int cvSlice = 0;
         
@@ -245,53 +396,54 @@ public:
         
         FILE *log = fopen("foo","w");
         fprintf(log,"x,slice,y\n");
-        for(int i=0;i<iterations;i++){
+        for(int i=0;i<params.iterations;i++){
             // find the example number
             int exampleIndex = i % nExamples;
             
             // train here, just one example, no batching.
             double trainingError = trainBatch(examples,exampleIndex,1);
             
-            if(!selectBestWithCV){
+            if(!params.selectBestWithCV){
                 // now test the error and keep the best net. This works differently
                 // if we're doing this by cross-validation or training error. Here
                 // we're using the training error.
                 if(minError < 0 || trainingError < minError){
-                    if(bestNetData)
-                        save(bestNetData);
+                    if(params.bestNetData)
+                        save(params.bestNetData);
                     minError = trainingError;
                 }
             }
             
             // is there cross-validation? If so, do it.
             if(nCV && !--cvCountdown){
-                cvCountdown = cvInterval; // reset
+                cvCountdown = params.cvInterval; // reset
                 
                 // test the appropriate slice, from example cvSlice*nPerSlice, length nPerSlice,
                 // and get the MSE
-                double error = test(cvExamples,cvSlice*nPerSlice,nPerSlice);
+                double error = test(cvExamples,cvSlice*params.nPerSlice,
+                                    params.nPerSlice);
                 fprintf(log,"%d,%d,%f\n",i,cvSlice,error);
                 
                 // test this against the min error as was done above
                 if(minError < 0 || trainingError < minError){
-                    if(bestNetData)
-                        save(bestNetData);
+                    if(params.bestNetData)
+                        save(params.bestNetData);
                     minError = trainingError;
                 }
                 
                 // increment the slice index
-                cvSlice = (cvSlice+1)%nSlices;
+                cvSlice = (cvSlice+1)%params.nSlices;
                 // if we are now on the first slice, shuffle the entire CV set
-                if(!cvSlice)
-                    cvExamples.shuffle(&rd,preserveHAlternation);
+                if(!cvSlice && params.cvShuffle)
+                    cvExamples.shuffle(&rd,params.preserveHAlternation);
             }
         }
         
         fclose(log);
         
         // at the end, finalise the network to the best found if we can
-        if(bestNetData)
-            load(bestNetData);
+        if(params.bestNetData)
+            load(params.bestNetData);
         
         // test on either the entire CV set or the training set and return result
         return test(nCV?cvExamples:examples);
@@ -334,11 +486,8 @@ protected:
     /**
      * \brief Constructor - protected because others inherit it and it's not used
      * directly
-     * \param _eta the learning rate
      */
-    Net(double _eta){
-        eta = _eta;
-    }
+    Net(){}
     
     /**
      * \brief get a random number using this net's PRNG data
