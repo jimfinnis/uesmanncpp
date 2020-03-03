@@ -77,6 +77,14 @@ public:
     }
     
     /**
+     * \brief Set the modulator level for subsequent runs and training of this
+     * network.
+     */
+    virtual void setH(double h){
+        // default does nothing.
+    }
+    
+    /**
      * Train using stochastic gradient descent.
      * Note that cross-validation parameters are slightly different from those
      * given in the thesis. Here we give the number of slices and number of examples
@@ -152,12 +160,9 @@ public:
         for(int i=0;i<iterations;i++){
             // find the example number
             int exampleIndex = i % nExamples;
-            // get the inputs and outputs for this example
-            double *in = examples->getInputs(exampleIndex);
-            double *out = examples->getOutputs(exampleIndex);
             
             // train here, just one example, no batching.
-            double trainingError = trainBatch(1,&in,&out);
+            double trainingError = trainBatch(examples,exampleIndex,1);
             
             if(!selectBestWithCV){
                 // now test the error and keep the best net. This works differently
@@ -175,7 +180,7 @@ public:
                 cvCountdown = cvInterval; // reset
                 // test the appropriate slice, from example cvSlice*nPerSlice, length nPerSlice.
                 
-                double error = test(&cvExamples,cvSlice*nPerSlice,nPerSlice);
+//                double error = test(&cvExamples,cvSlice*nPerSlice,nPerSlice);
                 
                 // increment the slice index
                 cvSlice = (cvSlice+1)%nSlices;
@@ -269,16 +274,14 @@ protected:
      * \f]
      * where \f$e_o(i)\f$ is network's output \f$i\f$ for example \f$e\f$ and \f$e_y(i)\f$ is the desired output
      * for the same example.
-     * 
-     * 
+     
+     * \param ex      pointer to example set
+     * \param start   index of first example to use
      * \param num     number of examples. For a single example, you'd just use 1.
-     * \param in      for an array of pointers, one for each example. Each points to an array
-     *                of doubles which constitute the inputs. 
-     * \param out     an array of pointers to doubles to write the output layer on completion.
      * \return        the sum of mean squared errors in the output layer (see formula in method documentation)
      */
     
-    virtual double trainBatch(int num,double **in, double **out) = 0;
+    virtual double trainBatch(ExampleSet *ex,int start,int num) = 0;
     
 };    
 

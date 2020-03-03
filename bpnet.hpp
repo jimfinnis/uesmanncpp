@@ -350,16 +350,14 @@ protected:
      * \f]
      * where \f$e_o(i)\f$ is network's output \f$i\f$ for example \f$e\f$ and \f$e_y(i)\f$ is the desired output
      * for the same example.
-     * 
-     * 
+     
+     * \param ex      pointer to example set
+     * \param start   index of first example to use
      * \param num     number of examples. For a single example, you'd just use 1.
-     * \param in      for an array of pointers, one for each example. Each points to an array
-     *                of doubles which constitute the inputs. 
-     * \param out     an array of pointers to doubles to write the output layer on completion.
      * \return        the sum of mean squared errors in the output layer (see formula in method documentation)
      */
     
-    double trainBatch(int num,double **in, double **out) {
+    double trainBatch(ExampleSet *ex,int start,int num){
         // zero average gradients
         for(int j=0;j<numLayers;j++){
             for(int k=0;k<layerSizes[j];k++)
@@ -372,8 +370,13 @@ protected:
         double totalError=0;
         // iterate over examples
         for(int nn=0;nn<num;nn++){
+            int exampleIndex = nn+start;
+            // set modulator
+            setH(ex->getH(exampleIndex));
+            // get outputs for this example
+            double *outs = ex->getOutputs(exampleIndex);
             // build errors for each example
-            calcError(in[nn],out[nn]);
+            calcError(ex->getInputs(exampleIndex),outs);
             
             // accumulate errors
             for(int l=1;l<numLayers;l++){
@@ -387,7 +390,7 @@ protected:
             int ol = numLayers-1;
             for(int i=0;i<layerSizes[ol];i++){
                 double o = outputs[ol][i];
-                double e = (o-out[nn][i]);
+                double e = (o-outs[i]);
                 totalError += e*e;
             }
         }
