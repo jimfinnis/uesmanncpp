@@ -28,17 +28,50 @@ public:
         for(int i=0;i<getCount();i++){
             double *d = getInputs(i);
             for(int j=0;j<getInputCount();j++)
-                d[j] = i*100+j;
+                d[j] = i*10+j;
             d= getOutputs(i);
             for(int j=0;j<getOutputCount();j++)
-                d[j] = i*200+j;
+                d[j] = i*20+j;
             setH(i,i*1000);
         }
     }
 };
 
 /**
- * Test the basic example
+ * \brief A simple test network, wraps a network
+ * based on a given example set with a single hidden layer of 2 nodes.
+ * It also has a method to zero all the parameters (weights and biases), used
+ * in testing MSE.
+ */
+
+class TestNet {
+public:
+    BPNet *n;
+    TestNet(const ExampleSet& e) {
+        int layers[3];
+        layers[0] = e.getInputCount();
+        layers[1] = 2;
+        layers[2] = e.getOutputCount();
+        n = new BPNet(1,2,layers);
+    }
+    
+    void zero(){
+        int ct = n->getDataSize();
+        double *buf = new double[ct];
+        for(int i=0;i<ct;i++)buf[i]=0;
+        n->load(buf);
+        delete[] buf;
+    }
+    
+    ~TestNet(){
+        delete n;
+    }
+};
+
+
+
+/**
+ * \brief Test the basic example
  */
 
 BOOST_AUTO_TEST_CASE(example) {
@@ -48,16 +81,16 @@ BOOST_AUTO_TEST_CASE(example) {
     for(int i=0;i<e.getCount();i++){
         double *d = e.getInputs(i);
         for(int j=0;j<e.getInputCount();j++)
-            BOOST_REQUIRE(d[j]== i*100+j);
+            BOOST_REQUIRE(d[j]== i*10+j);
         d= e.getOutputs(i);
         for(int j=0;j<e.getOutputCount();j++)
-            BOOST_REQUIRE(d[j]== i*200+j);
+            BOOST_REQUIRE(d[j]== i*20+j);
         BOOST_REQUIRE(e.getH(i)==i*1000);
     }
 }
 
 /**
- * Test that subsetting examples works
+ * \brief Test that subsetting examples works
  */
 
 BOOST_AUTO_TEST_CASE(subset) {
@@ -65,7 +98,7 @@ BOOST_AUTO_TEST_CASE(subset) {
     
     // check that bad values throw
     BOOST_REQUIRE_THROW(ExampleSet bad(parent,5,6),std::out_of_range);
-    BOOST_REQUIRE_THROW(ExampleSet bad(parent,0,6),std::out_of_range);
+    BOOST_REQUIRE_THROW(ExampleSet bad(parent,-1,6),std::out_of_range);
     BOOST_REQUIRE_THROW(ExampleSet bad(parent,5,6),std::out_of_range);
     BOOST_REQUIRE_THROW(ExampleSet bad(parent,11,6),std::out_of_range);
     
@@ -75,16 +108,18 @@ BOOST_AUTO_TEST_CASE(subset) {
         int parentIndex = i+5;
         double *d = e.getInputs(i);
         for(int j=0;j<e.getInputCount();j++)
-            BOOST_REQUIRE(d[j]== parentIndex*100+j);
+            BOOST_REQUIRE(d[j]== parentIndex*10+j);
         d= e.getOutputs(i);
         for(int j=0;j<e.getOutputCount();j++)
-            BOOST_REQUIRE(d[j]== parentIndex*200+j);
+            BOOST_REQUIRE(d[j]== parentIndex*20+j);
         BOOST_REQUIRE(e.getH(i)==parentIndex*1000);
     }
     
 }
 
-// simple shuffle for testing
+/**
+   \brief simple shuffle for testing
+ */
 template <class T> void sshuffle(T *x, int ct){
     T tmp;
     for(int i=ct-1;i>=1;i--){
@@ -98,7 +133,7 @@ template <class T> void sshuffle(T *x, int ct){
 
 
 /**
- * Test the alternate() function
+ * \brief Test the alternate() function
  */
 
 BOOST_AUTO_TEST_CASE(alt) {
@@ -126,19 +161,52 @@ BOOST_AUTO_TEST_CASE(alt) {
     }
 }
 
+/**
+ * \brief Test training.
+ * This just checks that the network trains.
+ */
 
 BOOST_AUTO_TEST_CASE(trainparams) {
+    ExampleSet e(5000,1,1); // 1 input, 1 output
+    TestNet n(e);
+    for(double i=0;i<5000;i++){
+        *(e.getInputs(i)) = i*0.0002;
+        *(e.getOutputs(i)) = i*0.0002;
+        e.setH(i,0);
+    }
+    printf("-- %f\n",
+    n.n->trainSGD(e,
+                  10000,
+                  5,
+                  200,
+                  100,
+                  NULL,false,false
+                  )
+           );
+}
+
+
+/**
+ * \brief Test mean sum squared error of outputs.
+ * This test finds the mean of the sum of the squared errors on the outputs
+ * across all examples in the test set, in the case of a network where
+ * all the parameters are zero. In this case, all outputs will be 0.5 given
+ * the logistic sigmoid activation function. We test for the correct value
+ * determined by lots of print statements during development.
+ */
+
+BOOST_AUTO_TEST_CASE(testmse) {
     TestExampleSet e;
+    // make a standard net
+    TestNet n(e);
+    // zero it so all the nodes produce 0.5 as their output
+    n.zero();
+    // get the MSE on all examples, given the example values
+    // in the test set
+    double t = n.n->test(e);
     
-    int layers[3];
-    layers[0] = e.getInputCount();
-    layers[1] = 2;
-    layers[2] = e.getOutputCount();
-    BPNet n(0.1,3,layers);
+    // value determined by running the network with a lot of
+    // debug printing
+    BOOST_REQUIRE(t==11400.25);
     
-    n.trainSGD(&e,
-               1000,
-               2,
-               2,
-               1);
 }

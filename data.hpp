@@ -1,5 +1,5 @@
 /**
- * @file data.h
+ * @file data.hpp
  * @brief  Contains formats for example data
  *
  */
@@ -118,7 +118,7 @@ public:
      * \param length the length of the subset.
      */
     ExampleSet(const ExampleSet &parent,int start,int length){
-        if(length > parent.ct - start || start<1 || length<1)
+        if(length > parent.ct - start || start<0 || length<1)
             throw std::out_of_range("subset out of range");
         
         ownsData = false;
@@ -170,7 +170,7 @@ public:
      * \brief get the number of inputs in all examples
      * \return number of inputs into each example
      */
-    int getInputCount(){
+    int getInputCount() const {
         return ninputs;
     }
     
@@ -178,7 +178,7 @@ public:
      * \brief get the number of outputs in all examples
      * \return number of outputs from each example
      */
-    int getOutputCount(){
+    int getOutputCount() const {
         return noutputs;
     }
     
@@ -186,7 +186,7 @@ public:
      * \brief get the number of examples
      * \return number of examples
      */
-    int getCount(){
+    int getCount() const {
         return ct;
     }
     
@@ -197,7 +197,7 @@ public:
      * \param example   index of the example
      */
     
-    double *getInputs(int example){
+    double *getInputs(int example) {
         assert(example<ct);
         return data+x[example].ins;
     }
@@ -208,7 +208,7 @@ public:
      * \param example   index of the example
      */
     
-    double *getOutputs(int example){
+    double *getOutputs(int example) {
         assert(example<ct);
         return data+x[example].outs;
     }
@@ -218,7 +218,7 @@ public:
      * Get the h (modulator) for a given example
      * \param example   index of the example
      */
-    double getH(int example){
+    double getH(int example) const {
         assert(example<ct);
         return data[x[example].h];
     }

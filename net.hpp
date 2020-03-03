@@ -85,19 +85,92 @@ public:
     }
     
     /**
-     * Train using stochastic gradient descent.
+     * \brief Run a function on some or all examples in an example set.
+     * This function runs a function, typically provided as a lambda,
+     * on an example set. It's used in testing the network.
+     * The function has the signature
+     * \code
+     *  void f(double *netout,ExampleSet& examples,int index)
+     * \endcode
+     * where 
+     * 
+     * * *netout* is the array of outputs from the network after the example has run,
+     * * *examples* is the ExampleSet in which the example resides, and
+     * * *index* is the index of the example within the set.
+     * 
+     * See test() for an example.
+     */
+
+    template <class TestFunc> void runExamples(ExampleSet& examples,
+                                                       int start,int num,
+                                                       TestFunc f){
+        if(num<0)num=examples.getCount()-start;
+        for(int i=0;i<num;i++){
+            int idx = start+i;
+            // run the example
+            setH(examples.getH(idx));
+            double *netout = run(examples.getInputs(idx));
+            // perform the function
+            f(netout,examples,i);
+        }
+    }
+    
+    /**
+     * \brief Test a network.
+     * Runs the network over a set of examples and returns the mean MSE for all outputs
+     * \f[
+     * \frac{1}{N\cdot N_{outs}}\sum^N_{e \in Examples} \sum_{i=0}^{N_{outs}} (e_o(i) - e_y(i))^2
+     * \f]
+     * where
+     * \f$N\f$ is the number of examples, 
+     * \f$N_{outs}\f$ is the number of outputs,
+     * \f$e_o(i)\f$ is network's output for example \f$e\f$,
+     * and
+     *  \f$e_y(i)\f$ is the desired output for the same example.
+     * 
+     * \param examples Example set to test (or partially test).
+     * \param start    index of example to start test at.
+     * \param num      number of examples to test (or -1 for all after start point).
+     * 
+     */
+    double test(ExampleSet& examples,int start=0,int num=-1){
+        double mseSum = 0;
+        // have to do this here, too, although runExamples does it, so we can
+        // get the denominator for the mse.
+        if(num<0)num=examples.getCount()-start;
+        // we use runExamples, which performs a function on all examples. The function
+        // here accumulates the sum of squared errors on all outputs.
+        runExamples(examples,start,num,
+                    [&mseSum](double *out,ExampleSet& examples,int idx){
+                    double *netOuts = examples.getOutputs(idx);
+                    for(int i=0;i<examples.getOutputCount();i++){
+                        double d = out[i]-netOuts[i];
+                        mseSum+=d*d;
+                    }
+                });
+        // we then divide by the number of examples and the output count.
+//        printf("SUM: %f, dividing by %d\n", mseSum, num*examples.getOutputCount());
+        return mseSum / (num * examples.getOutputCount());
+    }
+    
+    
+    /**
+     * \brief Train using stochastic gradient descent.
      * Note that cross-validation parameters are slightly different from those
      * given in the thesis. Here we give the number of slices and number of examples
      * per slice; in the thesis we give the total number of examples to be held out
      * and the number of slices.
      * \pre Network has weights initialised to random values
+     * \post The network will be set to the best network found if bestNetData is set,
+     * otherwise the final network will be used.
      * \throws std::out_of_range Too many CV examples
+     * \throws std::logic_error Trying to select best by CV when there's no CV done
      * 
      * @param examples training set (including cross-validation data)
      * @param iterations number of training iterations (pair-presentations for UESMANN,
      * h-as-input and output blending)
-     * @param nSlices number of cross-val slices
-     * @param nPerSlice number of examples in each slice
+     * @param nSlices number of cross-val slices - if zero, no CV is done
+     * @param nPerSlice number of examples in each slice - if zero, no CV is done
      * @param cvInterval cross-validation interval (1 means CV every for every training example)
      * @param bestNetData a buffer of at least getDataSize() bytes for the best network. If NULL,
      * the best network is not saved.
@@ -107,9 +180,12 @@ public:
      * otherwise use the training error. Note that if true, networks will only be tested
      * when the cross-validation runs.
      * @param initrange range of initial weights/biases [-n,n], or -1 for Bishop's rule.
+     * @return If bestNetData is null, the MSE of the final network; otherwise the MSE
+     * of the best network found. This is done across the entire
+     * validation set if provided, or the entire training set if not.
      */
     
-    void trainSGD(ExampleSet *examples,
+    double trainSGD(ExampleSet &examples,
                   int iterations,
                   int nSlices,
                   int nPerSlice,
@@ -123,13 +199,23 @@ public:
         // separate out the training examples from the cross-validation examples
         int nCV = nSlices*nPerSlice;
         // it's an error if there are too many CV examples
-        if(nCV>=examples->getCount())
+        if(nCV>=examples.getCount())
             throw std::out_of_range("Too many cross-validation examples");
-        // build a temporary subset for the CV examples
-        ExampleSet cvExamples(*examples,examples->getCount()-nCV,nCV);
+        
+        if(!nCV && selectBestWithCV)
+            throw std::logic_error("cannot use CV to select best when no CV is done");
+        
+        // shuffle before getting the cross-validation examples
+        examples.shuffle(&rd,true);
+        
+        // build a temporary subset for the CV examples. This still needs to exist
+        // even if we're not using CV, so in that case we'll just
+        // use a dummy of one example.
+        
+        ExampleSet cvExamples(examples,nCV?examples.getCount()-nCV:0,nCV?nCV:1);
         
         // get the number of actual training examples
-        int nExamples = examples->getCount() - nCV;
+        int nExamples = examples.getCount() - nCV;
         
         // initialise the network
         initWeights(initrange);
@@ -148,7 +234,7 @@ public:
         // Need to give this some thought. It doesn't invalidate the work in the PhD
         // although this is one of those cases where I could have been clearer!
         
-        examples->shuffle(&rd,preserveHAlternation);
+        examples.shuffle(&rd,preserveHAlternation);
         
         // setup a countdown for when we cross-validate
         int cvCountdown = cvInterval;
@@ -157,6 +243,8 @@ public:
         
         // now actually do the training
         
+        FILE *log = fopen("foo","w");
+        fprintf(log,"x,slice,y\n");
         for(int i=0;i<iterations;i++){
             // find the example number
             int exampleIndex = i % nExamples;
@@ -176,11 +264,20 @@ public:
             }
             
             // is there cross-validation? If so, do it.
-            if(!--cvCountdown){
+            if(nCV && !--cvCountdown){
                 cvCountdown = cvInterval; // reset
-                // test the appropriate slice, from example cvSlice*nPerSlice, length nPerSlice.
                 
-//                double error = test(&cvExamples,cvSlice*nPerSlice,nPerSlice);
+                // test the appropriate slice, from example cvSlice*nPerSlice, length nPerSlice,
+                // and get the MSE
+                double error = test(cvExamples,cvSlice*nPerSlice,nPerSlice);
+                fprintf(log,"%d,%d,%f\n",i,cvSlice,error);
+                
+                // test this against the min error as was done above
+                if(minError < 0 || trainingError < minError){
+                    if(bestNetData)
+                        save(bestNetData);
+                    minError = trainingError;
+                }
                 
                 // increment the slice index
                 cvSlice = (cvSlice+1)%nSlices;
@@ -190,6 +287,14 @@ public:
             }
         }
         
+        fclose(log);
+        
+        // at the end, finalise the network to the best found if we can
+        if(bestNetData)
+            load(bestNetData);
+        
+        // test on either the entire CV set or the training set and return result
+        return test(nCV?cvExamples:examples);
     }
     
     /**
@@ -267,21 +372,23 @@ protected:
      * - for each weight and bias
      *    - calculate the means across all provided examples
      *    - apply the mean to the weight or bias
-     * - return the total of the mean squared errors (NOTE: different from original, which returned
-     *   mean absolute error) for each output. This is for all examples:
+     * - return the mean squared error (NOTE: different from original, which returned
+     *   mean absolute error) for all outputs and examples:
      * \f[
-     * \sum_{e \in Examples} \sum_{i=0}^{N_{outs}} (e_o(i) - e_y(i))^2
+     * \frac{1}{N\cdot N_{outs}}\sum^N_{e \in Examples} \sum_{i=0}^{N_{outs}} (e_o(i) - e_y(i))^2
      * \f]
-     * where \f$e_o(i)\f$ is network's output \f$i\f$ for example \f$e\f$ and \f$e_y(i)\f$ is the desired output
-     * for the same example.
-     
-     * \param ex      pointer to example set
+     * where
+     * \f$N\f$ is the number of examples, 
+     * \f$N_{outs}\f$ is the number of outputs,
+     * \f$e_o(i)\f$ is network's output for example \f$e\f$,
+     * and
+     *  \f$e_y(i)\f$ is the desired output for the same example.
+     * \param ex      example set
      * \param start   index of first example to use
      * \param num     number of examples. For a single example, you'd just use 1.
      * \return        the sum of mean squared errors in the output layer (see formula in method documentation)
      */
-    
-    virtual double trainBatch(ExampleSet *ex,int start,int num) = 0;
+    virtual double trainBatch(ExampleSet& ex,int start,int num) = 0;
     
 };    
 

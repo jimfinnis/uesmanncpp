@@ -18,13 +18,40 @@
 class BPNet : public Net {
 public:
     /**
-     * \brief Constructor
+     * \brief Constructor -  does not initialise the weights to random values so
+     * that we can reinitialise networks.
      * \param _eta the learning rate
      * \param nlayers number of layers
      * \param layerCounts array of layer counts
      */
-    BPNet(double _eta,int nlayers,const int *layerCounts) : Net(eta) {
-        init(nlayers,layerCounts);
+    BPNet(double _eta,int nlayers,const int *layerCounts) : Net(_eta) {
+        numLayers = nlayers;
+        outputs = new double* [numLayers];
+        errors = new double* [numLayers];
+        layerSizes = new int [numLayers];
+        largestLayerSize=0;
+        for(int i=0;i<numLayers;i++){
+            int n = layerCounts[i];
+            outputs[i] = new double[n];
+            errors[i] = new double[n];
+            for(int k=0;k<n;k++)
+                outputs[i][k]=0;
+            layerSizes[i]=n;
+            if(n>largestLayerSize)
+                largestLayerSize=n;
+        }
+        
+        weights = new double * [numLayers];
+        gradAvgsWeights = new double* [numLayers];
+        biases = new double* [numLayers];
+        gradAvgsBiases = new double* [numLayers];
+        for(int i=0;i<numLayers;i++){
+            int n = layerCounts[i];
+            weights[i] = new double[largestLayerSize*largestLayerSize];
+            gradAvgsWeights[i] = new double[largestLayerSize*largestLayerSize];
+            biases[i] = new double[n];
+            gradAvgsBiases[i] = new double[n];
+        }
     }
     
     
@@ -50,30 +77,16 @@ public:
         delete [] layerSizes;
     }
     
-    /**
-     * \brief Set the inputs to the network before running or training
-     * \param d array of doubles, the size of the input layer
-     */
-    
     virtual void setInputs(double *d) {
-        for(int i=0;i<layerSizes[0];i++)
+        for(int i=0;i<layerSizes[0];i++){
             outputs[0][i]=d[i];
+        }
     }
-    
-    /**
-     * \brief Get the outputs after running
-     * \return pointer to the output layer outputs
-     */
     
     virtual double *getOutputs() const {
         return outputs[numLayers-1];
     }
     
-    /**
-     * \brief Get the length of the serialised data block
-     * for this network.
-     * \return the size in bytes
-     */
     virtual int getDataSize() const {
         // number of weights+biases for each layer is
         // the number of nodes in that layer (bias count)
@@ -88,11 +101,6 @@ public:
         return total;
     }
     
-    /**
-     * \brief Serialize the data (not including any network type magic number or
-     * layer/node counts) to the given memory (which must be of sufficient size).
-     * \param buf the buffer to save the data, must be at least getDataSize() bytes
-     */
     virtual void save(double *buf) const {
         double *g=buf;
         // data is ordered by layers, with nodes within
@@ -109,12 +117,6 @@ public:
         }
     }
     
-    /**
-     * \brief Given that the pointer points to a data block of the correct size
-     * for the current network, copy the parameters from that data block into
-     * the current network overwriting the current parameters.
-     * \param buf the buffer to load the data from, must be at least getDataSize() bytes
-     */
     virtual void load(double *buf){
         double *g=buf;
         // genome is ordered by layers, with nodes within
@@ -159,52 +161,6 @@ protected:
     
     double **gradAvgsWeights; //!< average gradient for each weight (built during training)
     double **gradAvgsBiases; //!< average gradient for each bias (built during training)
-    
-    
-    
-    /**
-     * \brief Default initialisation routine; other things may override it. 
-     * Called from each net class' constructor because non-standard net types
-     * do strange things. Does not initialise the weights; this is done as the
-     * first step in training.
-     * \param nlayers number of layers
-     * \param layerCounts array of layer counts
-     */
-    
-    virtual void init(int nlayers,const int *layerCounts){
-        numLayers = nlayers;
-        outputs = new double* [numLayers];
-        errors = new double* [numLayers];
-        layerSizes = new int [numLayers];
-        largestLayerSize=0;
-        for(int i=0;i<numLayers;i++){
-            int n = layerCounts[i];
-            outputs[i] = new double[n];
-            errors[i] = new double[n];
-            for(int k=0;k<n;k++)
-                outputs[i][k]=0;
-            layerSizes[i]=n;
-            if(n>largestLayerSize)
-                largestLayerSize=n;
-        }
-        
-        weights = new double * [numLayers];
-        gradAvgsWeights = new double* [numLayers];
-        biases = new double* [numLayers];
-        gradAvgsBiases = new double* [numLayers];
-        for(int i=0;i<numLayers;i++){
-            int n = layerCounts[i];
-            weights[i] = new double[largestLayerSize*largestLayerSize];
-            gradAvgsWeights[i] = new double[largestLayerSize*largestLayerSize];
-            biases[i] = new double[n];
-            gradAvgsBiases[i] = new double[n];
-        }
-    }
-    
-    /**
-     * \brief initialise weights to random values
-     * \param initr range of weights [-n,n], or -1 for Bishop's rule.
-     */
     
     virtual void initWeights(double initr){
         for(int i=0;i<numLayers;i++){
@@ -310,12 +266,6 @@ protected:
         }
     }
     
-    /**
-     * \brief update the network
-     * \pre inputs must be set
-     * \post the output member will hold the output values
-     */
-    
     virtual void update(){
         for(int i=1;i<numLayers;i++){
             for(int j=0;j<layerSizes[i];j++){
@@ -330,34 +280,7 @@ protected:
         }
     }
     
-    /**
-     * \brief
-     * Train a network for batch (or mini-batch) (or single example).
-     * 
-     * This will 
-     * - zero the average gradient variables for all weights and biases
-     * - zero the total error
-     * - for each example
-     *    - calculate the error with calcError() which itself calls update()
-     *    - add to the total mean squared error (see NOTE below)
-     * - for each weight and bias
-     *    - calculate the means across all provided examples
-     *    - apply the mean to the weight or bias
-     * - return the total of the mean squared errors (NOTE: different from original, which returned
-     *   mean absolute error) for each output. This is for all examples:
-     * \f[
-     * \sum_{e \in Examples} \sum_{i=0}^{N_{outs}} (e_o(i) - e_y(i))^2
-     * \f]
-     * where \f$e_o(i)\f$ is network's output \f$i\f$ for example \f$e\f$ and \f$e_y(i)\f$ is the desired output
-     * for the same example.
-     
-     * \param ex      pointer to example set
-     * \param start   index of first example to use
-     * \param num     number of examples. For a single example, you'd just use 1.
-     * \return        the sum of mean squared errors in the output layer (see formula in method documentation)
-     */
-    
-    double trainBatch(ExampleSet *ex,int start,int num){
+    virtual double trainBatch(ExampleSet& ex,int start,int num){
         // zero average gradients
         for(int j=0;j<numLayers;j++){
             for(int k=0;k<layerSizes[j];k++)
@@ -372,11 +295,11 @@ protected:
         for(int nn=0;nn<num;nn++){
             int exampleIndex = nn+start;
             // set modulator
-            setH(ex->getH(exampleIndex));
+            setH(ex.getH(exampleIndex));
             // get outputs for this example
-            double *outs = ex->getOutputs(exampleIndex);
+            double *outs = ex.getOutputs(exampleIndex);
             // build errors for each example
-            calcError(ex->getInputs(exampleIndex),outs);
+            calcError(ex.getInputs(exampleIndex),outs);
             
             // accumulate errors
             for(int l=1;l<numLayers;l++){
@@ -402,6 +325,7 @@ protected:
             for(int i=0;i<layerSizes[l];i++){
                 for(int j=0;j<layerSizes[l-1];j++){
                     double wdelta = eta*getavggradw(l,i,j)*factor;
+//                    printf("WCORR: %f factor %f\n",wdelta,getavggradw(l,i,j));
                     getw(l,i,j) -= wdelta;
                 }
                 double bdelta = eta*gradAvgsBiases[l][i]*factor;
