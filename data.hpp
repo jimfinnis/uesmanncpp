@@ -124,7 +124,7 @@ public:
     ExampleSet(const ExampleSet &parent,int start,int length){
         if(length > parent.ct - start || start<0 || length<1)
             throw std::out_of_range("subset out of range");
-        
+#if 0        
         ownsData = false;
         ninputs = parent.ninputs;
         noutputs = parent.noutputs;
@@ -135,6 +135,21 @@ public:
         for(int i=0;i<ct;i++){
             x[i] = parent.x[start+i];
         }
+#else
+#pragma message("Dumb subsetting")
+        // dumb subsetting
+        ownsData = true;
+        ninputs = parent.ninputs;
+        noutputs = parent.noutputs;
+        int size=(ninputs+noutputs+1)*parent.ct;
+        data = new double[size];
+        memcpy(data,parent.data,size*sizeof(double));
+        x = new Example[length];
+        ct = length;
+        for(int i=0;i<ct;i++){
+            x[i] = parent.x[start+i];
+        }
+#endif
     }
     
     /**

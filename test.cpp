@@ -289,12 +289,15 @@ BOOST_AUTO_TEST_CASE(trainmnist){
     MNIST m("../testdata/t10k-labels-idx1-ubyte","../testdata/t10k-images-idx3-ubyte");
     ExampleSet e(m);
     Net *n = NetFactory::makeNet(NetType::PLAIN,e,16);
+    n->setSeed(10);
     
-    Net::SGDParams params(0.1,100000); // eta,iterations
+    Net::SGDParams params(1,100000); // eta,iterations
     // use half of the data as CV examples, 1000 CV cycles, 10 slices.
     // Don't shuffle the CV examples on epoch. Also, store the best net
     // and make sure we end up with that.
-    params.crossValidation(e,0.5,1000,10,false).storeBest(*n);
+    params.crossValidation(e,0.5,1000,10,false)
+          .storeBest(*n)
+          .setPreserveHAlternation(false);
     
     double mse = n->trainSGD(e,params);
     printf("%f\n",mse);

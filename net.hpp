@@ -116,6 +116,7 @@ public:
                                                        int start,int num,
                                                        TestFunc f){
         if(num<0)num=examples.getCount()-start;
+        printf("Testing examples %d, count %d\n",start,num);
         for(int i=0;i<num;i++){
             int idx = start+i;
             // run the example
@@ -160,7 +161,7 @@ public:
                     }
                 });
         // we then divide by the number of examples and the output count.
-//        printf("SUM: %f, dividing by %d\n", mseSum, num*examples.getOutputCount());
+        printf("SUM: %f, dividing by %d\n", mseSum, num*examples.getOutputCount());
         return mseSum / (num * examples.getOutputCount());
     }
     
@@ -169,8 +170,10 @@ public:
      * This structure holds the parameters for the trainSGD() method, and serves
      * as a better way of passing them than a long parameter list. All values
      * have defaults set up by the constructor, which are given as constants.
+     * You can set parameters by hand, but there are fluent (chainable) setters for many members.
      */
     struct SGDParams {
+        friend class Net;
         
         /// @brief default value of iterations
         constexpr static int DEF_ITERATIONS=10000;
@@ -179,6 +182,12 @@ public:
          * a pair-presentation as is the case in the thesis when discussing the modulatory network types.
          */
         int iterations;
+        
+        /**
+         * The learning rate to use
+         */
+        double eta;
+        
         
         /**
          * \brief The number of cross-validation slices to use
@@ -196,6 +205,19 @@ public:
          */
         int cvInterval;
         
+        /** \brief fluent setter for cross-validation parameters; consider using crossValidation instead 
+         * \param slices number of slices
+         * \param nperslice number of examples per slice
+         * \param interval iteration interval for cross-validation events
+         */
+        SGDParams& setPreserveHAlternation(int slices,int nperslice,int interval){
+            nSlices = slices;
+            nPerSlice = nperslice;
+            cvInterval = interval;
+            return *this;
+        }
+        
+        
         /// @brief default value of preserveHAlternation (do preserve)
         constexpr static bool DEF_PRESERVEHALTERNATION=true;
         /**
@@ -203,6 +225,14 @@ public:
          * they alternate h<0.5 and h>=0.5
          */
         bool preserveHAlternation;
+        
+        /** \brief fluent setter for preserveHAlternation */
+        SGDParams& setPreserveHAlternation(bool v=true){
+            preserveHAlternation=v;
+            return *this;
+        }
+            
+
         
         /// @brief default value of selectBestWithCV (don't select with cross-validation;
         /// there isn't any by default)
@@ -214,6 +244,13 @@ public:
          */
         bool selectBestWithCV;
         
+        /** \brief fluent setter for selectBestWithCV */
+        SGDParams& setSelectBestWithCV(bool v=true){
+            selectBestWithCV=v;
+            return *this;
+        }
+        
+        
         /// @brief default value of cvShuffle (do shuffle)
         constexpr static bool DEF_CVSHUFFLE=true;
         /**
@@ -222,27 +259,28 @@ public:
          */
         bool cvShuffle = DEF_CVSHUFFLE;
         
+        /** \brief fluent setter for cvShuffle */
+        SGDParams& setCVShuffle(bool v=true){
+            cvShuffle=v;
+            return *this;
+        }
+        
         /**
          * \brief range of initial weights/biases [-n,n], or -1 for Bishop's rule.
          */
         int initrange;
+        
+        /** \brief fluent setter for initrange */
+        SGDParams& setInitRange(double range=-1){
+            initrange = range;
+            return *this;
+        }
         
         /**
          * \brief a buffer of at least getDataSize() bytes for the best network. If NULL,
          * the best network is not saved.
          */
         double *bestNetData;
-        
-        /**
-         * \brief true if we own the best net data buffer bestNetData, and should delete
-         * it on destruction.
-         */
-        bool ownsBestNetData;
-        
-        /**
-         * The learning rate to use
-         */
-        double eta;
         
         /** \brief Constructor which sets up defaults with no information about examples - 
          * cross-validation is not set up by default, but can be done by calling
@@ -330,6 +368,12 @@ public:
             ownsBestNetData = true;
             return *this;
         }
+    private:
+        /**
+         * \brief true if we own the best net data buffer bestNetData, and should delete
+         * it on destruction.
+         */
+        bool ownsBestNetData;
     };
         
     
@@ -369,12 +413,6 @@ public:
         // shuffle before getting the cross-validation examples
         examples.shuffle(&rd,true);
         
-        // build a temporary subset for the CV examples. This still needs to exist
-        // even if we're not using CV, so in that case we'll just
-        // use a dummy of one example.
-        
-        ExampleSet cvExamples(examples,nCV?examples.getCount()-nCV:0,nCV?nCV:1);
-        
         // get the number of actual training examples
         int nExamples = examples.getCount() - nCV;
         
@@ -396,6 +434,12 @@ public:
         // although this is one of those cases where I could have been clearer!
         
         examples.shuffle(&rd,params.preserveHAlternation);
+        
+        // build a temporary subset for the CV examples. This still needs to exist
+        // even if we're not using CV, so in that case we'll just
+        // use a dummy of one example.
+        
+        ExampleSet cvExamples(examples,nCV?examples.getCount()-nCV:0,nCV?nCV:1);
         
         // setup a countdown for when we cross-validate
         int cvCountdown = params.cvInterval;
@@ -425,6 +469,11 @@ public:
             }
             
             // is there cross-validation? If so, do it.
+            
+            /** \bug looks like there's a bug here:
+             * the zeroth slice always does much, much better.
+             */
+               
             if(nCV && !--cvCountdown){
                 cvCountdown = params.cvInterval; // reset
                 
