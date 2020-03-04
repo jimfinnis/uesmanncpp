@@ -129,6 +129,23 @@ BOOST_AUTO_TEST_CASE(alt) {
 }
 
 /**
+ * \brief Test the alternation function on examples
+ */
+
+BOOST_AUTO_TEST_CASE(altex){
+    TestExampleSet e;
+    for(int i=0;i<e.getCount();i++){
+        e.setH(i, i<e.getCount()/2 ? 1:0);
+    }
+    drand48_data rd;
+    srand48_r(10,&rd);
+    e.shuffle(&rd,true);
+    for(int i=0;i<e.getCount();i++){
+        BOOST_REQUIRE((e.getH(i)<0.5 ? 0 : 1) == i%2);
+    }
+}
+
+/**
  * \brief Test training.
  * This just checks that the network trains.
  */
@@ -151,22 +168,25 @@ BOOST_AUTO_TEST_CASE(trainparams) {
     // set up a net which conforms to those examples with 3 hidden nodes.
     Net *net = NetFactory::makeNet(NetType::PLAIN,e,3);
     
-    // eta=0.1, 10000 iterations
-    Net::SGDParams params(0.1,10000);
+    // eta=1, lots of  iterations
+    Net::SGDParams params(1,10000000);
     // use half of the data as CV examples, 1000 CV cycles, 3 slices.
     // Don't shuffle the CV examples on epoch. Also, store the best net
     // and make sure we end up with that.
-    params.crossValidation(e,0.5,1000,10,false).storeBest(*net);
+    
+        params.crossValidation(e,0.5,1000,10,true).storeBest(*net).setSeed(0);
     
     // do the training and get the MSE of the best net.
     double mse = net->trainSGD(e,params);
     printf("%f\n",mse);
-    
     // assert that it's a sensible value
     BOOST_REQUIRE(mse>0);
-    /** \bug needs to be much lower */
-    BOOST_REQUIRE(mse<0.05);
-    
+    BOOST_REQUIRE(mse<0.005);
+    for(double i=0;i<NUMEXAMPLES;i++){
+        double v = i*recipNE;
+        double o = *(net->run(&v));
+        printf("%f,%f\n",v,o);
+    }
     delete net;
 }
 
@@ -289,7 +309,6 @@ BOOST_AUTO_TEST_CASE(trainmnist){
     MNIST m("../testdata/t10k-labels-idx1-ubyte","../testdata/t10k-images-idx3-ubyte");
     ExampleSet e(m);
     Net *n = NetFactory::makeNet(NetType::PLAIN,e,16);
-    n->setSeed(10);
     
     Net::SGDParams params(1,100000); // eta,iterations
     // use half of the data as CV examples, 1000 CV cycles, 10 slices.
@@ -297,6 +316,7 @@ BOOST_AUTO_TEST_CASE(trainmnist){
     // and make sure we end up with that.
     params.crossValidation(e,0.5,1000,10,false)
           .storeBest(*n)
+          .setSeed(10)
           .setPreserveHAlternation(false);
     
     double mse = n->trainSGD(e,params);

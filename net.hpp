@@ -60,7 +60,7 @@ public:
     void setSeed(long seed){
         srand48_r(seed,&rd);
     }
-          
+    
     
     /**
      * \brief Set the inputs to the network before running or training
@@ -96,38 +96,6 @@ public:
     }
     
     /**
-     * \brief Run a function on some or all examples in an example set.
-     * This function runs a function, typically provided as a lambda,
-     * on an example set. It's used in testing the network.
-     * The function has the signature
-     * \code
-     *  void f(double *netout,ExampleSet& examples,int index)
-     * \endcode
-     * where 
-     * 
-     * * *netout* is the array of outputs from the network after the example has run,
-     * * *examples* is the ExampleSet in which the example resides, and
-     * * *index* is the index of the example within the set.
-     * 
-     * See test() for an example.
-     */
-
-    template <class TestFunc> void runExamples(ExampleSet& examples,
-                                                       int start,int num,
-                                                       TestFunc f){
-        if(num<0)num=examples.getCount()-start;
-        printf("Testing examples %d, count %d\n",start,num);
-        for(int i=0;i<num;i++){
-            int idx = start+i;
-            // run the example
-            setH(examples.getH(idx));
-            double *netout = run(examples.getInputs(idx));
-            // perform the function
-            f(netout,examples,i);
-        }
-    }
-    
-    /**
      * \brief Test a network.
      * Runs the network over a set of examples and returns the mean MSE for all outputs
      * \f[
@@ -150,18 +118,22 @@ public:
         // have to do this here, too, although runExamples does it, so we can
         // get the denominator for the mse.
         if(num<0)num=examples.getCount()-start;
-        // we use runExamples, which performs a function on all examples. The function
-        // here accumulates the sum of squared errors on all outputs.
-        runExamples(examples,start,num,
-                    [&mseSum](double *out,ExampleSet& examples,int idx){
-                    double *netOuts = examples.getOutputs(idx);
-                    for(int i=0;i<examples.getOutputCount();i++){
-                        double d = out[i]-netOuts[i];
-                        mseSum+=d*d;
-                    }
-                });
+        
+        // for each example, run it and accumulate the sum of squared errors
+        // on all outputs 
+        
+        for(int i=0;i<num;i++){
+            int idx = start+i;
+            setH(examples.getH(idx));
+            double *netout = run(examples.getInputs(idx));
+            double *exout = examples.getOutputs(idx);
+            for(int j=0;j<examples.getOutputCount();j++){
+                double d = netout[j]-exout[j];
+                mseSum += d*d;
+            }
+        }
+        
         // we then divide by the number of examples and the output count.
-        printf("SUM: %f, dividing by %d\n", mseSum, num*examples.getOutputCount());
         return mseSum / (num * examples.getOutputCount());
     }
     
@@ -231,8 +203,8 @@ public:
             preserveHAlternation=v;
             return *this;
         }
-            
-
+        
+        
         
         /// @brief default value of selectBestWithCV (don't select with cross-validation;
         /// there isn't any by default)
@@ -277,6 +249,18 @@ public:
         }
         
         /**
+         * \brief seed for random number generator used to initialise weights and also
+         * perform shuffling
+         */
+        long seed;
+        
+        /** \brief fluent setter for seed */
+        SGDParams& setSeed(long v){
+            seed = v;
+            return *this;
+        }
+        
+        /**
          * \brief a buffer of at least getDataSize() bytes for the best network. If NULL,
          * the best network is not saved.
          */
@@ -292,6 +276,7 @@ public:
          */
         
         SGDParams(double _eta, int _iters) {
+            seed = 0L;
             eta = _eta;
             iterations = _iters;
             initrange = -1;
@@ -375,7 +360,7 @@ public:
          */
         bool ownsBestNetData;
     };
-        
+    
     
     
     /**
@@ -400,6 +385,9 @@ public:
     double trainSGD(ExampleSet &examples,SGDParams& params){
         // set up learning rate
         eta = params.eta;
+        
+        // set seed for PRNG
+        setSeed(params.seed);
         
         // separate out the training examples from the cross-validation examples
         int nCV = params.nSlices*params.nPerSlice;
@@ -473,7 +461,7 @@ public:
             /** \bug looks like there's a bug here:
              * the zeroth slice always does much, much better.
              */
-               
+            
             if(nCV && !--cvCountdown){
                 cvCountdown = params.cvInterval; // reset
                 
@@ -484,10 +472,12 @@ public:
                 fprintf(log,"%d,%d,%f\n",i,cvSlice,error);
                 
                 // test this against the min error as was done above
-                if(minError < 0 || trainingError < minError){
-                    if(params.bestNetData)
-                        save(params.bestNetData);
-                    minError = trainingError;
+                if(params.selectBestWithCV){
+                    if(minError < 0 || trainingError < minError){
+                        if(params.bestNetData)
+                            save(params.bestNetData);
+                        minError = trainingError;
+                    }
                 }
                 
                 // increment the slice index
@@ -546,7 +536,9 @@ protected:
      * \brief Constructor - protected because others inherit it and it's not used
      * directly
      */
-    Net(){}
+    Net(){
+        setSeed(0);
+    }
     
     /**
      * \brief get a random number using this net's PRNG data

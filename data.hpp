@@ -27,7 +27,7 @@ template <class T,class TestFunc> void alternate(T *arr,int n,TestFunc f){
         if(f(arr+i)!=(i%2==0)){
             // doesn't match; swap.
             for(int j=i;;j++){
-                if(j>n)return; // can't find a match, exit.
+                if(j>=n)return; // can't find a match, exit.
                 // scan for one that does
                 if(f(arr+j)==(i%2==0)){
                     // and swap and leave loop
@@ -46,27 +46,20 @@ template <class T,class TestFunc> void alternate(T *arr,int n,TestFunc f){
  * \brief
  * A set of example data. Each datum consists of 
  * hormone (i.e. modulator value), inputs and outputs.
+ * The data is stored as a single double array, with each example made up
+ * of inputs, followed by outputs, followed by modulator value (h).
  */
 
 class ExampleSet {
-    
-    /**
-     * \brief An example consists of three integer offsets into a large double array
-     * of raw data.
-     */
-    
-    struct Example {
-        uint32_t ins; //!< offset to start of inputs
-        uint32_t outs; //!< offset to start of outputs
-        uint32_t h; //!< offset to hormone (modulator)
-    };
-    
-    Example *x; //!< pointer to array of examples
+    double **examples; //!< pointers to each example, stored as inputs, then outputs, then h.
     double *data; //!< pointer to block of floats containing all example data
     
     int ninputs; //!< number of inputs 
     int noutputs; //!< number of outputs
     int ct; //!< number of examples
+    
+    uint32_t outputOffset; //!< offset of outputs in example data
+    uint32_t hOffset; //!< offset of h in example data
     
     /**
      * \brief Does this set own its data?
@@ -83,7 +76,6 @@ public:
     /**
      * \brief
      * Constructor - creates but doesn't fill in the data
-     * and offset arrays
      * \param n    number of examples
      * \param nin  number of inputs to each example
      * \param nout number of outputs from each example
@@ -99,16 +91,19 @@ public:
         // size of a single example: number of inputs plus number of outputs
         // plus one for the modulator.
         
-        uint32_t exampleSize = nin+nout+1;
+        uint32_t exampleSize = ninputs+noutputs+1;
+        
+        // calculate the offsets
+        outputOffset = ninputs;
+        hOffset = ninputs+noutputs;
         
         data = new double[exampleSize*ct]; // allocate data
-        x = new Example[ct]; // allocate offset structures
+        examples = new double*[ct]; // allocate example pointers
         
         for(int i=0;i<ct;i++){
-            // fill in the example pointers
-            x[i].ins = exampleSize*i;
-            x[i].outs = x[i].ins+ninputs;
-            x[i].h = x[i].outs+noutputs;
+            // work out and store the example pointer
+            examples[i] = data+i*exampleSize;
+            
         }
         ownsData = true;
     }
@@ -124,32 +119,18 @@ public:
     ExampleSet(const ExampleSet &parent,int start,int length){
         if(length > parent.ct - start || start<0 || length<1)
             throw std::out_of_range("subset out of range");
-#if 0        
         ownsData = false;
         ninputs = parent.ninputs;
         noutputs = parent.noutputs;
+        outputOffset = ninputs;
+        hOffset = ninputs+noutputs;
         data = parent.data;
-        x = new Example[length];
+        examples = new double*[length];
         ct = length;
         
         for(int i=0;i<ct;i++){
-            x[i] = parent.x[start+i];
+            examples[i] = parent.examples[start+i];
         }
-#else
-#pragma message("Dumb subsetting")
-        // dumb subsetting
-        ownsData = true;
-        ninputs = parent.ninputs;
-        noutputs = parent.noutputs;
-        int size=(ninputs+noutputs+1)*parent.ct;
-        data = new double[size];
-        memcpy(data,parent.data,size*sizeof(double));
-        x = new Example[length];
-        ct = length;
-        for(int i=0;i<ct;i++){
-            x[i] = parent.x[start+i];
-        }
-#endif
     }
     
     /**
@@ -193,6 +174,8 @@ public:
         }
     }
     
+public:
+    
     /**
      * \brief
      * Shuffle the example using a PRNG and a Fisher-Yates shuffle.
@@ -202,19 +185,22 @@ public:
      */
     
     void shuffle(drand48_data *rd,bool preserveHAlternation){
-        Example tmp; // makes a copy of the structures
+        double *tmp; // makes a copy of the structures
         for(int i=ct-1;i>=1;i--){
             long lr;
             lrand48_r(rd,&lr);
             int j = lr%(i+1);
-            tmp=x[i];
-            x[i]=x[j];
-            x[j]=tmp;
+            tmp=examples[i];
+            examples[i]=examples[j];
+            examples[j]=tmp;
         }
         // if this flat is set, rearrange the shuffled data so that they go in the sequence
         // h<0.5, h>=0.5, h>0.5 etc.
         if(preserveHAlternation){
-            alternate<Example>(x, ct, [](Example *e){return e->h<0.5;});
+            alternate<double*>(examples, ct, 
+                               // abominations like this are why I used an overcomplicated
+                               // example system at first...
+                               [this](double **e){return (*e)[hOffset]<0.5;});
         }
     }
     
@@ -251,7 +237,7 @@ public:
     
     double *getInputs(int example) {
         assert(example<ct);
-        return data+x[example].ins;
+        return examples[example]; // inputs are first in each block
     }
     
     /**
@@ -262,7 +248,7 @@ public:
     
     double *getOutputs(int example) {
         assert(example<ct);
-        return data+x[example].outs;
+        return examples[example] + outputOffset;
     }
     
     /**
@@ -272,7 +258,7 @@ public:
      */
     double getH(int example) const {
         assert(example<ct);
-        return data[x[example].h];
+        return *(examples[example] + hOffset);
     }
     
     /**
@@ -283,7 +269,7 @@ public:
      */
     void setH(int example, double h){
         assert(example<ct);
-        data[x[example].h]=h;
+        *(examples[example] + hOffset) = h;
     }
     
 };
