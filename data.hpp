@@ -10,6 +10,8 @@
 #include <assert.h>
 #include <stdint.h>
 
+#include "mnist.hpp"
+
 /**
  * \brief Ensure array has alternating values of boolean predicate.
  * Given an array, this function will rearrange the values to ensure that
@@ -113,6 +115,8 @@ public:
     
     /**
      * \brief Constructor for making a subset of another set.
+     * This uses the actual data in the parent, but creates a fresh
+     * set of offset structures which can be independently shuffled.
      * \param parent the set which holds our data.
      * \param start the start index of the data in the parent.
      * \param length the length of the subset.
@@ -122,11 +126,45 @@ public:
             throw std::out_of_range("subset out of range");
         
         ownsData = false;
-        x = parent.x + start;
         ninputs = parent.ninputs;
         noutputs = parent.noutputs;
         data = parent.data;
+        x = new Example[length];
         ct = length;
+        
+        for(int i=0;i<ct;i++){
+            x[i] = parent.x[start+i];
+        }
+    }
+    
+    /**
+     * \brief Special constructor for generating a data set
+     * from an MNIST database with a single labelling (i.e.
+     * for use in non-modulatory training). We copy the data
+     * from the MNIST object. The outputs will use a one-hot encoding.
+     */
+    ExampleSet(const MNIST& mnist) : ExampleSet(
+                                                mnist.getCount(), // number of examples
+                                                mnist.r()*mnist.c(), // input count
+                                                mnist.getMaxLabel()+1 // output count
+                                                ){
+        // fill in the data
+        for(int i=0;i<ct;i++){
+            // convert each pixel into a 0-1 double and store
+            uint8_t *imgpix = mnist.getImg(i);
+            double *inpix = getInputs(i);
+            for(int i=0;i<ninputs;i++){
+                double pixval = *imgpix++;
+                pixval /= 255.0;
+                *inpix++ = pixval; 
+            }
+            // fill in the one-hot encoded output
+            double *out = getOutputs(i);
+            for(int outIdx=0;outIdx<noutputs;outIdx++){
+                out[outIdx] = mnist.getLabel(i)==outIdx?1:0;
+            }
+        }
+        ownsData=true;
     }
     
     /**
@@ -136,7 +174,6 @@ public:
     
     ~ExampleSet(){
         if(ownsData){ // only delete the data if we aren't a subset
-            delete [] x;
             delete [] data;
         }
     }
