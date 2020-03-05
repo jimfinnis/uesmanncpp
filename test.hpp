@@ -9,6 +9,7 @@
 
 #include "netFactory.hpp"
 
+namespace utf = boost::unit_test;
 
 /**
  * \brief get index of max value in an array

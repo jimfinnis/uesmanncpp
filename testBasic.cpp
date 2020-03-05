@@ -1,6 +1,7 @@
 /**
  * @file test.cpp
- * @brief  Basic tests of underlying functionality
+ * @brief  Basic tests of underlying functionality, or things which only take
+ * a short time to run!
  *
  */
 
@@ -189,5 +190,32 @@ BOOST_AUTO_TEST_CASE(testmse) {
     
 }
 
-
-
+/**
+ * \brief Loading MNIST data and converting to an example set.
+ * Ensure we can load MNIST data into an example set, and that
+ * the image and its label are correct. The former is hard to test
+ * automatically, so I'll rely on having eyeballed it.
+ */
+BOOST_AUTO_TEST_CASE(loadmnist) {
+    MNIST m("../testdata/t10k-labels-idx1-ubyte","../testdata/t10k-images-idx3-ubyte");
+    ExampleSet e(m);
+    
+    // in this data set, example 1233 should be a 5.
+    double *in = e.getInputs(1233);
+    for(int y=0;y<28;y++){
+        for(int x=0;x<28;x++){
+            uint8_t qq = *in++ * 10;
+            if(qq>9)putchar('?');
+            else putchar(qq?qq+'0':'.');
+        }
+        putchar('\n');
+    }
+    double *out = e.getOutputs(1233);
+    BOOST_REQUIRE(e.getOutputCount()==10);
+    for(int i=0;i<10;i++){
+        if(i==5)
+            BOOST_REQUIRE(out[i]==1.0);
+        else
+            BOOST_REQUIRE(out[i]==0.0);
+    }
+}
