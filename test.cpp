@@ -331,7 +331,7 @@ BOOST_AUTO_TEST_CASE(trainmnist){
     // create a network conforming to the examples' input and output counts with 16 hidden nodes
     Net *n = NetFactory::makeNet(NetType::PLAIN,e,16);
     
-    Net::SGDParams params(1,1000); // eta,iterations
+    Net::SGDParams params(0.1,10000); // eta,iterations
     
     // use half of the data as CV examples, 1000 CV cycles, 10 slices.
     // Shuffle the CV examples on epoch. Also, store the best net
@@ -348,6 +348,7 @@ BOOST_AUTO_TEST_CASE(trainmnist){
     MNIST mtest("../testdata/t10k-labels-idx1-ubyte","../testdata/t10k-images-idx3-ubyte");
     ExampleSet testSet(mtest);
     
+    // and test against the test set, recording how many are good.
     int correct=0;
     for(int i=0;i<testSet.getCount();i++){
         double *ins = testSet.getInputs(i);
@@ -357,5 +358,9 @@ BOOST_AUTO_TEST_CASE(trainmnist){
         if(correctLabel==netLabel)correct++;
     }
     
-    printf("MSE=%f, correct=%d/%d\n",mse,correct,testSet.getCount());
+    // we've not trained for long so this isn't going to be awesome.
+    double ratio = ((double)correct)/(double)testSet.getCount();
+    printf("MSE=%f, correct=%d/%d=%f\n",mse,correct,testSet.getCount(),ratio);
+    BOOST_REQUIRE(mse<0.03);
+    BOOST_REQUIRE(ratio>0.85);
 }

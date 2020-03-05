@@ -470,6 +470,7 @@ public:
                 double error = test(cvExamples,cvSlice*params.nPerSlice,
                                     params.nPerSlice);
                 fprintf(log,"%d,%d,%f\n",i,cvSlice,error);
+                printf("%d,%d,%f\n",i,cvSlice,error);
                 
                 // test this against the min error as was done above
                 if(params.selectBestWithCV){
