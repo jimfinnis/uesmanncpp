@@ -305,20 +305,57 @@ BOOST_AUTO_TEST_CASE(loadmnist) {
 }
 
 
+/**
+ * \brief get index of max value in an array
+ * \param o array ptr
+ * \param n length of array
+ */
+
+static int getHighest(double *o,int n){
+    int h=0;
+    double maxval=-10;
+    for(int i=0;i<n;i++,o++){
+        if(*o > maxval){
+            maxval= *o;
+            h=i;
+        }
+    }
+    return h;
+}
+    
+
 BOOST_AUTO_TEST_CASE(trainmnist){
-    MNIST m("../testdata/t10k-labels-idx1-ubyte","../testdata/t10k-images-idx3-ubyte");
+    // load training set and make examples
+    MNIST m("../testdata/train-labels-idx1-ubyte","../testdata/train-images-idx3-ubyte");
     ExampleSet e(m);
+    // create a network conforming to the examples' input and output counts with 16 hidden nodes
     Net *n = NetFactory::makeNet(NetType::PLAIN,e,16);
     
-    Net::SGDParams params(1,100000); // eta,iterations
+    Net::SGDParams params(1,1000); // eta,iterations
+    
     // use half of the data as CV examples, 1000 CV cycles, 10 slices.
-    // Don't shuffle the CV examples on epoch. Also, store the best net
-    // and make sure we end up with that.
-    params.crossValidation(e,0.5,1000,10,false)
+    // Shuffle the CV examples on epoch. Also, store the best net
+    // and make sure we end up with that. Set the seed to 10.
+    
+    params.crossValidation(e,0.5,1000,10,true)
           .storeBest(*n)
           .setSeed(10)
           .setPreserveHAlternation(false);
     
     double mse = n->trainSGD(e,params);
-    printf("%f\n",mse);
+    
+    // load test set
+    MNIST mtest("../testdata/t10k-labels-idx1-ubyte","../testdata/t10k-images-idx3-ubyte");
+    ExampleSet testSet(mtest);
+    
+    int correct=0;
+    for(int i=0;i<testSet.getCount();i++){
+        double *ins = testSet.getInputs(i);
+        double *o = n->run(ins);
+        int correctLabel = getHighest(testSet.getOutputs(i),testSet.getOutputCount());
+        int netLabel = getHighest(o,testSet.getOutputCount());
+        if(correctLabel==netLabel)correct++;
+    }
+    
+    printf("MSE=%f, correct=%d/%d\n",mse,correct,testSet.getCount());
 }
