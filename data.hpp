@@ -70,6 +70,13 @@ class ExampleSet {
      */
     bool ownsData;
     
+    /**
+     * \brief If there are discrete modulator levels, this is how many there
+     * are - if not, it should be 1.
+     */
+    int numHLevels;
+    
+    
 public:
     
     
@@ -79,11 +86,13 @@ public:
      * \param n    number of examples
      * \param nin  number of inputs to each example
      * \param nout number of outputs from each example
+     * \param levels number of modulator levels (see numHLevels)
      */
-    ExampleSet(int n,int nin,int nout){
+    ExampleSet(int n,int nin,int nout,int levels){
         ninputs=nin;
         noutputs=nout;
         ct=n;
+        numHLevels = levels;
         
         printf("Allocating new set %d*(%d,%d)\n",
                n,ninputs,noutputs);
@@ -127,6 +136,7 @@ public:
         data = parent.data;
         examples = new double*[length];
         ct = length;
+        numHLevels = parent.numHLevels;
         
         for(int i=0;i<ct;i++){
             examples[i] = parent.examples[start+i];
@@ -138,11 +148,13 @@ public:
      * from an MNIST database with a single labelling (i.e.
      * for use in non-modulatory training). We copy the data
      * from the MNIST object. The outputs will use a one-hot encoding.
+     * This example set will have no modulation.
      */
     ExampleSet(const MNIST& mnist) : ExampleSet(
                                                 mnist.getCount(), // number of examples
                                                 mnist.r()*mnist.c(), // input count
-                                                mnist.getMaxLabel()+1 // output count
+                                                mnist.getMaxLabel()+1, // output count
+                                                1 // single modulation level
                                                 ){
         // fill in the data
         for(int i=0;i<ct;i++){
@@ -159,6 +171,7 @@ public:
             for(int outIdx=0;outIdx<noutputs;outIdx++){
                 out[outIdx] = mnist.getLabel(i)==outIdx?1:0;
             }
+            setH(i,0); // set nominal modulator value
         }
         ownsData=true;
     }
@@ -177,31 +190,63 @@ public:
 public:
     
     /**
+     * \brief Shuffling mode for shuffle()
+     */
+    enum ShuffleMode { 
+        /**
+         * \brief Shuffle blocks of numHLevels examples, rather than single examples.
+         * This is intended for cases where examples with the same inputs are added contiguously
+         * at different modulator levels.
+         */
+        STRIDE,
+              /**
+               * \brief Shuffle single examples, but follow up by running a pass over the examples
+               * to ensure that they alternate by modulator level. This is useful where there are 
+               * discrete modulator levels but the examples are mixed up (as happens in the robot experiments).
+               */
+              ALTERNATE,
+              /**
+               * \brief Shuffle single examples, no matter the value of numHLevels.
+               */
+              NONE
+    };
+        
+    
+    /**
      * \brief
      * Shuffle the example using a PRNG and a Fisher-Yates shuffle.
      * \param rd  pointer to a PRNG data block
-     * \param preserveHAlternation if true, the data is fixed after the shuffle to preserve
-     * strict alternation between h=0 and h=1.
+     * \param mode ShuffleMode::STRIDE to keep blocks of size numHLevels together, ShuffleMode::ALTERNATE to
+     * shuffle all examples but ensure that h-levels alternate after shuffling, or ShuffleMode::NONE to just shuffle.
      */
     
-    void shuffle(drand48_data *rd,bool preserveHAlternation){
-        double *tmp; // makes a copy of the structures
-        for(int i=ct-1;i>=1;i--){
+    void shuffle(drand48_data *rd,ShuffleMode mode){
+        int blockSize; // size of the blocks we are shuffling, in bytes
+        if(mode == STRIDE)
+            blockSize = numHLevels;
+        else
+            blockSize = 1;
+        double **tmp = new double*[blockSize]; // temporary storage for swapping
+        for(int i=(ct/blockSize)-1;i>=1;i--){
             long lr;
             lrand48_r(rd,&lr);
             int j = lr%(i+1);
-            tmp=examples[i];
-            examples[i]=examples[j];
-            examples[j]=tmp;
+            memcpy(tmp,examples+i*blockSize,blockSize*sizeof(double*));
+            memcpy(examples+i*blockSize,examples+j*blockSize,blockSize*sizeof(double*));
+            memcpy(examples+j*blockSize,tmp,blockSize*sizeof(double*));
         }
         // if this flat is set, rearrange the shuffled data so that they go in the sequence
         // h<0.5, h>=0.5, h>0.5 etc.
-        if(preserveHAlternation){
+        if(mode == ALTERNATE){
+            /** \bug numHLevels!=2 is not supported in alternate */
+            if(numHLevels!=2)
+                throw std::domain_error("ALTERNATE shuffle mode must have two H levels, 0 and 1");
             alternate<double*>(examples, ct, 
                                // abominations like this are why I used an overcomplicated
                                // example system at first...
                                [this](double **e){return (*e)[hOffset]<0.5;});
         }
+        delete [] tmp;
     }
     
     /**

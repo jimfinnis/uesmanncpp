@@ -20,11 +20,13 @@
  * * output j of example i is i*200+j
  * * h of example i is i*1000
  * 
+ * While the set says there are 2 h levels, this is
+ * untrue (however, a later test resets the H to match this)
  */
 
 class TestExampleSet : public ExampleSet {
 public:
-    TestExampleSet() : ExampleSet(10,5,2){
+    TestExampleSet() : ExampleSet(10,5,2, 2){
         for(int i=0;i<getCount();i++){
             double *d = getInputs(i);
             for(int j=0;j<getInputCount();j++)
@@ -139,7 +141,7 @@ BOOST_AUTO_TEST_CASE(altex){
     }
     drand48_data rd;
     srand48_r(10,&rd);
-    e.shuffle(&rd,true);
+    e.shuffle(&rd,ExampleSet::ALTERNATE);
     for(int i=0;i<e.getCount();i++){
         BOOST_REQUIRE((e.getH(i)<0.5 ? 0 : 1) == i%2);
     }
@@ -152,7 +154,7 @@ BOOST_AUTO_TEST_CASE(altex){
 
 BOOST_AUTO_TEST_CASE(trainparams) {
     const int NUMEXAMPLES=1000;
-    ExampleSet e(NUMEXAMPLES,1,1); // 100 examples at 1 input, 1 output
+    ExampleSet e(NUMEXAMPLES,1,1 ,1); // 100 examples at 1 input, 1 output, 1 mod level
     
     double recipNE = 1.0/(double)NUMEXAMPLES;
     // generate examples of the identity function y=x, from 0 to 1.
@@ -170,11 +172,11 @@ BOOST_AUTO_TEST_CASE(trainparams) {
     
     // eta=1, lots of  iterations
     Net::SGDParams params(1,10000000);
+    
     // use half of the data as CV examples, 1000 CV cycles, 3 slices.
     // Don't shuffle the CV examples on epoch. Also, store the best net
     // and make sure we end up with that.
-    
-        params.crossValidation(e,0.5,1000,10,true).storeBest(*net).setSeed(0);
+    params.crossValidation(e,0.5,1000,10,true).storeBest(*net).setSeed(0);
     
     // do the training and get the MSE of the best net.
     double mse = net->trainSGD(e,params);
@@ -182,23 +184,24 @@ BOOST_AUTO_TEST_CASE(trainparams) {
     // assert that it's a sensible value
     BOOST_REQUIRE(mse>0);
     BOOST_REQUIRE(mse<0.005);
+#if 0
     for(double i=0;i<NUMEXAMPLES;i++){
         double v = i*recipNE;
         double o = *(net->run(&v));
-        printf("%f,%f\n",v,o);
+        printf("    %f,%f\n",v,o);
     }
+#endif
     delete net;
 }
 
 /**
  * \brief another test without cross-validation which attempts to emulate the Angort
  * test.ang program.
- * \bug At the moment, test trainparams2 doesn't train as well as the original test.ang.
  */
 
 BOOST_AUTO_TEST_CASE(trainparams2) {
     const int NUMEXAMPLES=100;
-    ExampleSet e(NUMEXAMPLES*2,1,1); // 100 examples at 1 input, 1 output
+    ExampleSet e(NUMEXAMPLES*2,1,1,1); // 100 examples at 1 input, 1 output, 1 modulator level
     
     double recipNE = 1.0/(double)NUMEXAMPLES;
     
@@ -221,13 +224,13 @@ BOOST_AUTO_TEST_CASE(trainparams2) {
     // do the training and get the MSE of the best net.
     double mse = net->trainSGD(e,params);
     printf("%f\n",mse);
-    
+#if 0
     for(double i=0;i<NUMEXAMPLES;i++){
         double v = i*recipNE;
         double o = *(net->run(&v));
         printf("%f -> %f\n",v,o);
     }
-    
+#endif
     // assert that it's a sensible value
     BOOST_REQUIRE(mse>0);
     BOOST_REQUIRE(mse<0.005);
@@ -336,11 +339,11 @@ BOOST_AUTO_TEST_CASE(trainmnist){
     // use half of the data as CV examples, 1000 CV cycles, 10 slices.
     // Shuffle the CV examples on epoch. Also, store the best net
     // and make sure we end up with that. Set the seed to 10.
+    // Shuffle mode is stride, the default (not that it matters here)
     
     params.crossValidation(e,0.5,1000,10,true)
           .storeBest(*n)
-          .setSeed(10)
-          .setPreserveHAlternation(false);
+          .setSeed(10);
     
     double mse = n->trainSGD(e,params);
     
