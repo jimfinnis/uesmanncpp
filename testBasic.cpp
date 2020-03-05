@@ -150,7 +150,37 @@ BOOST_AUTO_TEST_CASE(altex){
     }
 }
 
-BOOST_AUTO_TEST_SUITE_END()
+/**
+ * \brief test strided examples
+ */
+
+BOOST_AUTO_TEST_CASE(shufflestride){
+    static const int NEX=32;
+    ExampleSet e(NEX,2,1, 4); // 16 examples, 2 inputs, 1 output, 4 h-points
+    for(int i=0;i<NEX/4;i++){
+        int exbase = i*4;
+        for(int j=0;j<4;j++){
+            int ex = exbase+j;
+            double *d = e.getInputs(ex);
+            for(int k=0;k<e.getInputCount();k++)
+                d[k] = k*10+j;
+            *e.getOutputs(ex) = ex;
+            e.setH(ex,i);
+        }
+    }
+    
+    drand48_data rd;
+    srand48_r(10,&rd);
+    e.shuffle(&rd,ExampleSet::STRIDE);
+    for(int i=0;i<NEX;i++){
+        double *d = e.getInputs(i);
+        double o = *e.getOutputs(i);
+        double h = e.getH(i);
+        printf("(%f,%f)->%f, h=%f\n",d[0],d[1],o,h);
+    }
+    /**\bug write actual test! */
+}
+
 
 /** 
  * \brief set all parameters (weights and biases) in a network to zero
@@ -219,3 +249,6 @@ BOOST_AUTO_TEST_CASE(loadmnist) {
             BOOST_REQUIRE(out[i]==0.0);
     }
 }
+
+BOOST_AUTO_TEST_SUITE_END()
+
