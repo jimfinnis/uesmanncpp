@@ -132,6 +132,10 @@ BOOST_AUTO_TEST_CASE(loadmnist) {
     }
 }
 
+/**
+ * \brief Train for MNIST handwriting recognition in a plain backprop network.
+ * This doesn't do a huge number of iterations.
+ */
 BOOST_AUTO_TEST_CASE(trainmnist){
     // load training set and make examples
     MNIST m("../testdata/train-labels-idx1-ubyte","../testdata/train-images-idx3-ubyte");

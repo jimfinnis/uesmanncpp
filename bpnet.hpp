@@ -20,7 +20,6 @@ public:
     /**
      * \brief Constructor -  does not initialise the weights to random values so
      * that we can reinitialise networks.
-     * \param _eta the learning rate
      * \param nlayers number of layers
      * \param layerCounts array of layer counts
      */

@@ -215,9 +215,15 @@ public:
          * This is intended for cases where examples with the same inputs are added contiguously
          * at different modulator levels. 
          * For this to work correctly, the modulator levels must be distributed evenly
-         * across their range. For example, for four modulator levels from 2-3, ensure
-         * that numHLevels is 4 and that the values for 2,2.25,2.5 and 3 are equally
-         * represented in the data.
+         * across their range. For example, for four modulator levels from 2-3:
+         * 
+         * * ensure that numHLevels is 4 
+         * * ensure that the values for 2,2.25,2.5 and 3 are equally represented in the data.
+         * * ensure that the data is provided in equally sized groups cycling through the
+         * modulator (similar to the output of the ALTERNATE mode)
+         * 
+         * It is possible to run a shuffle(rd,ALTERNATE) on the data after input, followed
+         * by training with this mode.
          */
         STRIDE,
               /**
@@ -260,8 +266,7 @@ public:
             memcpy(examples+i*blockSize,examples+j*blockSize,blockSize*sizeof(double*));
             memcpy(examples+j*blockSize,tmp,blockSize*sizeof(double*));
         }
-        // if this flat is set, rearrange the shuffled data so that they go in the sequence
-        // h<0.5, h>=0.5, h>0.5 etc.
+        // if this mode is set, rearrange the shuffled data so that the h-levels cycle
         if(mode == ALTERNATE){
             alternate<double*>(examples, ct, numHLevels,
                                // abominations like this are why I used an overcomplicated
