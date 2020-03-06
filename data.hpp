@@ -249,16 +249,21 @@ public:
      * \param rd  pointer to a PRNG data block
      * \param mode ShuffleMode::STRIDE to keep blocks of size numHLevels together, ShuffleMode::ALTERNATE to
      * shuffle all examples but ensure that h-levels alternate after shuffling, or ShuffleMode::NONE to just shuffle.
+     * \param nExamples how many examples to shuffle; if 0, do all of them
      */
     
-    void shuffle(drand48_data *rd,ShuffleMode mode){
+    void shuffle(drand48_data *rd,ShuffleMode mode,int nExamples=0){
+        if(!nExamples)
+            nExamples=ct;
+        
         int blockSize; // size of the blocks we are shuffling, in bytes
         if(mode == STRIDE)
             blockSize = numHLevels;
         else
             blockSize = 1;
         double **tmp = new double*[blockSize]; // temporary storage for swapping
-        for(int i=(ct/blockSize)-1;i>=1;i--){
+        
+        for(int i=(nExamples/blockSize)-1;i>=1;i--){
             long lr;
             lrand48_r(rd,&lr);
             int j = lr%(i+1);
@@ -268,7 +273,7 @@ public:
         }
         // if this mode is set, rearrange the shuffled data so that the h-levels cycle
         if(mode == ALTERNATE){
-            alternate<double*>(examples, ct, numHLevels,
+            alternate<double*>(examples, nExamples, numHLevels,
                                // abominations like this are why I used an overcomplicated
                                // example system at first...
                                [this](double *e){

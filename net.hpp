@@ -430,6 +430,13 @@ public:
             // find the example number
             int exampleIndex = i % nExamples;
             
+            // at the start of each epoch, reshuffle. This will effectively do an extra shuffle
+            // as we've already done it once at the start, before splitting out the CV examples.
+            
+            if(exampleIndex == 0)
+                examples.shuffle(&rd,params.shuffleMode,nExamples);
+                
+            
             // train here, just one example, no batching.
             double trainingError = trainBatch(examples,exampleIndex,1);
             
