@@ -13,23 +13,27 @@
 #include "mnist.hpp"
 
 /**
- * \brief Ensure array has alternating values of boolean predicate.
+ * \brief Ensure array has cycling values of some function f mod n.
  * Given an array, this function will rearrange the values to ensure that
- * the boolean predicate passed in has values true and false alternately.
+ * the integer function passed in has values which cycle. For example, if
+ * a cycle length of four is specified, the values will be made to run 0,1,2,3,0,1,2,3.
  * This is done in-place.
+ * 
+ * The input function has the signature (int)(T). In the shuffling code we use it
+ * takes a pointer to the data of the example.
  */
 
-template <class T,class TestFunc> void alternate(T *arr,int n,TestFunc f){
+template <class T,class TestFunc> void alternate(T *arr,int nitems,int cycle,TestFunc f){
     // for each item, if it is not the appropriate value,
     // scan forward until we find one which is and swap with that.
     // Leave if we can't find one.
-    for(int i=0;i<n;i++){
-        if(f(arr+i)!=(i%2==0)){
+    for(int i=0;i<nitems;i++){
+        if(f(arr[i])%cycle!=(i%cycle)){
             // doesn't match; swap.
             for(int j=i;;j++){
-                if(j>=n)return; // can't find a match, exit.
+                if(j>=nitems)return; // can't find a match, exit.
                 // scan for one that does
-                if(f(arr+j)==(i%2==0)){
+                if(f(arr[j])%cycle==i%cycle){
                     // and swap and leave loop
                     T v=arr[i];
                     arr[i]=arr[j];
@@ -76,6 +80,15 @@ class ExampleSet {
      */
     int numHLevels;
     
+    /**
+     * \brief minimum H level, 0 by default, set with setHRange()
+     */
+    double minH;
+    /**
+     * \brief maximum H level, 1 by default, set with setHRange()
+     */
+    double maxH;
+    
     
 public:
     
@@ -93,6 +106,8 @@ public:
         noutputs=nout;
         ct=n;
         numHLevels = levels;
+        minH=0;
+        maxH=1;
         
         printf("Allocating new set %d*(%d,%d)\n",
                n,ninputs,noutputs);
@@ -137,6 +152,8 @@ public:
         examples = new double*[length];
         ct = length;
         numHLevels = parent.numHLevels;
+        minH = parent.minH;
+        maxH = parent.maxH;
         
         for(int i=0;i<ct;i++){
             examples[i] = parent.examples[start+i];
@@ -196,13 +213,21 @@ public:
         /**
          * \brief Shuffle blocks of numHLevels examples, rather than single examples.
          * This is intended for cases where examples with the same inputs are added contiguously
-         * at different modulator levels.
+         * at different modulator levels. 
+         * For this to work correctly, the modulator levels must be distributed evenly
+         * across their range. For example, for four modulator levels from 2-3, ensure
+         * that numHLevels is 4 and that the values for 2,2.25,2.5 and 3 are equally
+         * represented in the data.
          */
         STRIDE,
               /**
                * \brief Shuffle single examples, but follow up by running a pass over the examples
                * to ensure that they alternate by modulator level. This is useful where there are 
-               * discrete modulator levels but the examples are mixed up (as happens in the robot experiments).
+               * discrete modulator levels but the examples are mixed
+               * up (as happens in the robot experiments). This doesn't require equal distribution
+               * of modulator levels, but the levels should be evenly spaced across the range.
+               * If the distribution is unequal, a portion at the end of the set will not alternate
+               * correctly.
                */
               ALTERNATE,
               /**
@@ -238,16 +263,29 @@ public:
         // if this flat is set, rearrange the shuffled data so that they go in the sequence
         // h<0.5, h>=0.5, h>0.5 etc.
         if(mode == ALTERNATE){
-            /** \bug numHLevels!=2 is not supported in alternate */
-            if(numHLevels!=2)
-                throw std::domain_error("ALTERNATE shuffle mode must have two H levels, 0 and 1");
-            alternate<double*>(examples, ct, 
+            alternate<double*>(examples, ct, numHLevels,
                                // abominations like this are why I used an overcomplicated
                                // example system at first...
-                               [this](double **e){return (*e)[hOffset]<0.5;});
+                               [this](double *e){
+                               double d = (e[hOffset]-minH)/(maxH-minH);
+                               int i = (int)(d*(numHLevels-1));
+                               return i;
+                           });
         }
         delete [] tmp;
     }
+    
+    /**
+     * Modify the min/max h range, which is 0<=h<=1 by default.
+     * \param mn minimum H value in set domain
+     * \param mx maximum H value in set domain
+     */
+    ExampleSet& setHRange(double mn,double mx){
+        minH = mn;
+        maxH = mx;
+        return *this;
+    }
+        
     
     /**
      * \brief get the number of inputs in all examples
@@ -305,6 +343,14 @@ public:
         assert(example<ct);
         return *(examples[example] + hOffset);
     }
+    
+    /**
+     * \brief return the number of different H-levels
+     */
+    int getNumHLevels(){
+        return numHLevels;
+    }
+          
     
     /**
      * \brief

@@ -110,31 +110,36 @@ template <class T> void sshuffle(T *x, int ct){
 
 BOOST_AUTO_TEST_CASE(alt) {
     long t;
+    static const int NUMEXAMPLES = 100;
+    static const int CYCLE=5;
+    
     srand(time(&t));
     // make a bunch of numbers and shuffle them
-    int arr[100];
-    for(int i=0;i<100;i++){
+    int arr[NUMEXAMPLES];
+    for(int i=0;i<NUMEXAMPLES;i++){
         arr[i] = i;
     }
-    sshuffle<int>(arr,100);
+    sshuffle<int>(arr,NUMEXAMPLES);
     
     // make them alternate odd and even
-    alternate<int>(arr,100,[](int *v){return (*v)%2==0;});
+    alternate<int>(arr,NUMEXAMPLES,CYCLE,[](int v){return v;});
+    
+//    for(int i=0;i<NUMEXAMPLES;i++)printf("%d ",arr[i]%CYCLE);
     
     // make sure each item is there only once and that the sequence
     // alternates odd and even
-    bool seen[100];
-    for(int i=0;i<100;i++)seen[i]=false;
-    for(int i=0;i<100;i++){
+    bool seen[NUMEXAMPLES];
+    for(int i=0;i<NUMEXAMPLES;i++)seen[i]=false;
+    for(int i=0;i<NUMEXAMPLES;i++){
         int n = arr[i];
         BOOST_REQUIRE(!seen[n]);
         seen[n]=true;
-        BOOST_REQUIRE((n%2) == (i%2));
+        BOOST_REQUIRE((n%CYCLE) == (i%CYCLE));
     }
 }
 
 /**
- * \brief Test the alternation function on examples
+ * \brief Test the alternation function on examples, simple version
  */
 
 BOOST_AUTO_TEST_CASE(altex){
@@ -142,6 +147,7 @@ BOOST_AUTO_TEST_CASE(altex){
     for(int i=0;i<e.getCount();i++){
         e.setH(i, i<e.getCount()/2 ? 1:0);
     }
+    
     drand48_data rd;
     srand48_r(10,&rd);
     e.shuffle(&rd,ExampleSet::ALTERNATE);
@@ -151,13 +157,18 @@ BOOST_AUTO_TEST_CASE(altex){
 }
 
 /**
- * \brief test strided examples
+ * \brief test strided example shuffle, 4 different modulator levels
  */
 
 BOOST_AUTO_TEST_CASE(shufflestride){
-    static const int NEX=32;
-    ExampleSet e(NEX,2,1, 4); // 16 examples, 2 inputs, 1 output, 4 h-points
-    for(int i=0;i<NEX/4;i++){
+    static const int NUMBEREXAMPLES=32;
+    // 32 examples (or however many) with 2 inputs and 1 output, and 4
+    // different modulator values. We then create 4 different groups.
+    // Each group has 4 examples with the same inputs, but with different outputs
+    // between the groups. Examples within each group have the same modulator value.
+    
+    ExampleSet e(NUMBEREXAMPLES,2,1, 4); 
+    for(int i=0;i<NUMBEREXAMPLES/4;i++){
         int exbase = i*4;
         for(int j=0;j<4;j++){
             int ex = exbase+j;
@@ -169,16 +180,88 @@ BOOST_AUTO_TEST_CASE(shufflestride){
         }
     }
     
+    // shuffle the data with STRIDE, so that the four groups are each considered as
+    // a whole and moved en-bloc.
+    
     drand48_data rd;
     srand48_r(10,&rd);
     e.shuffle(&rd,ExampleSet::STRIDE);
-    for(int i=0;i<NEX;i++){
+    
+    // check the results, both that the output is non-monotonic (i.e. data is shuffled)
+    // and that the inputs appear to show that the blocks are intact.
+    
+    int lasto = -1;
+    bool monotonic_increasing=true;
+    for(int i=0;i<NUMBEREXAMPLES;i++){
         double *d = e.getInputs(i);
-        double o = *e.getOutputs(i);
-        double h = e.getH(i);
-        printf("(%f,%f)->%f, h=%f\n",d[0],d[1],o,h);
+        int i0 = (int)d[0];
+        int i1 = (int)d[1];
+        int o = (int)*e.getOutputs(i);
+        int h = (int)e.getH(i);
+        if(o<lasto)monotonic_increasing=false;
+        lasto=o;
+        BOOST_REQUIRE(i0 == i%4);
+        BOOST_REQUIRE(o/4  == h);
     }
-    /**\bug write actual test! */
+    BOOST_REQUIRE(!monotonic_increasing);
+}
+
+/**
+ * \brief test strided example shuffle, 4 different modulator levels
+ */
+
+BOOST_AUTO_TEST_CASE(altex4){
+    static const int NUMBEREXAMPLES=32;
+    // 32 examples (or however many) with 2 inputs and 1 output, and 4
+    // different modulator values. We then create 4 different groups.
+    // Each group has 4 examples with the same inputs, but with different outputs
+    // between the groups. Examples within each group have the same modulator value.
+    // Concretely, examples (index,in0,in1,out,h) will be
+    // (0 0 10 0 0) (1 1 11 1 0) (2 2 12 2 0) (3 3 13 3 0) (4 0 10 4 0) (5 1 11 5 0)
+    //       (6 2 12 6 0) (7 3 13 7 0)
+    // (8 0 10 8 1) (9 1 11 9 1) (10 2 12 10 1) (11 3 13 11 1) (12 0 10 12 1) (13 1 11 13 1)
+    //       (14 2 12 14 1) (15 3 13 15 1)
+    // and so on. These should be shuffled randomly, and then rearranged so that the 
+    // h-value (the last value in the brackets) goes (0,1,2,3,0,1,2,3...)
+          
+    ExampleSet e(NUMBEREXAMPLES,2,1, 4); 
+    for(int i=0;i<NUMBEREXAMPLES/4;i++){
+        int exbase = i*4;
+        for(int j=0;j<4;j++){
+            int ex = exbase+j;
+            double *d = e.getInputs(ex);
+            for(int k=0;k<e.getInputCount();k++)
+                d[k] = k*10+j;
+            *e.getOutputs(ex) = ex;
+            e.setH(ex,i/2); // gives four hormone levels
+            e.setHRange(0,i/2); // reset max h-level (will end up at 3)
+        }
+    }
+    
+    // shuffle the data with ALTERNATE, so everything is shuffled freely, but
+    // ensure afterwards that the h-levels go 01230123....
+    
+    drand48_data rd;
+    srand48_r(10,&rd);
+    e.shuffle(&rd,ExampleSet::ALTERNATE);
+    
+    // check the results, both that the output is non-monotonic (i.e. data is shuffled)
+    // and that the h-sequence is correct
+    
+    int lasto = -1;
+    bool monotonic_increasing=true;
+    for(int i=0;i<NUMBEREXAMPLES;i++){
+        double *d = e.getInputs(i);
+        int i0 = (int)d[0];
+        int i1 = (int)d[1];
+        int o = (int)*e.getOutputs(i);
+        int h = (int)e.getH(i);
+        if(o<lasto)monotonic_increasing=false;
+        lasto=o;
+        BOOST_REQUIRE(i%4==h);
+        BOOST_REQUIRE(o%4==i0); // check internal integrity of datum
+    }
+    BOOST_REQUIRE(!monotonic_increasing);
 }
 
 
