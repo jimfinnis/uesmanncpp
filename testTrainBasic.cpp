@@ -37,10 +37,10 @@ BOOST_AUTO_TEST_CASE(trainparams) {
     // eta=1, lots of  iterations
     Net::SGDParams params(1,10000000);
     
-    // use half of the data as CV examples, 1000 CV cycles, 3 slices.
+    // use half of the data as CV examples, 1000 CV cycles, 10 slices.
     // Don't shuffle the CV examples on epoch. Also, store the best net
     // and make sure we end up with that.
-    params.crossValidation(e,0.5,1000,10,true).storeBest(*net).setSeed(0);
+    params.crossValidation(e,0.5,1000,10,false).storeBest(*net).setSeed(0);
     
     // do the training and get the MSE of the best net.
     double mse = net->trainSGD(e,params);

@@ -7,7 +7,7 @@ set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-pg -std=c++11")
 
 set(UESMANN_LIBS -lm)
 
-add_executable(uesmann_test testBasic.cpp testTrainBasic.cpp)
+add_executable(uesmann_test testBasic.cpp testTrainBasic.cpp testTrainOB.cpp)
 
 target_link_libraries(uesmann_test
     ${UESMANN_LIBS}

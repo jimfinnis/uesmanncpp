@@ -53,6 +53,14 @@ public:
         }
     }
     
+    virtual void setH(double h){
+        // does nothing, because this is an unmodulated net.
+    }
+    
+    virtual double getH(){
+        return 0;
+    }
+    
     
     /**
      * \brief destructor
@@ -85,6 +93,16 @@ public:
     virtual double *getOutputs() const {
         return outputs[numLayers-1];
     }
+    
+    virtual int getLayerSize(int n) {
+        return layerSizes[n];
+    }
+    
+    virtual int getLayerCount(){
+        return numLayers;
+    }
+    
+        
     
     virtual int getDataSize() const {
         // number of weights+biases for each layer is
@@ -279,7 +297,7 @@ protected:
         }
     }
     
-    virtual double trainBatch(ExampleSet& ex,int start,int num){
+    virtual double trainBatch(ExampleSet& ex,int start,int num,double eta){
         // zero average gradients
         for(int j=0;j<numLayers;j++){
             for(int k=0;k<layerSizes[j];k++)

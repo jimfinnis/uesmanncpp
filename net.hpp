@@ -36,19 +36,13 @@ inline double sigmoidDiff(double x){
  * level operations (such as the top-level training algorithm).
  */
 class Net {
-protected:
-    
-    /// \brief learning rate, set up as part of each training function
-    double eta;
+    friend class OutputBlendingNet;
 public:
     
     /**
-     * \brief get the learning rate
+     * \brief virtual destructor which does nothing
      */
-    
-    double getEta() const {
-        return eta;
-    }
+    virtual ~Net() {} 
     
     drand48_data rd; //!< PRNG data (thread safe)
     
@@ -60,6 +54,32 @@ public:
     void setSeed(long seed){
         srand48_r(seed,&rd);
     }
+    
+    /**
+     * \brief Get the number of nodes in a given layer
+     * \param n layer number
+     */
+    virtual int getLayerSize(int n)=0;
+    
+    /**
+     * \brief Get the number of layers
+     */
+    virtual int getLayerCount()=0;
+    
+    /**
+     * \brief get the number of inputs
+     */
+    int getInputCount(){
+        return getLayerSize(0);
+    }
+    
+    /**
+     * \brief get the number of outputs
+     */
+    int getOutputCount(){
+        return getLayerSize(getLayerCount()-1);
+    }
+        
     
     
     /**
@@ -91,9 +111,12 @@ public:
      * \brief Set the modulator level for subsequent runs and training of this
      * network.
      */
-    virtual void setH(double h){
-        // default does nothing.
-    }
+    virtual void setH(double h)=0;
+    
+    /**
+     * \brief get the modulator level
+     */
+    virtual double getH()=0;
     
     /**
      * \brief Test a network.
@@ -384,8 +407,6 @@ public:
      */
     
     double trainSGD(ExampleSet &examples,SGDParams& params){
-        // set up learning rate
-        eta = params.eta;
         
         // set seed for PRNG
         setSeed(params.seed);
@@ -438,7 +459,7 @@ public:
                 
             
             // train here, just one example, no batching.
-            double trainingError = trainBatch(examples,exampleIndex,1);
+            double trainingError = trainBatch(examples,exampleIndex,1,params.eta);
             
             if(!params.selectBestWithCV){
                 // now test the error and keep the best net. This works differently
@@ -511,8 +532,9 @@ public:
      */
     virtual void load(double *buf) = 0;
     
-    
 protected:
+    
+    
     
     /**
      * \brief Run a single update of the network
@@ -521,7 +543,6 @@ protected:
      */
     
     virtual void update() = 0;
-    
     
     /**
      * \brief Constructor - protected because others inherit it and it's not used
@@ -577,9 +598,10 @@ protected:
      * \param ex      example set
      * \param start   index of first example to use
      * \param num     number of examples. For a single example, you'd just use 1.
+     * \param eta     learning rate
      * \return        the sum of mean squared errors in the output layer (see formula in method documentation)
      */
-    virtual double trainBatch(ExampleSet& ex,int start,int num) = 0;
+    virtual double trainBatch(ExampleSet& ex,int start,int num,double eta) = 0;
     
 };    
 

@@ -10,6 +10,7 @@
 #define __NETFACTORY_HPP
 
 #include "bpnet.hpp"
+#include "obnet.hpp"
 
 /**
  * \brief The different types of network - each has an associated integer
@@ -17,8 +18,8 @@
  */
 enum class NetType {
     PLAIN=1000, /// \brief plain back-propagation
-          
-    MAX = PLAIN /// \brief max
+          OUTPUTBLENDING, /// \brief output blending
+          MAX = PLAIN /// \brief max
 };
 
 namespace NetFactory {
@@ -39,6 +40,8 @@ inline static Net *makeNet(NetType t,ExampleSet &e,int hnodes){
     switch(t){
     case NetType::PLAIN:
         return new BPNet(3,layers);
+    case NetType::OUTPUTBLENDING:
+        return new OutputBlendingNet(3,layers);
     default:break;
     }
 }
