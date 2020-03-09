@@ -46,7 +46,9 @@ DOXYFILE=$TRAVIS_BUILD_DIR/Doxyfile
 
 
 # Get the current gh-pages branch
+echo git clone -b gh-pages git@github.com:$GH_REPO_ORG/$GH_REPO_NAME.git code_docs
 git clone -b gh-pages git@github.com:$GH_REPO_ORG/$GH_REPO_NAME.git code_docs
+
 cd code_docs
 
 # Copy DoxygenLayout.xml here
