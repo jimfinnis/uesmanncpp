@@ -1,6 +1,6 @@
 sudo: required
 before-install:
-    - sudo apt-get install libboost-test-dev
+    - sudo apt-get install libboost-test-dev doxygen
     
 language: cpp
 compiler: 
