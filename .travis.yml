@@ -1,6 +1,6 @@
 sudo: required
 before-install:
-    - sudo apt-get install libboost-test-dev doxygen
+    - sudo apt-get install libboost-test-dev doxygen graphviz
     
 language: cpp
 compiler: 
