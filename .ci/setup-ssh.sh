@@ -13,9 +13,13 @@ openssl aes-256-cbc \
 head -n 1 "$SSH_FILE"
 
 # Enable SSH authentication
-chmod 600 "$SSH_FILE" \
-  && printf "%s\n" \
-       "Host github.com" \
-       "  IdentityFile $SSH_FILE" \
-       "  LogLevel ERROR" >> ~/.ssh/config
-cat ~/.ssh/config
+#chmod 600 "$SSH_FILE" \
+#  && printf "%s\n" \
+#       "Host github.com" \
+#       "  IdentityFile $SSH_FILE" \
+#       "  LogLevel ERROR" >> ~/.ssh/config
+#cat ~/.ssh/config
+
+eval $(ssh-agent -s)
+ssh-add "$SSH_FILE"
+
