@@ -1,5 +1,5 @@
 /**
- * @file test.cpp
+ * @file testBasic.cpp
  * @brief  Basic tests of underlying functionality, or things which only take
  * a short time to run!
  *
