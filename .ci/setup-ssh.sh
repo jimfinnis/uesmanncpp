@@ -9,6 +9,8 @@ openssl aes-256-cbc \
     -iv $encrypted_5944ae25418c_iv \
     -in ".ci/travis_deploy_key.enc" \
     -out "$SSH_FILE" -d
+    
+head -n 1 "$SSH_FILE"
 
 # Enable SSH authentication
 chmod 600 "$SSH_FILE" \
