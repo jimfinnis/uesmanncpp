@@ -24,6 +24,6 @@ and performing some basic operations.
 ## Tests
 
 The files named *test* have various unit tests in them which can be useful to 
-examine. The [Tests](@ref docs/tests.md) page shows some of these tests in more detail.
+examine. The [Tests](@ref tests) page shows some of these tests in more detail.
 
 

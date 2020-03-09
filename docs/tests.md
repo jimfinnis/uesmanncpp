@@ -1,4 +1,4 @@
-Tests
+Tests   {#tests}
 =====
 
 ## Addition 
