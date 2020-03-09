@@ -20,6 +20,7 @@ head -n 1 "$SSH_FILE"
 #       "  LogLevel ERROR" >> ~/.ssh/config
 #cat ~/.ssh/config
 
+chmod 600 "$SSH_FILE"
 eval $(ssh-agent -s)
 ssh-add "$SSH_FILE"
 
