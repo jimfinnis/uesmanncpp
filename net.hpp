@@ -37,6 +37,7 @@ inline double sigmoidDiff(double x){
  */
 class Net {
     friend class OutputBlendingNet;
+    friend class HInputNet;
 public:
     
     /**
@@ -59,24 +60,24 @@ public:
      * \brief Get the number of nodes in a given layer
      * \param n layer number
      */
-    virtual int getLayerSize(int n)=0;
+    virtual int getLayerSize(int n) const =0;
     
     /**
      * \brief Get the number of layers
      */
-    virtual int getLayerCount()=0;
+    virtual int getLayerCount() const =0;
     
     /**
      * \brief get the number of inputs
      */
-    int getInputCount(){
+    int getInputCount() const {
         return getLayerSize(0);
     }
     
     /**
      * \brief get the number of outputs
      */
-    int getOutputCount(){
+    int getOutputCount() const {
         return getLayerSize(getLayerCount()-1);
     }
         
@@ -116,7 +117,7 @@ public:
     /**
      * \brief get the modulator level
      */
-    virtual double getH()=0;
+    virtual double getH() const =0;
     
     /**
      * \brief Test a network.
@@ -288,7 +289,12 @@ public:
          * \brief a buffer of at least getDataSize() bytes for the best network. If NULL,
          * the best network is not saved.
          */
-        double *bestNetData;
+        double *bestNetBuffer;
+        
+        /**
+         * \brief true if we should store the best net data
+         */
+        bool storeBestNet;
         
         /** \brief Constructor which sets up defaults with no information about examples - 
          * cross-validation is not set up by default, but can be done by calling
@@ -304,8 +310,9 @@ public:
             eta = _eta;
             iterations = _iters;
             initrange = -1;
-            bestNetData = NULL;
-            ownsBestNetData = false;
+            bestNetBuffer = NULL;
+            ownsBestNetBuffer = false;
+            storeBestNet = false;
             nSlices=0;
             nPerSlice=0;
             cvInterval=1;
@@ -319,7 +326,7 @@ public:
          */
         
         ~SGDParams(){
-            if(ownsBestNetData)delete[] bestNetData;
+            if(ownsBestNetBuffer)delete[] bestNetBuffer;
         }
         
         /**
@@ -372,17 +379,17 @@ public:
          * @return a reference to this, so we can do fluent chains.
          */
         
-        SGDParams &storeBest(const Net& net){
-            bestNetData = new double[net.getDataSize()];
-            ownsBestNetData = true;
+        SGDParams &storeBest(){
+            ownsBestNetBuffer = true;
+            storeBestNet = true;
             return *this;
         }
     private:
         /**
-         * \brief true if we own the best net data buffer bestNetData, and should delete
+         * \brief true if we own the best net data buffer bestNetBuffer, and should delete
          * it on destruction.
          */
-        bool ownsBestNetData;
+        bool ownsBestNetBuffer;
     };
     
     
@@ -394,14 +401,14 @@ public:
      * per slice; in the thesis we give the total number of examples to be held out
      * and the number of slices.
      * \pre Network has weights initialised to random values
-     * \post The network will be set to the best network found if bestNetData is set,
+     * \post The network will be set to the best network found if bestNetBuffer is set,
      * otherwise the final network will be used.
      * \throws std::out_of_range Too many CV examples
      * \throws std::logic_error Trying to select best by CV when there's no CV done
      * 
      * @param examples training set (including cross-validation data)
      * @param params a filled-in SGDParams structure giving the parameters for the training.
-     * @return If bestNetData is null, the MSE of the final network; otherwise the MSE
+     * @return If storeBestNet is null, the MSE of the final network; otherwise the MSE
      * of the best network found. This is done across the entire
      * validation set if provided, or the entire training set if not.
      */
@@ -466,8 +473,11 @@ public:
                 // if we're doing this by cross-validation or training error. Here
                 // we're using the training error.
                 if(minError < 0 || trainingError < minError){
-                    if(params.bestNetData)
-                        save(params.bestNetData);
+                    if(params.storeBestNet){
+                        if(!params.bestNetBuffer)
+                            params.bestNetBuffer = new double[getDataSize()];
+                        save(params.bestNetBuffer);
+                    }
                     minError = trainingError;
                 }
             }
@@ -486,8 +496,11 @@ public:
                 // test this against the min error as was done above
                 if(params.selectBestWithCV){
                     if(minError < 0 || trainingError < minError){
-                        if(params.bestNetData)
-                            save(params.bestNetData);
+                        if(params.storeBestNet){
+                        if(!params.bestNetBuffer)
+                            params.bestNetBuffer = new double[getDataSize()];
+                            save(params.bestNetBuffer);
+                        }
                         minError = trainingError;
                     }
                 }
@@ -503,8 +516,8 @@ public:
         fclose(log);
         
         // at the end, finalise the network to the best found if we can
-        if(params.bestNetData)
-            load(params.bestNetData);
+        if(params.bestNetBuffer)
+            load(params.bestNetBuffer);
         
         // test on either the entire CV set or the training set and return result
         return test(nCV?cvExamples:examples);

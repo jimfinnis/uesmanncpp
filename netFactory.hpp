@@ -11,6 +11,7 @@
 
 #include "bpnet.hpp"
 #include "obnet.hpp"
+#include "hinet.hpp"
 
 /**
  * \brief The different types of network - each has an associated integer
@@ -19,17 +20,27 @@
 enum class NetType {
     PLAIN=1000, /// \brief plain back-propagation
           OUTPUTBLENDING, /// \brief output blending
+          HINPUT, /// \brief h-as-input
+          
+          
           MAX = PLAIN /// \brief max
 };
 
-namespace NetFactory {
-
 /**
+ * \brief
+ * This class - really a namespace -  contains functions which create,
+ *  load or save networks of all types.
+ */
+
+class NetFactory { // not a namespace because Doxygen gets confused.
+public:
+/**
+ * \brief
  * Construct a single hidden layer network of a given type
  * which conforms to the example set.
  */
 
-inline static Net *makeNet(NetType t,ExampleSet &e,int hnodes){
+static Net *makeNet(NetType t,ExampleSet &e,int hnodes){
     Net *net;
     
     int layers[3];
@@ -42,6 +53,8 @@ inline static Net *makeNet(NetType t,ExampleSet &e,int hnodes){
         return new BPNet(3,layers);
     case NetType::OUTPUTBLENDING:
         return new OutputBlendingNet(3,layers);
+    case NetType::HINPUT:
+        return new HInputNet(3,layers);
     default:break;
     }
 }
@@ -62,7 +75,7 @@ inline static void saveNet(char *fn,Net *n){
     throw new std::runtime_error("not yet implemented");
 }
 
-}
+};
 
 
 

@@ -40,7 +40,7 @@ BOOST_AUTO_TEST_CASE(trainparams) {
     // use half of the data as CV examples, 1000 CV cycles, 10 slices.
     // Don't shuffle the CV examples on epoch. Also, store the best net
     // and make sure we end up with that.
-    params.crossValidation(e,0.5,1000,10,false).storeBest(*net).setSeed(0);
+    params.crossValidation(e,0.5,1000,10,false).storeBest().setSeed(0);
     
     // do the training and get the MSE of the best net.
     double mse = net->trainSGD(e,params);
@@ -83,7 +83,7 @@ BOOST_AUTO_TEST_CASE(trainparams2) {
     
     // eta=1, 10000000 iterations. No CV.
     Net::SGDParams params(1,10000000);
-    params.storeBest(*net);
+    params.storeBest();
     
     // do the training and get the MSE of the best net.
     double mse = net->trainSGD(e,params);
@@ -132,17 +132,30 @@ BOOST_AUTO_TEST_CASE(loadmnist) {
     }
 }
 
+//! [trainmnist]
 /**
  * \brief Train for MNIST handwriting recognition in a plain backprop network.
  * This doesn't do a huge number of iterations.
  */
 BOOST_AUTO_TEST_CASE(trainmnist){
-    // load training set and make examples
+    // Create an MNIST object, which consists of labelled data in the standard MNIST
+    // format (http://yann.lecun.com/exdb/mnist/). This is in two files, one containing
+    // the images and one containing the data.
+    
     MNIST m("../testdata/train-labels-idx1-ubyte","../testdata/train-images-idx3-ubyte");
+    
+    // This ExampleSet constructor builds the examples directly from the MNIST data,
+    // with a large number of inputs (28x28) and a number of outputs equal to the maximum
+    // label value + 1. The outputs of the examples are in a one-hot format: for handwritten
+    // digits, there will be 10 in which the output corresponding to the label will
+    // be 1 with the others 0.
     ExampleSet e(m);
-    // create a network conforming to the examples' input and output counts with 16 hidden nodes
+    
+    // create a plain MLP network conforming to the examples' input and output counts
+    // with 16 hidden nodes
     Net *n = NetFactory::makeNet(NetType::PLAIN,e,16);
     
+    // set up the parameters
     Net::SGDParams params(0.1,10000); // eta,iterations
     
     // use half of the data as CV examples, 1000 CV cycles, 10 slices.
@@ -151,31 +164,41 @@ BOOST_AUTO_TEST_CASE(trainmnist){
     // Shuffle mode is stride, the default (not that it matters here)
     
     params.crossValidation(e,0.5,1000,10,true)
-          .storeBest(*n)
+          .storeBest()
           .setSeed(10);
     
+    // train and get the MSE, and test it is low.
     double mse = n->trainSGD(e,params);
+    BOOST_REQUIRE(mse<0.03);
     
-    // load test set
+    // now load the test set of 10000 images and labels and construct
+    // examples in a similar way.
     MNIST mtest("../testdata/t10k-labels-idx1-ubyte","../testdata/t10k-images-idx3-ubyte");
     ExampleSet testSet(mtest);
     
     // and test against the test set, recording how many are good.
     int correct=0;
     for(int i=0;i<testSet.getCount();i++){
+        // for each test, get the inputs
         double *ins = testSet.getInputs(i);
+        // run them through the network and get the outputs
         double *o = n->run(ins);
+        // find the correct label by getting the highest output in the example
         int correctLabel = getHighest(testSet.getOutputs(i),testSet.getOutputCount());
+        // find the network's result by getting its highest output 
         int netLabel = getHighest(o,testSet.getOutputCount());
+        // and increment the count if they agree
         if(correctLabel==netLabel)correct++;
     }
     
-    // we've not trained for long so this isn't going to be awesome.
+    // get the ratio of correct answers -
+    // we've not trained for long so this isn't going to be brilliant performance.
     double ratio = ((double)correct)/(double)testSet.getCount();
     printf("MSE=%f, correct=%d/%d=%f\n",mse,correct,testSet.getCount(),ratio);
-    BOOST_REQUIRE(mse<0.03);
+    // assert that it's at least 85%
     BOOST_REQUIRE(ratio>0.85);
 }
+//! [trainmnist]
 
 
 

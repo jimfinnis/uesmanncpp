@@ -57,7 +57,7 @@ public:
         // does nothing, because this is an unmodulated net.
     }
     
-    virtual double getH(){
+    virtual double getH() const {
         return 0;
     }
     
@@ -90,15 +90,25 @@ public:
         }
     }
     
+    /**
+     * \brief Used to set inputs manually, typically in
+     * HInputNet.
+     */
+    
+    void setInput(int n, double d){
+        outputs[0][n] = d;
+    }
+        
+    
     virtual double *getOutputs() const {
         return outputs[numLayers-1];
     }
     
-    virtual int getLayerSize(int n) {
+    virtual int getLayerSize(int n) const {
         return layerSizes[n];
     }
     
-    virtual int getLayerCount(){
+    virtual int getLayerCount() const {
         return numLayers;
     }
     

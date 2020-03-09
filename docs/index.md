@@ -21,3 +21,9 @@ are also included.
 The top level class is @ref Net, which is an virtual type describing the neural net interface
 and performing some basic operations. 
 
+## Tests
+
+The files named *test* have various unit tests in them which can be useful to 
+examine. The [Tests](@ref docs/tests.md) page shows some of these tests in more detail.
+
+
