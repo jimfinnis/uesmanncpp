@@ -46,6 +46,22 @@ inline static Net *makeNet(NetType t,ExampleSet &e,int hnodes){
     }
 }
 
+/**
+ * \brief Load a network of any type from a file
+ */
+
+inline static Net *loadNet(char *fn){
+    throw new std::runtime_error("not yet implemented");
+}
+
+/**
+ * \brief Save a net of any type to a file
+ */
+
+inline static void saveNet(char *fn,Net *n){
+    throw new std::runtime_error("not yet implemented");
+}
+
 }
 
 
