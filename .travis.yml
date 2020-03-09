@@ -25,3 +25,5 @@ script:
     - mkdir build
     - cd build
     - ${DEPS_DIR}/cmake/bin/cmake .. && make
+    - ./uesmann_test --log_level=all
+    
