@@ -1,6 +1,15 @@
 UESMANN CPP
 ===========
 
+---
+**PROGRESS**
+Current progress:
+* UESMANN itself is not yet implemented
+* load/save files not yet implemented
+
+---
+
+
 This is the new C++ implementation of UESMANN, based on the original
 code used in my thesis. 
 The code is very simplistic, using scalar as opposed to matrix operations
@@ -14,7 +23,7 @@ an 80's coder.
 A rather more complete set of documentation, including a description
 of the network and a Doxygen docs, can be found at
 
-[Github Page](https://jimfinnis.github.io/uesmanncpp/html/index.html)
+https://jimfinnis.github.io/uesmanncpp/html/index.html
 
 I originally intended to write use Keras/Tensorflow,
 but would have been limited to using the low-level Tensorflow operations
