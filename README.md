@@ -2,8 +2,7 @@ UESMANN CPP
 ===========
 
 ---
-**PROGRESS**
-Current progress:
+**Current progress**
 * UESMANN itself is not yet implemented
 * load/save files not yet implemented
 
