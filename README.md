@@ -26,7 +26,7 @@ of the network and a Doxygen docs, can be found at
 
 https://jimfinnis.github.io/uesmanncpp/html/index.html
 
-I originally intended to write use Keras/Tensorflow,
+I originally intended to use Keras/Tensorflow,
 but would have been limited to using the low-level Tensorflow operations
 because of the somewhat peculiar nature of optimisation in UESMANN:
 we descend the gradient relative to the weights for one function,
