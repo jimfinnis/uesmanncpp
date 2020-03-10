@@ -21,7 +21,7 @@ protected:
      * \brief Special constructor for subclasses which need to manipulate layer
      * count before initialisation (e.g. HInputNet).
      */
-    BPNet() {
+    BPNet() : Net () {
     }
     
     /**

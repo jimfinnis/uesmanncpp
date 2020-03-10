@@ -12,6 +12,7 @@
 #include "bpnet.hpp"
 #include "obnet.hpp"
 #include "hinet.hpp"
+#include "uesnet.hpp"
 
 /**
  * \brief The different types of network - each has an associated integer
@@ -56,7 +57,7 @@ static Net *makeNet(NetType t,ExampleSet &e,int hnodes){
     case NetType::HINPUT:
         return new HInputNet(3,layers);
     case NetType::UESMANN:
-        throw new std::runtime_error("UESMANN not yet implemented");
+        return new UESNet(3,layers);
     default:break;
     }
 }
