@@ -14,14 +14,7 @@
  * with an extra input to carry the modulator.
  */
 
-class HInputNet : public Net {
-    /**
-     * \brief the underlying plain backprop net, which has to be allocated
-     * on the heap so that we can manipulate the layer count before initialisation.
-     */
-    
-    Net *bpnet; 
-    
+class HInputNet : public BPNet {
     /**
      * \brief The current modulator value, which is sent to the last input
      * when we train/run the network
@@ -31,11 +24,12 @@ class HInputNet : public Net {
 public:
     /**
      * \brief Constructor -  does not initialise the weights to random values so
-     * that we can reinitialise networks.
+     * that we can reinitialise networks. Uses the non-initialising constructor
+     * BPNet::BPNet(), changes the layer count and initialises.
      * \param nlayers number of layers
      * \param layerCounts array of layer counts
      */
-    HInputNet(int layers,const int *layerCounts) : Net() {
+    HInputNet(int layers,const int *layerCounts) : BPNet() {
         // you may have noticed that I tend to use arrays a lot rather than
         // std::vector. Sorry, I do this without realising because I'm very,
         // very old.
@@ -46,25 +40,20 @@ public:
         }
         ll[0]++; // add an extra input
         
-        bpnet = new BPNet(layers,ll);
+        init(layers,ll);
     }
     
     /**
-     * \brief destructor, to delete the underlying net
+     * \brief destructor
      */
     virtual ~HInputNet(){
-        delete bpnet;
     }
     
     virtual int getLayerSize(int n) const {
-        int ct = bpnet->getLayerSize(n);
+        int ct = layerSizes[0];
         // subtract one if it's the input layer, so we
         // don't see the hidden input.
         return (n==0)?ct-1:ct;
-    }
-    
-    virtual int getLayerCount() const {
-        return bpnet->getLayerCount();
     }
     
     virtual void setH(double h){
@@ -75,54 +64,15 @@ public:
         return modulator;
     }
     
-    virtual double *getOutputs() const {
-        return bpnet->getOutputs();
-    }
-    
     virtual void setInputs(double *d) {
-        // this is a little ugly - to do this, we can't use setInputs in
-        // the underlying net because it will also try to set the extra h
-        // input, which would be out of range. We have to set the inputs
-        // (actually the outputs of layer 0) by hand.
-        
-        // cast here; we need access to the BPNet proper for setInput.
-        BPNet *bpn = static_cast<BPNet *>(bpnet);
-        
-        // getInputCount() on this class will return the number of 
-        // real inputs: that's the net's inputs, -1 for the h input.
-        int nins = getInputCount();
+        // get the number of input which are not the modulator input
+        int nins = layerSizes[0]-1;
         for(int i=0;i<nins;i++){
-            bpn->setInput(i,*d++);
+            setInput(i,*d++); // set manually
         }
         
         // now set the final input
-        bpn->setInput(nins,modulator);
-    }
-    
-    virtual int getDataSize() const {
-        return bpnet->getDataSize();
-    }
-    
-    virtual void save(double *buf) const {
-        bpnet->save(buf);
-    }
-    
-    virtual void load(double *buf){
-        bpnet->load(buf);
-    }
-    
-protected:
-    
-    virtual void update() {
-        bpnet->update();
-    }
-    
-    virtual void initWeights(double initr){
-        bpnet->initWeights(initr);
-    }
-    
-    virtual double trainBatch(ExampleSet& ex,int start,int num,double eta) {
-        bpnet->trainBatch(ex,start,num,eta);
+        setInput(nins,modulator);
     }
 };
     

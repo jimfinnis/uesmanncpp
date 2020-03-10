@@ -373,6 +373,26 @@ public:
         *(examples[example] + hOffset) = h;
     }
     
+    /**
+     * \brief dump to stdout
+     * \param number to dump (might only be first part of set)
+     */
+    void dump(int start=0,int end=-1){
+        if(end<0)end=ct;
+        for(int i=start;i<end;i++){
+            double *ins = getInputs(i);
+            double *outs = getOutputs(i);
+            for(int j=0;j<ninputs;j++){
+                printf("%f ",ins[j]);
+            }
+            printf(" modulator %f --> ",getH(i));
+            for(int j=0;j<noutputs;j++){
+                printf("%f ",outs[j]);
+            }
+            printf("\n");
+        }
+    }
+    
 };
 
 

@@ -21,7 +21,7 @@ enum class NetType {
     PLAIN=1000, /// \brief plain back-propagation
           OUTPUTBLENDING, /// \brief output blending
           HINPUT, /// \brief h-as-input
-          
+          UESMANN, /// \brief UESMANN
           
           MAX = PLAIN /// \brief max
 };
@@ -55,6 +55,8 @@ static Net *makeNet(NetType t,ExampleSet &e,int hnodes){
         return new OutputBlendingNet(3,layers);
     case NetType::HINPUT:
         return new HInputNet(3,layers);
+    case NetType::UESMANN:
+        throw new std::runtime_error("UESMANN not yet implemented");
     default:break;
     }
 }
@@ -64,7 +66,7 @@ static Net *makeNet(NetType t,ExampleSet &e,int hnodes){
  */
 
 inline static Net *loadNet(char *fn){
-    throw new std::runtime_error("not yet implemented");
+    throw new std::runtime_error("loadNet not yet implemented");
 }
 
 /**
@@ -72,7 +74,7 @@ inline static Net *loadNet(char *fn){
  */
 
 inline static void saveNet(char *fn,Net *n){
-    throw new std::runtime_error("not yet implemented");
+    throw new std::runtime_error("saveNet not yet implemented");
 }
 
 };

@@ -16,14 +16,20 @@
  */
 
 class BPNet : public Net {
-public:
+protected:
     /**
-     * \brief Constructor -  does not initialise the weights to random values so
-     * that we can reinitialise networks.
-     * \param nlayers number of layers
-     * \param layerCounts array of layer counts
+     * \brief Special constructor for subclasses which need to manipulate layer
+     * count before initialisation (e.g. HInputNet).
      */
-    BPNet(int nlayers,const int *layerCounts) : Net() {
+    BPNet() {
+    }
+    
+    /**
+     * \brief Initialiser for use by the main constructor and the ctors of those
+     * subclasses mentioned in BPNet()
+     */
+    
+    void init(int nlayers,const int *layerCounts){
         numLayers = nlayers;
         outputs = new double* [numLayers];
         errors = new double* [numLayers];
@@ -51,6 +57,17 @@ public:
             biases[i] = new double[n];
             gradAvgsBiases[i] = new double[n];
         }
+    }        
+        
+public:
+    /**
+     * \brief Constructor -  does not initialise the weights to random values so
+     * that we can reinitialise networks.
+     * \param nlayers number of layers
+     * \param layerCounts array of layer counts
+     */
+    BPNet(int nlayers,const int *layerCounts) : Net() {
+        init(nlayers,layerCounts);
     }
     
     virtual void setH(double h){
@@ -118,6 +135,9 @@ public:
         // number of weights+biases for each layer is
         // the number of nodes in that layer (bias count)
         // times the number of nodes in the previous layer.
+        // 
+        // NOTE THAT this uses the true layer size rather than
+        // the fake version returned in the subclass HInputNet
         int pc=0;
         int total=0;
         for(int i=0;i<numLayers;i++){
@@ -132,6 +152,9 @@ public:
         double *g=buf;
         // data is ordered by layers, with nodes within
         // layers, and each node is bias then weights.
+        // 
+        // NOTE THAT this uses the true layer size rather than
+        // the fake version returned in the subclass HInputNet
         for(int i=0;i<numLayers;i++){
             for(int j=0;j<layerSizes[i];j++){
                 *g++ = biases[i][j];
@@ -148,6 +171,9 @@ public:
         double *g=buf;
         // genome is ordered by layers, with nodes within
         // layers, and each node is bias then weights.
+        // 
+        // NOTE THAT this uses the true layer size rather than
+        // the fake version returned in the subclass HInputNet
         for(int i=0;i<numLayers;i++){
             for(int j=0;j<layerSizes[i];j++){
                 biases[i][j]=*g++;
@@ -200,7 +226,6 @@ protected:
                     initrange = 1.0/sqrt(ct); // from Bishop
             } else 
                 initrange = 0.1; // on input layer, should mean little.
-            //        printf("Layer %d - count %d - initrange %f\n",i,layerSizes[i],initrange);
             for(int j=0;j<layerSizes[i];j++)
                 biases[i][j]=drand(-initrange,initrange);
             for(int j=0;j<largestLayerSize*largestLayerSize;j++){
@@ -298,8 +323,6 @@ protected:
             for(int j=0;j<layerSizes[i];j++){
                 double v = biases[i][j];
                 for(int k=0;k<layerSizes[i-1];k++){
-                    //                printf("Layer %d, Node %d-%d weight*output = %f*%f\n",
-                    //                       i,k,j,getw(i,j,k),outputs[i-1][k]);
                     v += getw(i,j,k) * outputs[i-1][k];
                 }
                 outputs[i][j]=sigmoid(v);

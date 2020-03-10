@@ -436,14 +436,18 @@ public:
         // initialise minimum error to rogue value
         double minError = -1;
         
-        // shuffle before getting the cross-validation examples
-        examples.shuffle(&rd,params.shuffleMode);
+        // We don't shuffle before getting the cross-validation examples,
+        // because in some cases there's a kind of "fake" cv going on where the
+        // training portion and cv portion have to have similar (or identical)
+        // distributions. See the boolean test code for an example.
+        //        examples.shuffle(&rd,params.shuffleMode);
         
         // build a temporary subset for the CV examples. This still needs to exist
         // even if we're not using CV, so in that case we'll just
         // use a dummy of one example.
         
         ExampleSet cvExamples(examples,nCV?examples.getCount()-nCV:0,nCV?nCV:1);
+        
         
         // setup a countdown for when we cross-validate
         int cvCountdown = params.cvInterval;
@@ -464,7 +468,6 @@ public:
             if(exampleIndex == 0)
                 examples.shuffle(&rd,params.shuffleMode,nExamples);
                 
-            
             // train here, just one example, no batching.
             double trainingError = trainBatch(examples,exampleIndex,1,params.eta);
             
