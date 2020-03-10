@@ -3,9 +3,10 @@ UESMANN CPP
 
 ---
 **Current progress**
-* UESMANN itself is not yet implemented
 * load/save files not yet implemented
-* many tests need reorganising, and I predict some will be hard to pass
+* many tests need reorganising 
+* More tests, particularly of UESMANN proper:
+I predict some will be hard to pass
 (real networks need multiple attempts to train)
 
 ---

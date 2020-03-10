@@ -292,7 +292,6 @@ protected:
      */
     
     void calcError(double *in,double *out){
-        // perform the actual backprop algorithm
         // first run the network forwards
         setInputs(in);
         update();
