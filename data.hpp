@@ -375,7 +375,8 @@ public:
     
     /**
      * \brief dump to stdout
-     * \param number to dump (might only be first part of set)
+     * \param start index to start dump
+     * \param end index to end dump (exclusive)
      */
     void dump(int start=0,int end=-1){
         if(end<0)end=ct;

@@ -29,18 +29,18 @@ public:
      * \param nlayers number of layers
      * \param layerCounts array of layer counts
      */
-    HInputNet(int layers,const int *layerCounts) : BPNet() {
+    HInputNet(int nlayers,const int *layerCounts) : BPNet() {
         // you may have noticed that I tend to use arrays a lot rather than
         // std::vector. Sorry, I do this without realising because I'm very,
         // very old.
         
-        int *ll = new int[layers];
-        for(int i=0;i<layers;i++){
+        int *ll = new int[nlayers];
+        for(int i=0;i<nlayers;i++){
             ll[i] = layerCounts[i]; // copy the layers array
         }
         ll[0]++; // add an extra input
         
-        init(layers,ll);
+        init(nlayers,ll);
     }
     
     /**

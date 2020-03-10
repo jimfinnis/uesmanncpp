@@ -1,5 +1,5 @@
 /**
- * @file testTrainOB.cpp
+ * @file testTrainBooleans.cpp
  * @brief Simple boolean tests for modulation
  *
  */
@@ -10,6 +10,13 @@
 #include "test.hpp"
 
 BOOST_AUTO_TEST_SUITE(booleans)
+
+/** \addtogroup booleantests Testing modulatory networks transitioning from XOR to AND
+ * \ingroup tests
+ * @{
+ */
+
+
 
 /**
  * \brief test function for booleans.
@@ -70,5 +77,9 @@ BOOST_AUTO_TEST_CASE(hinxorand) {
 BOOST_AUTO_TEST_CASE(uesxorand) {
     dotest(NetType::UESMANN);
 }
+
+/** 
+ * @}
+ */
 
 BOOST_AUTO_TEST_SUITE_END()

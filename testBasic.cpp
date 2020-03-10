@@ -40,6 +40,12 @@ public:
     }
 };
 
+/** \addtogroup basictests Core functionality tests
+ * \ingroup tests
+ * @{
+ */
+
+
 BOOST_AUTO_TEST_SUITE(basic)
 
 
@@ -92,7 +98,8 @@ BOOST_AUTO_TEST_CASE(subset) {
 }
 
 /**
-   \brief simple shuffle for testing
+ * \brief simple shuffle for testing - performs a Fisher-Yates shuffle
+ * on an array of items of class T.
  */
 template <class T> void sshuffle(T *x, int ct){
     T tmp;
@@ -397,6 +404,10 @@ BOOST_AUTO_TEST_CASE(addition) {
     BOOST_REQUIRE(mse<0.03);
 }
 //! [addition]
+
+/** 
+ * @}
+ */
 
 
 BOOST_AUTO_TEST_SUITE_END()

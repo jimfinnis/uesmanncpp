@@ -9,6 +9,8 @@
 
 #include "netFactory.hpp"
 
+/** \defgroup tests Unit tests */
+
 namespace utf = boost::unit_test;
 
 /**

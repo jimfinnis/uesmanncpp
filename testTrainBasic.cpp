@@ -11,6 +11,12 @@
 
 BOOST_AUTO_TEST_SUITE(basictrain)
 
+/** \addtogroup testtrainbasic Training a plain unmodulated network
+ * \ingroup tests
+ * @{
+ */
+
+
 /**
  * \brief Test training.
  * This just checks that the network trains.
@@ -200,6 +206,9 @@ BOOST_AUTO_TEST_CASE(trainmnist){
 }
 //! [trainmnist]
 
+/** 
+ * @}
+ */
 
 
 BOOST_AUTO_TEST_SUITE_END()
