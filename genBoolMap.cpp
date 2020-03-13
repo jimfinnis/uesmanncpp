@@ -9,9 +9,8 @@
 
 #define NUM_ATTEMPTS 1000
 #define ETA 0.1
-// double that in the PhD - those are pair presentations,
-// these are single.
-#define ITERATIONS 150000
+
+#define EPOCHS 75000
 
 // possible inputs
 double ins[][2]={
@@ -87,23 +86,29 @@ double doPairing(int f1,int f2){
     setExample(e,6,f1,1,1,0);
     setExample(e,7,f2,1,1,1);
     
-    Net::SGDParams params(ETA,ITERATIONS);
-    params.storeBest().setSeed(1);
+    Net::SGDParams params(ETA,e,EPOCHS);
+    printf("Iterations: %d\n",params.iterations);
+    params.storeBest().setSeed(1).setShuffle(ExampleSet::STRIDE);
     
     
     int successful = 0;
     for(int i=0;i<NUM_ATTEMPTS;i++){
+//        printf("Seed %d\n",i);
         Net *n = NetFactory::makeNet(NetType::UESMANN,e,2);
         params.setSeed(i);
         n->trainSGD(e,params);
         if(success(f1,f2,n))
             successful++;
+//        printf("SUCCESS COUNT: %d\n",successful);
         delete n;
     }
     return ((double)successful)/(double)NUM_ATTEMPTS;
 }
 
 int main(int argc,char *argv[]){
+//    doPairing(7,8);
+//    exit(0);
+    
     printf("a,b,ct\n");
     for(int f1=0;f1<16;f1++){
         for(int f2=0;f2<16;f2++){

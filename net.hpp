@@ -173,7 +173,8 @@ public:
         
         /**
          * \brief number of iterations to run: an iteration is the presentation of a single example, NOT
-         * a pair-presentation as is the case in the thesis when discussing the modulatory network types.
+         * an epoch (or occasionally pair-presentation) as is the case in the thesis when discussing the modulatory
+         * network types.
          */
         int iterations;
         
@@ -285,16 +286,14 @@ public:
          */
         bool storeBestNet;
         
-        /** \brief Constructor which sets up defaults with no information about examples - 
-         * cross-validation is not set up by default, but can be done by calling
-         * crossValidation() or crossValidationManual().
-         * \param _eta learning rate to use
-         * \param _iters number of iterations to run: an iteration is the presentation
-         * of a single example, NOT a pair-presentation as is the case in the thesis when
-         * discussing the modulatory network types.
+    private:
+        /**
+         * \brief Private construction helper method used by all constructors.
+         * Done this way rather than calling a more basic constructor in case
+         * we need to do anything clever before calling that more basic constructor.
          */
         
-        SGDParams(double _eta, int _iters) {
+        void init(double _eta,int _iters){
             seed = 0L;
             eta = _eta;
             iterations = _iters;
@@ -308,6 +307,28 @@ public:
             shuffleMode = ExampleSet::STRIDE;
             selectBestWithCV=false; // there might not be CV!
             cvShuffle = true; // do shuffle CV at the end of an epoch
+        }
+    public:        
+        /** \brief Constructor which sets up defaults with no information about examples - 
+         * cross-validation is not set up by default, but can be done by calling
+         * crossValidation() or crossValidationManual().
+         * \param _eta learning rate to use
+         * \param _iters number of iterations to run: an iteration is the presentation
+         * of a single example, NOT a pair-presentation as is the case in the thesis when
+         * discussing the modulatory network types.
+         */
+        
+        SGDParams(double _eta, int _iters) {
+            init(_eta,_iters);
+        }
+        
+        /**
+         * Alternative constructor which uses the examples to calculate
+         * the number of iterations from an epoch count
+         */
+        
+        SGDParams(double _eta,const ExampleSet& examples,int _iters){
+            init(_eta,examples.getCount()*_iters);
         }
         
         /**
