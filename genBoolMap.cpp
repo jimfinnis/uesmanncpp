@@ -2,29 +2,42 @@
  * @file genBoolMap.cpp
  * @brief  Generate a 2D grid of how many trials of UESMANN on
  * every combination of binary boolean functions succeed.
- *
+ * This should (and does) generate approximately the same
+ * data as in Fig. 5.3a of the thesis (p.100). The variation is
+ * no greater than 0.001 (i.e. a single network) in each pairing
+ * tested.
  */
 
 #include "netFactory.hpp"
 
+// How many networks to attempt for each pairing
 #define NUM_ATTEMPTS 1000
+
+// the learning rate
 #define ETA 0.1
 
+// how many epochs to train each network for. At 8 examples per
+// epoch, this is 600000 training iterations (single examples)
 #define EPOCHS 75000
 
-// possible inputs
+// possible inputs: boolean pairs
 double ins[][2]={
     {0,0},
     {0,1},
     {1,0},
     {1,1}};
 
+/**
+ * \brief names of functions for the output
+ */
 const char *simpleNames[] = {
  "f","and","x and !y","x","!x and y","y","xor","or","nor","xnor",
     "!y","x or !y","!x","!x or y","nand","t"};
 
-// given a function index, perform the appropriate boolean. The index is actually
-// the truth table: four bits in order 00,01,10,11.
+/**
+ * \brief given a function index, perform the appropriate boolean. 
+ * The index is actually  the truth table: four bits in order 00,01,10,11.
+ */
 
 bool boolFunc(int f,bool a,bool b){
     // which bit do we want?
@@ -32,6 +45,12 @@ bool boolFunc(int f,bool a,bool b){
 //    printf("Bit set is %d, & %d = %d\n",bit,f,bit&f);
     return (f&bit)!=0;
 }
+
+/**
+ * \brief Set an example in the example set to the output of a given
+ * function (as an index into simpleNames), given the inputs and
+ * the modulator level.
+ */
 
 static void setExample(ExampleSet& e,int exampleIdx,
                        int functionIdx,int xbit,int ybit,double mod){
@@ -45,6 +64,11 @@ static void setExample(ExampleSet& e,int exampleIdx,
     
 }
 
+/**
+ * \brief test if a given network successfully performs a given pair
+ * of boolean functions, modulating from f1 to f2. The functions are
+ * indices into the simpleNames array.
+ */
 bool success(int f1,int f2,Net *n){
     double in[2];
     double out;
@@ -68,7 +92,13 @@ bool success(int f1,int f2,Net *n){
 }
 
 
-// returns proportion of networks which worked.
+/**
+ * \brief Train a large number of networks to do a particular
+ * pairing of boolean functions (provided as indices into simpleNames)
+ * an return what proportion successfully perform that pairing under
+ * modulation
+ */
+
 double doPairing(int f1,int f2){
     // first we need to build the examples.
     // 8 examples (4 at each mod level), 2 in, 1 out, 2 mod levels
@@ -86,8 +116,8 @@ double doPairing(int f1,int f2){
     setExample(e,6,f1,1,1,0);
     setExample(e,7,f2,1,1,1);
     
+    // training parameters.
     Net::SGDParams params(ETA,e,EPOCHS);
-    printf("Iterations: %d\n",params.iterations);
     params.storeBest().setSeed(1).setShuffle(ExampleSet::STRIDE);
     
     
