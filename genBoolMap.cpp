@@ -118,28 +118,39 @@ double doPairing(int f1,int f2){
     
     // training parameters.
     Net::SGDParams params(ETA,e,EPOCHS);
-    params.storeBest().setSeed(1).setShuffle(ExampleSet::STRIDE);
+    // pick the best network by training MSE (not cross-validation
+    // as we're not doing it) and keep it as we go along.
+    // Shuffle the network by stride, which is the number of examples:
+    // on each epoch, pairs of examples will be shuffled rather than
+    // single examples. This is true to the method given in the thesis,
+    // alternating training between h=0 and h=1 examples.
+    
+    params.storeBest().setShuffle(ExampleSet::STRIDE);
     
     
-    int successful = 0;
+    int successful = 0; // number of networks which worked
     for(int i=0;i<NUM_ATTEMPTS;i++){
-//        printf("Seed %d\n",i);
+        // make a new network
         Net *n = NetFactory::makeNet(NetType::UESMANN,e,2);
+        // set a new PRNG and train it (this will also set the init
+        // weights)
         params.setSeed(i);
+        // train the network
         n->trainSGD(e,params);
+        // and increment the count if it was good
         if(success(f1,f2,n))
             successful++;
-//        printf("SUCCESS COUNT: %d\n",successful);
-        delete n;
+        delete n; // remember to delete the network
     }
+    // return successful proportion
     return ((double)successful)/(double)NUM_ATTEMPTS;
 }
 
 int main(int argc,char *argv[]){
-//    doPairing(7,8);
-//    exit(0);
-    
-    printf("a,b,ct\n");
+    // output is function 1, function 2, and correct network
+    // proportion
+    printf("a,b,correct\n");
+    // run the 256 pairings and output their correctness proportion.
     for(int f1=0;f1<16;f1++){
         for(int f2=0;f2<16;f2++){
             printf("%d,%d,%f\n",f1,f2, doPairing(f1,f2));
