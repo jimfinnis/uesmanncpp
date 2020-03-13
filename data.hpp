@@ -109,8 +109,8 @@ public:
         minH=0;
         maxH=1;
         
-        printf("Allocating new set %d*(%d,%d)\n",
-               n,ninputs,noutputs);
+//        printf("Allocating new set %d*(%d,%d)\n",
+//               n,ninputs,noutputs);
         
         // size of a single example: number of inputs plus number of outputs
         // plus one for the modulator.
@@ -239,6 +239,10 @@ public:
               /**
                * \brief Shuffle single examples, no matter the value of numHLevels.
                */
+              SINGLE,
+              /**
+               * \brief Don't shuffle examples at all
+               */
               NONE
     };
         
@@ -253,6 +257,9 @@ public:
      */
     
     void shuffle(drand48_data *rd,ShuffleMode mode,int nExamples=0){
+        if(mode == NONE) // this means we don't shuffle
+            return;
+        
         if(!nExamples)
             nExamples=ct;
         

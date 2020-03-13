@@ -9,8 +9,13 @@ set(UESMANN_LIBS -lm)
 
 add_executable(uesmann_test testBasic.cpp testTrainBasic.cpp
     testTrainBooleans.cpp)
+add_executable(genBoolMap genBoolMap.cpp)
 
 target_link_libraries(uesmann_test
+    ${UESMANN_LIBS}
+    ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
+    )
+target_link_libraries(genBoolMap
     ${UESMANN_LIBS}
     ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
     )

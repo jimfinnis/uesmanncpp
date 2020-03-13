@@ -171,8 +171,6 @@ public:
     struct SGDParams {
         friend class Net;
         
-        /// @brief default value of iterations
-        constexpr static int DEF_ITERATIONS=10000;
         /**
          * \brief number of iterations to run: an iteration is the presentation of a single example, NOT
          * a pair-presentation as is the case in the thesis when discussing the modulatory network types.
@@ -213,10 +211,6 @@ public:
             return *this;
         }
         
-        
-        /// @brief default value of preserveHAlternation (do preserve)
-        constexpr static bool DEF_PRESERVEHALTERNATION=true;
-        
         /**
          * \brief The shuffle mode to use - see the ExampleSet::ShuffleMode
          * enum for details.
@@ -231,9 +225,6 @@ public:
         
         
         
-        /// @brief default value of selectBestWithCV (don't select with cross-validation;
-        /// there isn't any by default)
-        constexpr static bool DEF_SELECTBESTWITHCV=false;
         /**
          * \brief if true, use the minimum CV error to find the best net,
          * otherwise use the training error. Note that if true, networks will only be tested
@@ -248,13 +239,11 @@ public:
         }
         
         
-        /// @brief default value of cvShuffle (do shuffle)
-        constexpr static bool DEF_CVSHUFFLE=true;
         /**
          * \brief if true, shuffle the entire CV data set when all slices have been done so
          * that the cross-validation has (effectively) a new set of slices each time.
          */
-        bool cvShuffle = DEF_CVSHUFFLE;
+        bool cvShuffle;
         
         /** \brief fluent setter for cvShuffle */
         SGDParams& setCVShuffle(bool v=true){
@@ -317,8 +306,8 @@ public:
             nPerSlice=0;
             cvInterval=1;
             shuffleMode = ExampleSet::STRIDE;
-            selectBestWithCV=DEF_SELECTBESTWITHCV;
-            cvShuffle = DEF_CVSHUFFLE;
+            selectBestWithCV=false; // there might not be CV!
+            cvShuffle = true; // do shuffle CV at the end of an epoch
         }
         
         /**
