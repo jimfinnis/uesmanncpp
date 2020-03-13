@@ -1,7 +1,9 @@
 /**
  * @file genBoolMap.cpp
- * @brief  Generate a 2D grid of how many trials of UESMANN on
+ * @brief  Generate a 2D grid (well, a table from which such
+ * a grid can be generated) of how many trials of UESMANN on
  * every combination of binary boolean functions succeed.
+ * 
  * This should (and does) generate approximately the same
  * data as in Fig. 5.3a of the thesis (p.100). The variation is
  * no greater than 0.001 (i.e. a single network) in each pairing
@@ -10,17 +12,23 @@
 
 #include "netFactory.hpp"
 
-// How many networks to attempt for each pairing
+/** \brief How many networks to attempt for each pairing in genBoolMap */
 #define NUM_ATTEMPTS 1000
 
-// the learning rate
+/** \brief the learning rate for genBoolMap */
 #define ETA 0.1
 
-// how many epochs to train each network for. At 8 examples per
-// epoch, this is 600000 training iterations (single examples)
+
+/** \brief
+ * how many epochs to train each genBoolMap network for -  at 8 examples per
+ * epoch, this is 600000 training iterations (single examples)
+ */
 #define EPOCHS 75000
 
-// possible inputs: boolean pairs
+/**
+ * \brief possible inputs to boolean functions
+ */
+
 double ins[][2]={
     {0,0},
     {0,1},
@@ -28,7 +36,7 @@ double ins[][2]={
     {1,1}};
 
 /**
- * \brief names of functions for the output
+ * \brief names of functions performed by boolFunc()
  */
 const char *simpleNames[] = {
  "f","and","x and !y","x","!x and y","y","xor","or","nor","xnor",
@@ -36,7 +44,7 @@ const char *simpleNames[] = {
 
 /**
  * \brief given a function index, perform the appropriate boolean. 
- * The index is actually  the truth table: four bits in order 00,01,10,11.
+ * The index is actually the truth table: four bits in order 00,01,10,11
  */
 
 bool boolFunc(int f,bool a,bool b){
@@ -95,7 +103,7 @@ bool success(int f1,int f2,Net *n){
 /**
  * \brief Train a large number of networks to do a particular
  * pairing of boolean functions (provided as indices into simpleNames)
- * an return what proportion successfully perform that pairing under
+ * and return what proportion successfully perform that pairing under
  * modulation
  */
 
@@ -146,6 +154,9 @@ double doPairing(int f1,int f2){
     return ((double)successful)/(double)NUM_ATTEMPTS;
 }
 
+/**
+ * \brief The main function for genBoolMap
+ */
 int main(int argc,char *argv[]){
     // output is function 1, function 2, and correct network
     // proportion

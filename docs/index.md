@@ -41,6 +41,19 @@ crossvalidation and hyperparameters)
 * MNIST, which encapsulates MNIST-format data sets and from which
 ExampleSet instances can be generated.
 
+
+## The library and test executables
+
+The entire library is include-only, just include
+netFactory.hpp to get everything. The provided CMakeLists.txt
+builds two executables:
+
+* *uesmann-test* runs a set of test suites
+* *genBoolGrid* trains 1000 UESMANN networks for every possible
+binary boolean function pairing and calculates how many perform
+the required function (this test was designed to ensure that the
+library's output matched that from equivalent code used in the thesis).
+
 ## The network
 
 The network implemented is a modified version of the basic Rumelhart, Hinton

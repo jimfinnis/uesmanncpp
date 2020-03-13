@@ -37,5 +37,4 @@ A Keras/Tensorflow implementation is planned.
 Implementations of the other network types mentioned in the thesis
 are also included.
 
-
 [![Build Status](https://travis-ci.com/jimfinnis/uesmanncpp.svg?branch=master)](https://travis-ci.com/jimfinnis/uesmanncpp)
