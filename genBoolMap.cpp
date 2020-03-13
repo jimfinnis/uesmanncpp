@@ -87,8 +87,8 @@ double doPairing(int f1,int f2){
     setExample(e,7,f2,1,1,1);
     
     Net::SGDParams params(ETA,e,EPOCHS);
-    printf("Iterations: %d\n",params.iterations);
-    params.storeBest().setSeed(1).setShuffle(ExampleSet::STRIDE);
+//    printf("Iterations: %d\n",params.iterations);
+    params.storeBest().setShuffle(ExampleSet::STRIDE);
     
     
     int successful = 0;
