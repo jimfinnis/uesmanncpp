@@ -48,8 +48,8 @@ The entire library is include-only, just include
 netFactory.hpp to get everything. The provided CMakeLists.txt
 builds two executables:
 
-* *uesmann-test* runs a set of test suites
-* *genBoolGrid* trains 1000 UESMANN networks for every possible
+* **uesmann-test** runs a set of test suites written using the Boost test framework.
+* **genBoolGrid** trains 1000 UESMANN networks for every possible
 binary boolean function pairing and calculates how many perform
 the required function (this test was designed to ensure that the
 library's output matched that from equivalent code used in the thesis).

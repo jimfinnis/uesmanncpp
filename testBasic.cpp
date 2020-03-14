@@ -169,7 +169,7 @@ BOOST_AUTO_TEST_CASE(altex){
  * \brief test strided example shuffle, 4 different modulator levels
  */
 
-BOOST_AUTO_TEST_CASE(shufflestride){
+BOOST_AUTO_TEST_CASE(stride){
     static const int NUMBEREXAMPLES=32;
     // 32 examples (or however many) with 2 inputs and 1 output, and 4
     // different modulator values. We then create 4 different groups.
@@ -341,69 +341,6 @@ BOOST_AUTO_TEST_CASE(loadmnist) {
             BOOST_REQUIRE(out[i]==0.0);
     }
 }
-
-//! [addition]
-
-/**
- * \brief Construct an addition model from scratch and try to learn it
- * with backprop
- */
-
-BOOST_AUTO_TEST_CASE(addition) {
-    // 1000 examples, 2 inputs, 1 output, 1 modulator level (i.e. no modulation)
-    ExampleSet e(1000,2,1,1);
-    
-    // initialise a PRNG
-    drand48_data rd;
-    srand48_r(10,&rd);
-    
-    // create the examples
-    for(int i=0;i<1000;i++){
-        // get a pointer to the inputs for this example
-        double *ins = e.getInputs(i);
-        // and a pointer to the outputs (only one of them in this case)
-        double *out = e.getOutputs(i);
-        
-        // use the PRNG to generate the operands in the range [0,0.5) to ensure
-        // that the result is <1.
-        double a,b;
-        drand48_r(&rd,&a);a*=0.5;
-        drand48_r(&rd,&b);b*=0.5;
-        
-        // write the inputs and the output
-        ins[0] = a;
-        ins[1] = b;
-        *out = a+b;
-    }
-    
-    // create a plain backprop network
-    // set up a net which conforms to those examples with 2 hidden nodes.
-    Net *net = NetFactory::makeNet(NetType::PLAIN,e,2);
-    
-    // set up training parameters:
-    // eta=1, lots of  iterations
-    Net::SGDParams params(1,10000000);
-    // cross validation etc.:
-    // use half of the data as CV examples. This is divided into 10 slices,
-    // and we do cross-validation 1000 times during the run.
-    // Don't shuffle the CV examples on epoch. Also, store the best net
-    // and make sure we end up with that. We also set a PRNG seed to
-    // ensure reproducibility.
-    params.crossValidation(e, // example set
-                           0.5, // proportion of set to hold back for CV
-                           1000, // number of CV cycles
-                           10, // number of CV slices
-                           false // don't shuffle the entire CV set on completing an epoch
-                           )
-          .storeBest() // store the best net inside this param block
-          .setSeed(0); // initialise PRNG for net, used for initial weights and shuffling.
-    
-    // do the training and get the MSE of the best net, found by cross-validation.
-    double mse = net->trainSGD(e,params);
-    printf("%f\n",mse);
-    BOOST_REQUIRE(mse<0.03);
-}
-//! [addition]
 
 /** 
  * @}
