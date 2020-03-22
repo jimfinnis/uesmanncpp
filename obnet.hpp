@@ -30,7 +30,8 @@ public:
      * \param nlayers number of layers
      * \param layerCounts array of layer counts
      */
-    OutputBlendingNet(int nlayers,const int *layerCounts) : Net() {
+    OutputBlendingNet(int nlayers,const int *layerCounts) 
+                : Net(NetType::OUTPUTBLENDING) {
         // we create two networks, one for each modulator level.
         net0 = new BPNet(nlayers,layerCounts);
         net1 = new BPNet(nlayers,layerCounts);

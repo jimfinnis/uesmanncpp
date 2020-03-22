@@ -10,6 +10,7 @@
 
 #include <math.h>
 
+#include "netType.hpp"
 #include "data.hpp"
 
 /**
@@ -45,6 +46,7 @@ public:
      */
     virtual ~Net() {} 
     
+    NetType type; //!< type of the network, used for load/save
     drand48_data rd; //!< PRNG data (thread safe)
     
     /** 
@@ -539,14 +541,14 @@ public:
     /**
      * \brief Get the length of the serialised data block
      * for this network.
-     * \return the size in bytes
+     * \return the size in doubles
      */
     virtual int getDataSize() const = 0;
     
     /**
      * \brief Serialize the data (not including any network type magic number or
      * layer/node counts) to the given memory (which must be of sufficient size).
-     * \param buf the buffer to save the data, must be at least getDataSize() bytes
+     * \param buf the buffer to save the data, must be at least getDataSize() doubles
      */
     virtual void save(double *buf) const = 0;
     
@@ -554,7 +556,7 @@ public:
      * \brief Given that the pointer points to a data block of the correct size
      * for the current network, copy the parameters from that data block into
      * the current network overwriting the current parameters.
-     * \param buf the buffer to load the data from, must be at least getDataSize() bytes
+     * \param buf the buffer to load the data from, must be at least getDataSize() doubles
      */
     virtual void load(double *buf) = 0;
     
@@ -572,9 +574,11 @@ protected:
     
     /**
      * \brief Constructor - protected because others inherit it and it's not used
-     * directly
+     * directly.
+     * \param tp network type enumeration
      */
-    Net(){
+    Net(NetType tp){
+        type = tp;
         setSeed(0);
     }
     

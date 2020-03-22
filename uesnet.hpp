@@ -26,7 +26,11 @@ public:
      */
     
     UESNet(int nlayers,const int *layerCounts) : BPNet(nlayers,layerCounts),
-          modulator(0) {
+          modulator(0)
+    {
+        // replace the net type, it's not a plain net any more
+        type = NetType::UESMANN;
+        
     }
     
     virtual void setH(double h){
@@ -68,7 +72,7 @@ protected:
             }
         }
     }
-
+    
     virtual void update(){
         double hfactor = modulator+1.0;
         for(int i=1;i<numLayers;i++){
@@ -139,7 +143,7 @@ protected:
                     // this does the modulation part of Eq. 4.13, but a little
                     // later than in the thesis.
                     double wdelta = eta*getavggradw(l,i,j)*factor*hfactor;
-//                    printf("WCORR: %f factor %f\n",wdelta,getavggradw(l,i,j));
+                    //                    printf("WCORR: %f factor %f\n",wdelta,getavggradw(l,i,j));
                     getw(l,i,j) -= wdelta;
                 }
                 // biases are not modulated

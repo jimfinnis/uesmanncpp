@@ -14,18 +14,6 @@
 #include "hinet.hpp"
 #include "uesnet.hpp"
 
-/**
- * \brief The different types of network - each has an associated integer
- * for saving/loading file data.
- */
-enum class NetType {
-    PLAIN=1000, /// \brief plain back-propagation
-          OUTPUTBLENDING, /// \brief output blending
-          HINPUT, /// \brief h-as-input
-          UESMANN, /// \brief UESMANN
-          
-          MAX = PLAIN /// \brief max
-};
 
 /**
  * \brief
@@ -35,49 +23,128 @@ enum class NetType {
 
 class NetFactory { // not a namespace because Doxygen gets confused.
 public:
-/**
- * \brief
- * Construct a single hidden layer network of a given type
- * which conforms to the example set.
- */
-
-static Net *makeNet(NetType t,ExampleSet &e,int hnodes){
-    Net *net;
+    /**
+     * \brief
+     * Construct a single hidden layer network of a given type
+     * which conforms to the example set.
+     */
     
-    int layers[3];
-    layers[0] = e.getInputCount();
-    layers[1] = hnodes;
-    layers[2] = e.getOutputCount();
-    
-    switch(t){
-    case NetType::PLAIN:
-        return new BPNet(3,layers);
-    case NetType::OUTPUTBLENDING:
-        return new OutputBlendingNet(3,layers);
-    case NetType::HINPUT:
-        return new HInputNet(3,layers);
-    case NetType::UESMANN:
-        return new UESNet(3,layers);
-    default:break;
+    static Net *makeNet(NetType t,ExampleSet &e,int hnodes){
+        Net *net;
+        
+        int layers[3];
+        layers[0] = e.getInputCount();
+        layers[1] = hnodes;
+        layers[2] = e.getOutputCount();
+        
+        return makeNet(t,3,layers);
     }
-}
-
-/**
- * \brief Load a network of any type from a file
- */
-
-inline static Net *loadNet(char *fn){
-    throw new std::runtime_error("loadNet not yet implemented");
-}
-
-/**
- * \brief Save a net of any type to a file
- */
-
-inline static void saveNet(char *fn,Net *n){
-    throw new std::runtime_error("saveNet not yet implemented");
-}
-
+    
+    static Net *makeNet(NetType t,int layercount, int *layers){
+        switch(t){
+        case NetType::PLAIN:
+            return new BPNet(layercount,layers);
+        case NetType::OUTPUTBLENDING:
+            return new OutputBlendingNet(layercount,layers);
+        case NetType::HINPUT:
+            return new HInputNet(layercount,layers);
+        case NetType::UESMANN:
+            return new UESNet(layercount,layers);
+        default:break;
+        }
+    }
+    
+    /**
+     * \brief Load a network of any type from a file - note, endianness not checked!
+     */
+    
+    inline static Net *loadNet(char *fn){
+        FILE *a = fopen(fn,"rb");
+        if(!a)
+            throw new std::runtime_error("cannot open file");
+        
+        // get type
+        uint32_t magic;
+        if(!fread(&magic,sizeof(uint32_t),1,a)){
+            fclose(a);
+            throw new std::runtime_error("bad net save file");
+        }
+            
+        NetType t = static_cast<NetType>(magic);
+        
+        // build layer specification reading the layer count and then
+        // the layer sizes
+        uint32_t layercount,tmp;
+        if(!fread(&layercount,sizeof(uint32_t),1,a)){
+            fclose(a);
+            throw new std::runtime_error("bad net save file");
+        }
+        int *layers = new int[layercount];
+        for(int i=0;i<layercount;i++){
+            if(!fread(&tmp,sizeof(uint32_t),1,a)){
+                delete [] layers;
+                fclose(a);
+                throw new std::runtime_error("bad net save file");
+            }
+            layers[i]=tmp;
+        }
+        
+        // build the net
+        Net *n = makeNet(t,layercount,layers);
+        
+        // get the parameter data 
+        int size = n->getDataSize();
+        double *buf = new double[size];
+        // and read it
+        if(fread(buf,sizeof(double),size,a)!=size){
+            delete [] buf;
+            delete [] layers;
+            fclose(a);
+            throw new std::runtime_error("bad net save file");
+        }
+        n->load(buf);
+        
+        delete [] buf;
+        delete [] layers;
+        fclose(a);
+        
+        
+        
+        
+    }
+    
+    /**
+     * \brief Save a net of any type to a file - note, endianness not checked!
+     */
+    
+    inline static void saveNet(const char *fn,Net *n) {
+        FILE *a = fopen(fn,"wb");
+        if(!a)
+            throw new std::runtime_error("cannot open file");
+        
+        // get and write the magic number
+        uint32_t magic=static_cast<uint32_t>(n->type); // magic number
+        fwrite(&magic,sizeof(uint32_t),1,a);
+        
+        // write the layer count and layer sizes, all as 32-bit.
+        uint32_t layercount = n->getLayerCount();
+        fwrite(&layercount,sizeof(uint32_t),1,a);
+        for(int i=0;i<layercount;i++){
+            uint32_t layersize = n->getLayerSize(i);
+            fwrite(&layercount,sizeof(uint32_t),1,a);
+        }
+        
+        // get the parameter data 
+        int size = n->getDataSize();
+        double *buf = new double[size];
+        n->save(buf);
+        // and write it
+        fwrite(buf,sizeof(double),size,a);
+        delete [] buf;
+        
+        fclose(a);
+    }
+    
 };
 
 

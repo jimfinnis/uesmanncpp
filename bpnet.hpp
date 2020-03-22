@@ -21,7 +21,7 @@ protected:
      * \brief Special constructor for subclasses which need to manipulate layer
      * count before initialisation (e.g. HInputNet).
      */
-    BPNet() : Net () {
+    BPNet() : Net (NetType::PLAIN) {
     }
     
     /**
@@ -66,7 +66,7 @@ public:
      * \param nlayers number of layers
      * \param layerCounts array of layer counts
      */
-    BPNet(int nlayers,const int *layerCounts) : Net() {
+    BPNet(int nlayers,const int *layerCounts) : Net(NetType::PLAIN) {
         init(nlayers,layerCounts);
     }
     

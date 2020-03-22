@@ -20,7 +20,7 @@ class HInputNet : public BPNet {
      * when we train/run the network
      */
     double modulator;
-
+    
 public:
     /**
      * \brief Constructor -  does not initialise the weights to random values so
@@ -30,6 +30,9 @@ public:
      * \param layerCounts array of layer counts
      */
     HInputNet(int nlayers,const int *layerCounts) : BPNet() {
+        // replace the net type, it's not a plain net any more
+        type = NetType::HINPUT;
+        
         // you may have noticed that I tend to use arrays a lot rather than
         // std::vector. Sorry, I do this without realising because I'm very,
         // very old.
@@ -41,6 +44,8 @@ public:
         ll[0]++; // add an extra input
         
         init(nlayers,ll);
+        
+        
     }
     
     /**
@@ -75,7 +80,7 @@ public:
         setInput(nins,modulator);
     }
 };
-    
-    
-    
+
+
+
 #endif /* __HINET_HPP */
