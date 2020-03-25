@@ -324,6 +324,7 @@ BOOST_AUTO_TEST_CASE(loadmnist) {
     
     // in this data set, example 1233 should be a 5.
     double *in = e.getInputs(1233);
+
     for(int y=0;y<28;y++){
         for(int x=0;x<28;x++){
             uint8_t qq = *in++ * 10;

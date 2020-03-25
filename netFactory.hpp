@@ -58,7 +58,7 @@ public:
      * \brief Load a network of any type from a file - note, endianness not checked!
      */
     
-    inline static Net *loadNet(char *fn){
+    inline static Net *load(const char *fn){
         FILE *a = fopen(fn,"rb");
         if(!a)
             throw new std::runtime_error("cannot open file");
@@ -96,7 +96,9 @@ public:
         int size = n->getDataSize();
         double *buf = new double[size];
         // and read it
-        if(fread(buf,sizeof(double),size,a)!=size){
+//        printf("loading %d doubles\n",size);
+        int readData = fread(buf,sizeof(double),size,a);
+        if(readData!=size){
             delete [] buf;
             delete [] layers;
             fclose(a);
@@ -107,17 +109,14 @@ public:
         delete [] buf;
         delete [] layers;
         fclose(a);
-        
-        
-        
-        
+        return n;
     }
     
     /**
      * \brief Save a net of any type to a file - note, endianness not checked!
      */
     
-    inline static void saveNet(const char *fn,Net *n) {
+    inline static void save(const char *fn,Net *n) {
         FILE *a = fopen(fn,"wb");
         if(!a)
             throw new std::runtime_error("cannot open file");
@@ -131,11 +130,12 @@ public:
         fwrite(&layercount,sizeof(uint32_t),1,a);
         for(int i=0;i<layercount;i++){
             uint32_t layersize = n->getLayerSize(i);
-            fwrite(&layercount,sizeof(uint32_t),1,a);
+            fwrite(&layersize,sizeof(uint32_t),1,a);
         }
         
         // get the parameter data 
         int size = n->getDataSize();
+//        printf("saving %d doubles\n",size);
         double *buf = new double[size];
         n->save(buf);
         // and write it
