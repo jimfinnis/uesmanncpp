@@ -33,5 +33,5 @@ script:
     - mkdir build
     - cd build
     - ${DEPS_DIR}/cmake/bin/cmake .. && make
-    - ./uesmann_test --run_test=basic,booleans --log_level=test_suite
+    - ./uesmann_test --run_test=basic,booleans,saveload --log_level=test_suite
     
