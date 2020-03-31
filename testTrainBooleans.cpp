@@ -57,6 +57,7 @@ static void dotest(NetType tp){
     BOOST_REQUIRE(booleanTest(net,1,  0,1,0)<threshold);
     BOOST_REQUIRE(booleanTest(net,1,  1,0,0)<threshold);
     BOOST_REQUIRE(booleanTest(net,1,  1,1,1)<threshold);
+    delete net;
 }
 
 /**

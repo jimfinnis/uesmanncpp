@@ -186,6 +186,7 @@ BOOST_AUTO_TEST_CASE(addition) {
             BOOST_REQUIRE(diff<0.05);
         }
     }
+    delete net;
 }
 
 //! [addition]
@@ -292,6 +293,7 @@ BOOST_AUTO_TEST_CASE(additionmod) {
             BOOST_REQUIRE(diff<0.07); 
         }
     }
+    delete net;
 }
 //! [additionmod]
 
@@ -361,6 +363,7 @@ BOOST_AUTO_TEST_CASE(trainmnist){
     printf("MSE=%f, correct=%d/%d=%f\n",mse,correct,testSet.getCount(),ratio);
     // assert that it's at least 85%
     BOOST_REQUIRE(ratio>0.85);
+    delete n;
 }
 //! [trainmnist]
 

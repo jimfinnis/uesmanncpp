@@ -305,6 +305,7 @@ BOOST_AUTO_TEST_CASE(testmse) {
     // get the MSE on all examples, given the example values
     // in the test set
     double t = n->test(e);
+    delete n;
     
     // value determined by running the network with a lot of
     // debug printing
