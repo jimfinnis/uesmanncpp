@@ -29,7 +29,14 @@ types - the network should modulate from XOR to AND as the modulator moves from 
     * **obxorand** : output blending
     * **hinxorand** : h-as-input
     * **uesmann** : UESMANN
-    
+* **saveload** : test that saving and loading the different network types leaves the
+parameters of the network unchanged. This is done by training a network on a single silly
+example, so it essentially has random parameters, then saving, then loading into a new
+network and comparing.
+    * **saveloadplain** : plain backprop
+    * **saveloadob** : output blending
+    * **saveloadhin** : h-as-input
+    * **saveloadues** : UESMANN
     
 
 ## Example code

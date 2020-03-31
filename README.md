@@ -3,6 +3,8 @@ UESMANN CPP
 
 This is the new C++ implementation of the UESMANN modulatory neural network
 architecture, based on the original code used in my thesis. 
+See [my University web site for more details and publications](http://users.aber.ac.uk/jcf12/research/uesmann/)
+or the brief introduction below.
 
 ## What is UESMANN?
 

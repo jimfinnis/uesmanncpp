@@ -55,7 +55,7 @@ public:
     }
     
     virtual int getLayerSize(int n) const {
-        int ct = layerSizes[0];
+        int ct = layerSizes[n];
         // subtract one if it's the input layer, so we
         // don't see the hidden input.
         return (n==0)?ct-1:ct;
