@@ -1,0 +1,420 @@
+\hypertarget{classExampleSet}{}\section{Example\+Set Class Reference}
+\label{classExampleSet}\index{Example\+Set@{Example\+Set}}
+
+
+A set of example data. Each datum consists of hormone (i.\+e. modulator value), inputs and outputs. The data is stored as a single double array, with each example made up of inputs, followed by outputs, followed by modulator value (h).  
+
+
+
+
+{\ttfamily \#include $<$data.\+hpp$>$}
+
+
+
+Inheritance diagram for Example\+Set\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=292pt]{classExampleSet__inherit__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{classExampleSet_afcdcdbc9a02c53864997e334d8bae33d}{Shuffle\+Mode} \{ \hyperlink{classExampleSet_afcdcdbc9a02c53864997e334d8bae33da7dfbbc7c9fb69bf8aacc556a1eaf4480}{S\+T\+R\+I\+DE}, 
+\hyperlink{classExampleSet_afcdcdbc9a02c53864997e334d8bae33dacc61e53a68e337018a03252922ebc6b1}{A\+L\+T\+E\+R\+N\+A\+TE}, 
+\hyperlink{classExampleSet_afcdcdbc9a02c53864997e334d8bae33dab2b8cedf3f694baf320ce881237c7833}{S\+I\+N\+G\+LE}, 
+\hyperlink{classExampleSet_afcdcdbc9a02c53864997e334d8bae33dad0bd9d15e4bf63f5038da60af9c4ae07}{N\+O\+NE}
+ \}\begin{DoxyCompactList}\small\item\em Shuffling mode for \hyperlink{classExampleSet_a2df897c759c7cc03475f68fd1f4834b9}{shuffle()} \end{DoxyCompactList}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classExampleSet_abc839769d9337279f1627d4822c65a44}{Example\+Set} (int n, int nin, int nout, int levels)
+\begin{DoxyCompactList}\small\item\em Constructor -\/ creates but doesn\textquotesingle{}t fill in the data. \end{DoxyCompactList}\item 
+\hyperlink{classExampleSet_a1e7d58c8262da06bf8d0de1a20a3b994}{Example\+Set} (const \hyperlink{classExampleSet}{Example\+Set} \&parent, int start, int length)
+\begin{DoxyCompactList}\small\item\em Constructor for making a subset of another set. This uses the actual data in the parent, but creates a fresh set of offset structures which can be independently shuffled. \end{DoxyCompactList}\item 
+\hyperlink{classExampleSet_a5abacfde6b834ad368ccb28eb7900205}{Example\+Set} (const \hyperlink{classMNIST}{M\+N\+I\+ST} \&mnist)
+\begin{DoxyCompactList}\small\item\em Special constructor for generating a data set from an \hyperlink{classMNIST}{M\+N\+I\+ST} database with a single labelling (i.\+e. for use in non-\/modulatory training). We copy the data from the \hyperlink{classMNIST}{M\+N\+I\+ST} object. The outputs will use a one-\/hot encoding. This example set will have no modulation. \end{DoxyCompactList}\item 
+\hyperlink{classExampleSet_a442c40fd6b16d0f41b613b106e55dec7}{$\sim$\+Example\+Set} ()
+\begin{DoxyCompactList}\small\item\em Destructor -\/ deletes data and offset array. \end{DoxyCompactList}\item 
+void \hyperlink{classExampleSet_a2df897c759c7cc03475f68fd1f4834b9}{shuffle} (drand48\+\_\+data $\ast$rd, \hyperlink{classExampleSet_afcdcdbc9a02c53864997e334d8bae33d}{Shuffle\+Mode} mode, int n\+Examples=0)
+\begin{DoxyCompactList}\small\item\em Shuffle the example using a P\+R\+NG and a Fisher-\/\+Yates shuffle. \end{DoxyCompactList}\item 
+\hyperlink{classExampleSet}{Example\+Set} \& \hyperlink{classExampleSet_a32f409e6dae79b926041814e704791de}{set\+H\+Range} (double mn, double mx)
+\item 
+int \hyperlink{classExampleSet_adc2a5ca623db66524e19562ba677cd67}{get\+Input\+Count} () const 
+\begin{DoxyCompactList}\small\item\em get the number of inputs in all examples \end{DoxyCompactList}\item 
+int \hyperlink{classExampleSet_a700faa92ffb424ffa8b0f58ab597e240}{get\+Output\+Count} () const 
+\begin{DoxyCompactList}\small\item\em get the number of outputs in all examples \end{DoxyCompactList}\item 
+int \hyperlink{classExampleSet_a58cdb9c925a4f33267541197d897fdd8}{get\+Count} () const 
+\begin{DoxyCompactList}\small\item\em get the number of examples \end{DoxyCompactList}\item 
+double $\ast$ \hyperlink{classExampleSet_a77229f0f933a885f5bffc6e46cafe432}{get\+Inputs} (int example)
+\begin{DoxyCompactList}\small\item\em Get a pointer to the inputs for a given example, for reading or writing. \end{DoxyCompactList}\item 
+double $\ast$ \hyperlink{classExampleSet_a97c5c5596d388c2adcb1f761472d18aa}{get\+Outputs} (int example)
+\begin{DoxyCompactList}\small\item\em Get a pointer to the outputs for a given example, for reading or writing. \end{DoxyCompactList}\item 
+double \hyperlink{classExampleSet_a084224adb0fdf5555caa24a0bd4d4211}{getH} (int example) const 
+\begin{DoxyCompactList}\small\item\em Get the h (modulator) for a given example. \end{DoxyCompactList}\item 
+int \hyperlink{classExampleSet_a3558d3a74a8bccf8736f2a2e65a861f2}{get\+Num\+H\+Levels} ()
+\begin{DoxyCompactList}\small\item\em return the number of different H-\/levels \end{DoxyCompactList}\item 
+void \hyperlink{classExampleSet_a8fa30270c775be95ae69fae9cec3e9bc}{setH} (int example, double h)
+\begin{DoxyCompactList}\small\item\em Set the h (modulator) for a given example. \end{DoxyCompactList}\item 
+void \hyperlink{classExampleSet_a15a6c0897780abd8c421691bcc43f711}{dump} (int start=0, int end=-\/1)
+\begin{DoxyCompactList}\small\item\em dump to stdout \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A set of example data. Each datum consists of hormone (i.\+e. modulator value), inputs and outputs. The data is stored as a single double array, with each example made up of inputs, followed by outputs, followed by modulator value (h). 
+
+Definition at line 57 of file data.\+hpp.
+
+
+
+\subsection{Member Enumeration Documentation}
+\index{Example\+Set@{Example\+Set}!Shuffle\+Mode@{Shuffle\+Mode}}
+\index{Shuffle\+Mode@{Shuffle\+Mode}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{Shuffle\+Mode}{ShuffleMode}}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf Example\+Set\+::\+Shuffle\+Mode}}\hypertarget{classExampleSet_afcdcdbc9a02c53864997e334d8bae33d}{}\label{classExampleSet_afcdcdbc9a02c53864997e334d8bae33d}
+
+
+Shuffling mode for \hyperlink{classExampleSet_a2df897c759c7cc03475f68fd1f4834b9}{shuffle()} 
+
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{S\+T\+R\+I\+DE@{S\+T\+R\+I\+DE}!Example\+Set@{Example\+Set}}\index{Example\+Set@{Example\+Set}!S\+T\+R\+I\+DE@{S\+T\+R\+I\+DE}}\item[{\em 
+S\+T\+R\+I\+DE\hypertarget{classExampleSet_afcdcdbc9a02c53864997e334d8bae33da7dfbbc7c9fb69bf8aacc556a1eaf4480}{}\label{classExampleSet_afcdcdbc9a02c53864997e334d8bae33da7dfbbc7c9fb69bf8aacc556a1eaf4480}
+}]Shuffle blocks of num\+H\+Levels examples, rather than single examples. This is intended for cases where examples with the same inputs are added contiguously at different modulator levels. For this to work correctly, the modulator levels must be distributed evenly across their range. For example, for four modulator levels from 2-\/3\+: 
+\begin{DoxyItemize}
+\item ensure that num\+H\+Levels is 4
+\item ensure that the values for 2,2.\+25,2.\+5 and 3 are equally represented in the data.
+\item ensure that the data is provided in equally sized groups cycling through the modulator (similar to the output of the A\+L\+T\+E\+R\+N\+A\+TE mode)
+\end{DoxyItemize}
+
+It is possible to run a shuffle(rd,\+A\+L\+T\+E\+R\+N\+A\+T\+E) on the data after input, followed by training with this mode. \index{A\+L\+T\+E\+R\+N\+A\+TE@{A\+L\+T\+E\+R\+N\+A\+TE}!Example\+Set@{Example\+Set}}\index{Example\+Set@{Example\+Set}!A\+L\+T\+E\+R\+N\+A\+TE@{A\+L\+T\+E\+R\+N\+A\+TE}}\item[{\em 
+A\+L\+T\+E\+R\+N\+A\+TE\hypertarget{classExampleSet_afcdcdbc9a02c53864997e334d8bae33dacc61e53a68e337018a03252922ebc6b1}{}\label{classExampleSet_afcdcdbc9a02c53864997e334d8bae33dacc61e53a68e337018a03252922ebc6b1}
+}]Shuffle single examples, but follow up by running a pass over the examples to ensure that they alternate by modulator level. This is useful where there are discrete modulator levels but the examples are mixed up (as happens in the robot experiments). This doesn\textquotesingle{}t require equal distribution of modulator levels, but the levels should be evenly spaced across the range. If the distribution is unequal, a portion at the end of the set will not alternate correctly. \index{S\+I\+N\+G\+LE@{S\+I\+N\+G\+LE}!Example\+Set@{Example\+Set}}\index{Example\+Set@{Example\+Set}!S\+I\+N\+G\+LE@{S\+I\+N\+G\+LE}}\item[{\em 
+S\+I\+N\+G\+LE\hypertarget{classExampleSet_afcdcdbc9a02c53864997e334d8bae33dab2b8cedf3f694baf320ce881237c7833}{}\label{classExampleSet_afcdcdbc9a02c53864997e334d8bae33dab2b8cedf3f694baf320ce881237c7833}
+}]Shuffle single examples, no matter the value of num\+H\+Levels. \index{N\+O\+NE@{N\+O\+NE}!Example\+Set@{Example\+Set}}\index{Example\+Set@{Example\+Set}!N\+O\+NE@{N\+O\+NE}}\item[{\em 
+N\+O\+NE\hypertarget{classExampleSet_afcdcdbc9a02c53864997e334d8bae33dad0bd9d15e4bf63f5038da60af9c4ae07}{}\label{classExampleSet_afcdcdbc9a02c53864997e334d8bae33dad0bd9d15e4bf63f5038da60af9c4ae07}
+}]Don\textquotesingle{}t shuffle examples at all. \end{description}
+\end{Desc}
+
+
+Definition at line 212 of file data.\+hpp.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Example\+Set@{Example\+Set}!Example\+Set@{Example\+Set}}
+\index{Example\+Set@{Example\+Set}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{Example\+Set(int n, int nin, int nout, int levels)}{ExampleSet(int n, int nin, int nout, int levels)}}]{\setlength{\rightskip}{0pt plus 5cm}Example\+Set\+::\+Example\+Set (
+\begin{DoxyParamCaption}
+\item[{int}]{n, }
+\item[{int}]{nin, }
+\item[{int}]{nout, }
+\item[{int}]{levels}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classExampleSet_abc839769d9337279f1627d4822c65a44}{}\label{classExampleSet_abc839769d9337279f1627d4822c65a44}
+
+
+Constructor -\/ creates but doesn\textquotesingle{}t fill in the data. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & number of examples \\
+\hline
+{\em nin} & number of inputs to each example \\
+\hline
+{\em nout} & number of outputs from each example \\
+\hline
+{\em levels} & number of modulator levels (see num\+H\+Levels) \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 104 of file data.\+hpp.
+
+\index{Example\+Set@{Example\+Set}!Example\+Set@{Example\+Set}}
+\index{Example\+Set@{Example\+Set}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{Example\+Set(const Example\+Set \&parent, int start, int length)}{ExampleSet(const ExampleSet &parent, int start, int length)}}]{\setlength{\rightskip}{0pt plus 5cm}Example\+Set\+::\+Example\+Set (
+\begin{DoxyParamCaption}
+\item[{const {\bf Example\+Set} \&}]{parent, }
+\item[{int}]{start, }
+\item[{int}]{length}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classExampleSet_a1e7d58c8262da06bf8d0de1a20a3b994}{}\label{classExampleSet_a1e7d58c8262da06bf8d0de1a20a3b994}
+
+
+Constructor for making a subset of another set. This uses the actual data in the parent, but creates a fresh set of offset structures which can be independently shuffled. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em parent} & the set which holds our data. \\
+\hline
+{\em start} & the start index of the data in the parent. \\
+\hline
+{\em length} & the length of the subset. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 143 of file data.\+hpp.
+
+\index{Example\+Set@{Example\+Set}!Example\+Set@{Example\+Set}}
+\index{Example\+Set@{Example\+Set}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{Example\+Set(const M\+N\+I\+S\+T \&mnist)}{ExampleSet(const MNIST &mnist)}}]{\setlength{\rightskip}{0pt plus 5cm}Example\+Set\+::\+Example\+Set (
+\begin{DoxyParamCaption}
+\item[{const {\bf M\+N\+I\+ST} \&}]{mnist}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classExampleSet_a5abacfde6b834ad368ccb28eb7900205}{}\label{classExampleSet_a5abacfde6b834ad368ccb28eb7900205}
+
+
+Special constructor for generating a data set from an \hyperlink{classMNIST}{M\+N\+I\+ST} database with a single labelling (i.\+e. for use in non-\/modulatory training). We copy the data from the \hyperlink{classMNIST}{M\+N\+I\+ST} object. The outputs will use a one-\/hot encoding. This example set will have no modulation. 
+
+
+
+Definition at line 170 of file data.\+hpp.
+
+\index{Example\+Set@{Example\+Set}!````~Example\+Set@{$\sim$\+Example\+Set}}
+\index{````~Example\+Set@{$\sim$\+Example\+Set}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{$\sim$\+Example\+Set()}{~ExampleSet()}}]{\setlength{\rightskip}{0pt plus 5cm}Example\+Set\+::$\sim$\+Example\+Set (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classExampleSet_a442c40fd6b16d0f41b613b106e55dec7}{}\label{classExampleSet_a442c40fd6b16d0f41b613b106e55dec7}
+
+
+Destructor -\/ deletes data and offset array. 
+
+
+
+Definition at line 201 of file data.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\index{Example\+Set@{Example\+Set}!dump@{dump}}
+\index{dump@{dump}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{dump(int start=0, int end=-\/1)}{dump(int start=0, int end=-1)}}]{\setlength{\rightskip}{0pt plus 5cm}void Example\+Set\+::dump (
+\begin{DoxyParamCaption}
+\item[{int}]{start = {\ttfamily 0}, }
+\item[{int}]{end = {\ttfamily -\/1}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classExampleSet_a15a6c0897780abd8c421691bcc43f711}{}\label{classExampleSet_a15a6c0897780abd8c421691bcc43f711}
+
+
+dump to stdout 
+
+
+\begin{DoxyParams}{Parameters}
+{\em start} & index to start dump \\
+\hline
+{\em end} & index to end dump (exclusive) \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 388 of file data.\+hpp.
+
+\index{Example\+Set@{Example\+Set}!get\+Count@{get\+Count}}
+\index{get\+Count@{get\+Count}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{get\+Count() const }{getCount() const }}]{\setlength{\rightskip}{0pt plus 5cm}int Example\+Set\+::get\+Count (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classExampleSet_a58cdb9c925a4f33267541197d897fdd8}{}\label{classExampleSet_a58cdb9c925a4f33267541197d897fdd8}
+
+
+get the number of examples 
+
+\begin{DoxyReturn}{Returns}
+number of examples 
+\end{DoxyReturn}
+
+
+Definition at line 327 of file data.\+hpp.
+
+\index{Example\+Set@{Example\+Set}!getH@{getH}}
+\index{getH@{getH}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{get\+H(int example) const }{getH(int example) const }}]{\setlength{\rightskip}{0pt plus 5cm}double Example\+Set\+::getH (
+\begin{DoxyParamCaption}
+\item[{int}]{example}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classExampleSet_a084224adb0fdf5555caa24a0bd4d4211}{}\label{classExampleSet_a084224adb0fdf5555caa24a0bd4d4211}
+
+
+Get the h (modulator) for a given example. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em example} & index of the example \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 359 of file data.\+hpp.
+
+\index{Example\+Set@{Example\+Set}!get\+Input\+Count@{get\+Input\+Count}}
+\index{get\+Input\+Count@{get\+Input\+Count}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{get\+Input\+Count() const }{getInputCount() const }}]{\setlength{\rightskip}{0pt plus 5cm}int Example\+Set\+::get\+Input\+Count (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classExampleSet_adc2a5ca623db66524e19562ba677cd67}{}\label{classExampleSet_adc2a5ca623db66524e19562ba677cd67}
+
+
+get the number of inputs in all examples 
+
+\begin{DoxyReturn}{Returns}
+number of inputs into each example 
+\end{DoxyReturn}
+
+
+Definition at line 311 of file data.\+hpp.
+
+\index{Example\+Set@{Example\+Set}!get\+Inputs@{get\+Inputs}}
+\index{get\+Inputs@{get\+Inputs}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{get\+Inputs(int example)}{getInputs(int example)}}]{\setlength{\rightskip}{0pt plus 5cm}double$\ast$ Example\+Set\+::get\+Inputs (
+\begin{DoxyParamCaption}
+\item[{int}]{example}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classExampleSet_a77229f0f933a885f5bffc6e46cafe432}{}\label{classExampleSet_a77229f0f933a885f5bffc6e46cafe432}
+
+
+Get a pointer to the inputs for a given example, for reading or writing. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em example} & index of the example \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 338 of file data.\+hpp.
+
+\index{Example\+Set@{Example\+Set}!get\+Num\+H\+Levels@{get\+Num\+H\+Levels}}
+\index{get\+Num\+H\+Levels@{get\+Num\+H\+Levels}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{get\+Num\+H\+Levels()}{getNumHLevels()}}]{\setlength{\rightskip}{0pt plus 5cm}int Example\+Set\+::get\+Num\+H\+Levels (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classExampleSet_a3558d3a74a8bccf8736f2a2e65a861f2}{}\label{classExampleSet_a3558d3a74a8bccf8736f2a2e65a861f2}
+
+
+return the number of different H-\/levels 
+
+
+
+Definition at line 367 of file data.\+hpp.
+
+\index{Example\+Set@{Example\+Set}!get\+Output\+Count@{get\+Output\+Count}}
+\index{get\+Output\+Count@{get\+Output\+Count}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{get\+Output\+Count() const }{getOutputCount() const }}]{\setlength{\rightskip}{0pt plus 5cm}int Example\+Set\+::get\+Output\+Count (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classExampleSet_a700faa92ffb424ffa8b0f58ab597e240}{}\label{classExampleSet_a700faa92ffb424ffa8b0f58ab597e240}
+
+
+get the number of outputs in all examples 
+
+\begin{DoxyReturn}{Returns}
+number of outputs from each example 
+\end{DoxyReturn}
+
+
+Definition at line 319 of file data.\+hpp.
+
+\index{Example\+Set@{Example\+Set}!get\+Outputs@{get\+Outputs}}
+\index{get\+Outputs@{get\+Outputs}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{get\+Outputs(int example)}{getOutputs(int example)}}]{\setlength{\rightskip}{0pt plus 5cm}double$\ast$ Example\+Set\+::get\+Outputs (
+\begin{DoxyParamCaption}
+\item[{int}]{example}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classExampleSet_a97c5c5596d388c2adcb1f761472d18aa}{}\label{classExampleSet_a97c5c5596d388c2adcb1f761472d18aa}
+
+
+Get a pointer to the outputs for a given example, for reading or writing. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em example} & index of the example \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 349 of file data.\+hpp.
+
+\index{Example\+Set@{Example\+Set}!setH@{setH}}
+\index{setH@{setH}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{set\+H(int example, double h)}{setH(int example, double h)}}]{\setlength{\rightskip}{0pt plus 5cm}void Example\+Set\+::setH (
+\begin{DoxyParamCaption}
+\item[{int}]{example, }
+\item[{double}]{h}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classExampleSet_a8fa30270c775be95ae69fae9cec3e9bc}{}\label{classExampleSet_a8fa30270c775be95ae69fae9cec3e9bc}
+
+
+Set the h (modulator) for a given example. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em example} & index of the example \\
+\hline
+{\em h} & modulator to use \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 378 of file data.\+hpp.
+
+\index{Example\+Set@{Example\+Set}!set\+H\+Range@{set\+H\+Range}}
+\index{set\+H\+Range@{set\+H\+Range}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{set\+H\+Range(double mn, double mx)}{setHRange(double mn, double mx)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Example\+Set}\& Example\+Set\+::set\+H\+Range (
+\begin{DoxyParamCaption}
+\item[{double}]{mn, }
+\item[{double}]{mx}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classExampleSet_a32f409e6dae79b926041814e704791de}{}\label{classExampleSet_a32f409e6dae79b926041814e704791de}
+Modify the min/max h range, which is 0$<$=h$<$=1 by default. 
+\begin{DoxyParams}{Parameters}
+{\em mn} & minimum H value in set domain \\
+\hline
+{\em mx} & maximum H value in set domain \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 300 of file data.\+hpp.
+
+\index{Example\+Set@{Example\+Set}!shuffle@{shuffle}}
+\index{shuffle@{shuffle}!Example\+Set@{Example\+Set}}
+\subsubsection[{\texorpdfstring{shuffle(drand48\+\_\+data $\ast$rd, Shuffle\+Mode mode, int n\+Examples=0)}{shuffle(drand48_data *rd, ShuffleMode mode, int nExamples=0)}}]{\setlength{\rightskip}{0pt plus 5cm}void Example\+Set\+::shuffle (
+\begin{DoxyParamCaption}
+\item[{drand48\+\_\+data $\ast$}]{rd, }
+\item[{{\bf Shuffle\+Mode}}]{mode, }
+\item[{int}]{n\+Examples = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classExampleSet_a2df897c759c7cc03475f68fd1f4834b9}{}\label{classExampleSet_a2df897c759c7cc03475f68fd1f4834b9}
+
+
+Shuffle the example using a P\+R\+NG and a Fisher-\/\+Yates shuffle. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em rd} & pointer to a P\+R\+NG data block \\
+\hline
+{\em mode} & Shuffle\+Mode\+::\+S\+T\+R\+I\+DE to keep blocks of size num\+H\+Levels together, Shuffle\+Mode\+::\+A\+L\+T\+E\+R\+N\+A\+TE to shuffle all examples but ensure that h-\/levels alternate after shuffling, or Shuffle\+Mode\+::\+N\+O\+NE to just shuffle. \\
+\hline
+{\em n\+Examples} & how many examples to shuffle; if 0, do all of them \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 259 of file data.\+hpp.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/travis/build/jimfinnis/uesmanncpp/\hyperlink{data_8hpp}{data.\+hpp}\end{DoxyCompactItemize}

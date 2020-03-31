@@ -1,0 +1,36 @@
+\hypertarget{testSaveLoad_8cpp}{}\section{/home/travis/build/jimfinnis/uesmanncpp/test\+Save\+Load.cpp File Reference}
+\label{testSaveLoad_8cpp}\index{/home/travis/build/jimfinnis/uesmanncpp/test\+Save\+Load.\+cpp@{/home/travis/build/jimfinnis/uesmanncpp/test\+Save\+Load.\+cpp}}
+
+
+Tests of loading and saving. These work by generating random networks, running them, and load/save cycling them to see if the params are the same.  
+
+
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$boost/test/unit\+\_\+test.\+hpp$>$}\\*
+{\ttfamily \#include \char`\"{}test.\+hpp\char`\"{}}\\*
+Include dependency graph for test\+Save\+Load.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{testSaveLoad_8cpp__incl}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{group__saveloadtests_gad10c7697c92534686096093ed5706651}{test\+Save\+Load} (\hyperlink{netType_8hpp_a1526df0fc932ccf720aa26267f923213}{Net\+Type} tp)
+\item 
+\hyperlink{group__saveloadtests_gaaae2c86d5c5efd62cb1c60b59cb5468e}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (saveloadplain)
+\begin{DoxyCompactList}\small\item\em Test that saving and loading a plain network leaves the weights and biases unchanged. \end{DoxyCompactList}\item 
+\hyperlink{group__saveloadtests_gab6e4f80a52c26911259372b0048b22e5}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (saveloadob)
+\begin{DoxyCompactList}\small\item\em Test that saving and loading an output blending network leaves the weights and biases unchanged. \end{DoxyCompactList}\item 
+\hyperlink{group__saveloadtests_gaaf7006daed225b7600e44f29c559f1f4}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (saveloadhin)
+\begin{DoxyCompactList}\small\item\em Test that saving and loading an h-\/as-\/input network leaves the weights and biases unchanged. \end{DoxyCompactList}\item 
+\hyperlink{group__saveloadtests_ga37edbb51abe933e20c379601ab099983}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (saveloadues)
+\begin{DoxyCompactList}\small\item\em Test that saving and loading a U\+E\+S\+M\+A\+NN network leaves the weights and biases unchanged. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Tests of loading and saving. These work by generating random networks, running them, and load/save cycling them to see if the params are the same. 
+

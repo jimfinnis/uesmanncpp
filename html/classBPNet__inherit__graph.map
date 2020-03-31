@@ -1,0 +1,5 @@
+<map id="BPNet" name="BPNet">
+<area shape="rect" id="node3" href="$classHInputNet.html" title="A modulatory network architecture which uses a plain backprop network with an extra input to carry th..." alt="" coords="5,155,88,181"/>
+<area shape="rect" id="node4" href="$classUESNet.html" title="The UESMANN network, which it itself based on the BPNet code as it has the same architecture as the p..." alt="" coords="113,155,183,181"/>
+<area shape="rect" id="node2" href="$classNet.html" title="The abstract network type upon which all others are based. It&#39;s not pure virtual, in that it encapsul..." alt="" coords="76,5,119,32"/>
+</map>

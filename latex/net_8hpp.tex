@@ -1,0 +1,70 @@
+\hypertarget{net_8hpp}{}\section{/home/travis/build/jimfinnis/uesmanncpp/net.hpp File Reference}
+\label{net_8hpp}\index{/home/travis/build/jimfinnis/uesmanncpp/net.\+hpp@{/home/travis/build/jimfinnis/uesmanncpp/net.\+hpp}}
+
+
+This is the abstract basic network class -\/ the training methods are in each subclass.  
+
+
+{\ttfamily \#include $<$math.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}net\+Type.\+hpp\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}data.\+hpp\char`\"{}}\\*
+Include dependency graph for net.\+hpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{net_8hpp__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{net_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classNet}{Net}
+\begin{DoxyCompactList}\small\item\em The abstract network type upon which all others are based. It\textquotesingle{}s not pure virtual, in that it encapsulates some high level operations (such as the top-\/level training algorithm). \end{DoxyCompactList}\item 
+struct \hyperlink{structNet_1_1SGDParams}{Net\+::\+S\+G\+D\+Params}
+\begin{DoxyCompactList}\small\item\em Training parameters for \hyperlink{classNet_a4e527a7773eed5fb071b78ef3a636c95}{train\+S\+G\+D()}. This structure holds the parameters for the \hyperlink{classNet_a4e527a7773eed5fb071b78ef3a636c95}{train\+S\+G\+D()} method, and serves as a better way of passing them than a long parameter list. All values have defaults set up by the constructor, which are given as constants. You can set parameters by hand, but there are fluent (chainable) setters for many members. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+double \hyperlink{net_8hpp_aa924e8c95bc498ebc9f8e08a0c491e7c}{sigmoid} (double x)
+\item 
+double \hyperlink{net_8hpp_aacece1d08b0e55e19453767d5e173c37}{sigmoid\+Diff} (double x)
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This is the abstract basic network class -\/ the training methods are in each subclass. 
+
+
+
+\subsection{Function Documentation}
+\index{net.\+hpp@{net.\+hpp}!sigmoid@{sigmoid}}
+\index{sigmoid@{sigmoid}!net.\+hpp@{net.\+hpp}}
+\subsubsection[{\texorpdfstring{sigmoid(double x)}{sigmoid(double x)}}]{\setlength{\rightskip}{0pt plus 5cm}double sigmoid (
+\begin{DoxyParamCaption}
+\item[{double}]{x}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{net_8hpp_aa924e8c95bc498ebc9f8e08a0c491e7c}{}\label{net_8hpp_aa924e8c95bc498ebc9f8e08a0c491e7c}
+Logistic sigmoid function, which is our activation function 
+
+Definition at line 20 of file net.\+hpp.
+
+\index{net.\+hpp@{net.\+hpp}!sigmoid\+Diff@{sigmoid\+Diff}}
+\index{sigmoid\+Diff@{sigmoid\+Diff}!net.\+hpp@{net.\+hpp}}
+\subsubsection[{\texorpdfstring{sigmoid\+Diff(double x)}{sigmoidDiff(double x)}}]{\setlength{\rightskip}{0pt plus 5cm}double sigmoid\+Diff (
+\begin{DoxyParamCaption}
+\item[{double}]{x}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{net_8hpp_aacece1d08b0e55e19453767d5e173c37}{}\label{net_8hpp_aacece1d08b0e55e19453767d5e173c37}
+The derivative of the sigmoid function 
+
+Definition at line 28 of file net.\+hpp.
+

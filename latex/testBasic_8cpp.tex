@@ -1,0 +1,75 @@
+\hypertarget{testBasic_8cpp}{}\section{/home/travis/build/jimfinnis/uesmanncpp/test\+Basic.cpp File Reference}
+\label{testBasic_8cpp}\index{/home/travis/build/jimfinnis/uesmanncpp/test\+Basic.\+cpp@{/home/travis/build/jimfinnis/uesmanncpp/test\+Basic.\+cpp}}
+
+
+Basic tests of underlying functionality, or things which only take a short time to run!  
+
+
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$boost/test/unit\+\_\+test.\+hpp$>$}\\*
+{\ttfamily \#include \char`\"{}test.\+hpp\char`\"{}}\\*
+Include dependency graph for test\+Basic.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{testBasic_8cpp__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classTestExampleSet}{Test\+Example\+Set}
+\begin{DoxyCompactList}\small\item\em Utility test class. Constructs a standard set\+: 10 examples, 5 ins, 2 outs\+: \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{testBasic_8cpp_ab340a5e76af466a5f20ec5500d30a80b}{B\+O\+O\+S\+T\+\_\+\+T\+E\+S\+T\+\_\+\+M\+A\+IN}
+\item 
+\#define \hyperlink{testBasic_8cpp_a139f00d2466d591f60b8d6a73c8273f1}{B\+O\+O\+S\+T\+\_\+\+T\+E\+S\+T\+\_\+\+D\+Y\+N\+\_\+\+L\+I\+NK}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__basictests_ga95e163533a64ba72e25fc8dfe7fbf065}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (example)
+\begin{DoxyCompactList}\small\item\em Test the basic example. \end{DoxyCompactList}\item 
+\hyperlink{group__basictests_gacb115fa45cafc60a423957cc29f5052d}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (subset)
+\begin{DoxyCompactList}\small\item\em Test that subsetting examples works. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class T $>$ }\\void \hyperlink{group__basictests_ga71cbfe9af5a01401f34e7a7ad89237ca}{sshuffle} (T $\ast$x, int ct)
+\begin{DoxyCompactList}\small\item\em simple shuffle for testing -\/ performs a Fisher-\/\+Yates shuffle on an array of items of class T. \end{DoxyCompactList}\item 
+\hyperlink{group__basictests_gae8675ed7eae8be5e0b3d6b187768c544}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (alt)
+\begin{DoxyCompactList}\small\item\em Test the \hyperlink{data_8hpp_a3f60001db133eff96da81b29a43cc8a4}{alternate()} function. \end{DoxyCompactList}\item 
+\hyperlink{group__basictests_ga04099944bd3fcadcfd7e5bc9b4a7f12f}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (altex)
+\begin{DoxyCompactList}\small\item\em Test the alternation function on examples, simple version. \end{DoxyCompactList}\item 
+\hyperlink{group__basictests_gaa493d8803a27251657f4d4ec1e50bfd9}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (stride)
+\begin{DoxyCompactList}\small\item\em test strided example shuffle, 4 different modulator levels \end{DoxyCompactList}\item 
+\hyperlink{group__basictests_gaef74c48a74c8dde77a98b18c1e0cd9b3}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (altex4)
+\begin{DoxyCompactList}\small\item\em test strided example shuffle, 4 different modulator levels \end{DoxyCompactList}\item 
+void \hyperlink{group__basictests_ga74ab1bd4f33a7d4671010710c83baa74}{zero} (\hyperlink{classNet}{Net} $\ast$n)
+\begin{DoxyCompactList}\small\item\em set all parameters (weights and biases) in a network to zero \end{DoxyCompactList}\item 
+\hyperlink{group__basictests_ga24b757533cad8c65d523f3d3f552c8a6}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (testmse)
+\begin{DoxyCompactList}\small\item\em Test mean sum squared error of outputs. This test finds the mean of the sum of the squared errors on the outputs across all examples in the test set, in the case of a network where all the parameters are zero. In this case, all outputs will be 0.\+5 given the logistic sigmoid activation function. We test for the correct value determined by lots of print statements during development. \end{DoxyCompactList}\item 
+\hyperlink{group__basictests_ga90ac9b7ee58da02fed518568d5fb8bc2}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (loadmnist)
+\begin{DoxyCompactList}\small\item\em Loading \hyperlink{classMNIST}{M\+N\+I\+ST} data and converting to an example set. Ensure we can load \hyperlink{classMNIST}{M\+N\+I\+ST} data into an example set, and that the image and its label are correct. The former is hard to test automatically, so I\textquotesingle{}ll rely on having eyeballed it. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Basic tests of underlying functionality, or things which only take a short time to run! 
+
+
+
+\subsection{Macro Definition Documentation}
+\index{test\+Basic.\+cpp@{test\+Basic.\+cpp}!B\+O\+O\+S\+T\+\_\+\+T\+E\+S\+T\+\_\+\+D\+Y\+N\+\_\+\+L\+I\+NK@{B\+O\+O\+S\+T\+\_\+\+T\+E\+S\+T\+\_\+\+D\+Y\+N\+\_\+\+L\+I\+NK}}
+\index{B\+O\+O\+S\+T\+\_\+\+T\+E\+S\+T\+\_\+\+D\+Y\+N\+\_\+\+L\+I\+NK@{B\+O\+O\+S\+T\+\_\+\+T\+E\+S\+T\+\_\+\+D\+Y\+N\+\_\+\+L\+I\+NK}!test\+Basic.\+cpp@{test\+Basic.\+cpp}}
+\subsubsection[{\texorpdfstring{B\+O\+O\+S\+T\+\_\+\+T\+E\+S\+T\+\_\+\+D\+Y\+N\+\_\+\+L\+I\+NK}{BOOST_TEST_DYN_LINK}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+O\+O\+S\+T\+\_\+\+T\+E\+S\+T\+\_\+\+D\+Y\+N\+\_\+\+L\+I\+NK}\hypertarget{testBasic_8cpp_a139f00d2466d591f60b8d6a73c8273f1}{}\label{testBasic_8cpp_a139f00d2466d591f60b8d6a73c8273f1}
+
+
+Definition at line 11 of file test\+Basic.\+cpp.
+
+\index{test\+Basic.\+cpp@{test\+Basic.\+cpp}!B\+O\+O\+S\+T\+\_\+\+T\+E\+S\+T\+\_\+\+M\+A\+IN@{B\+O\+O\+S\+T\+\_\+\+T\+E\+S\+T\+\_\+\+M\+A\+IN}}
+\index{B\+O\+O\+S\+T\+\_\+\+T\+E\+S\+T\+\_\+\+M\+A\+IN@{B\+O\+O\+S\+T\+\_\+\+T\+E\+S\+T\+\_\+\+M\+A\+IN}!test\+Basic.\+cpp@{test\+Basic.\+cpp}}
+\subsubsection[{\texorpdfstring{B\+O\+O\+S\+T\+\_\+\+T\+E\+S\+T\+\_\+\+M\+A\+IN}{BOOST_TEST_MAIN}}]{\setlength{\rightskip}{0pt plus 5cm}\#define B\+O\+O\+S\+T\+\_\+\+T\+E\+S\+T\+\_\+\+M\+A\+IN}\hypertarget{testBasic_8cpp_ab340a5e76af466a5f20ec5500d30a80b}{}\label{testBasic_8cpp_ab340a5e76af466a5f20ec5500d30a80b}
+
+
+Definition at line 10 of file test\+Basic.\+cpp.
+

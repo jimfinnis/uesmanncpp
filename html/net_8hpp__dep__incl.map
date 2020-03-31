@@ -1,0 +1,10 @@
+<map id="/home/travis/build/jimfinnis/uesmanncpp/net.hpp" name="/home/travis/build/jimfinnis/uesmanncpp/net.hpp">
+<area shape="rect" id="node2" href="$bpnet_8hpp.html" title="This implements a plain backprop network. " alt="" coords="181,109,333,165"/>
+<area shape="rect" id="node3" href="$netFactory_8hpp.html" title="I&#39;m not a fan of factories, but here&#39;s one &#45; this makes a network of the appropriate type which confo..." alt="" coords="181,213,333,269"/>
+<area shape="rect" id="node4" href="$genBoolMap_8cpp.html" title="Generate a 2D grid (well, a table from which such a grid can be generated) of how many trials of UESM..." alt="" coords="93,317,245,373"/>
+<area shape="rect" id="node5" href="$test_8hpp.html" title="Useful stuff for testing. " alt="" coords="269,317,421,373"/>
+<area shape="rect" id="node6" href="$testBasic_8cpp.html" title="Basic tests of underlying functionality, or things which only take a short time to run! ..." alt="" coords="5,421,157,477"/>
+<area shape="rect" id="node7" href="$testSaveLoad_8cpp.html" title="Tests of loading and saving. These work by generating random networks, running them, and load/save cycling them to see if the params are the same. " alt="" coords="181,421,333,477"/>
+<area shape="rect" id="node8" href="$testTrainBasic_8cpp.html" title="Tests of basic training. " alt="" coords="357,421,509,477"/>
+<area shape="rect" id="node9" href="$testTrainBooleans_8cpp.html" title="Simple boolean tests for modulation. " alt="" coords="534,421,690,477"/>
+</map>

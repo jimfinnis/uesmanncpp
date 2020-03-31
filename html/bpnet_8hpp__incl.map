@@ -1,0 +1,6 @@
+<map id="/home/travis/build/jimfinnis/uesmanncpp/bpnet.hpp" name="/home/travis/build/jimfinnis/uesmanncpp/bpnet.hpp">
+<area shape="rect" id="node2" href="$net_8hpp.html" title="This is the abstract basic network class &#45; the training methods are in each subclass. " alt="" coords="107,109,172,136"/>
+<area shape="rect" id="node4" href="$netType_8hpp.html" title="Contains integer enum for network types. " alt="" coords="92,184,187,211"/>
+<area shape="rect" id="node5" href="$data_8hpp.html" title="Contains formats for example data. " alt="" coords="211,184,283,211"/>
+<area shape="rect" id="node8" href="$mnist_8hpp.html" title="Code for converting MNIST data into example sets. " alt="" coords="333,259,412,285"/>
+</map>

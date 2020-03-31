@@ -1,0 +1,192 @@
+\hypertarget{genBoolMap_8cpp}{}\section{/home/travis/build/jimfinnis/uesmanncpp/gen\+Bool\+Map.cpp File Reference}
+\label{genBoolMap_8cpp}\index{/home/travis/build/jimfinnis/uesmanncpp/gen\+Bool\+Map.\+cpp@{/home/travis/build/jimfinnis/uesmanncpp/gen\+Bool\+Map.\+cpp}}
+
+
+Generate a 2D grid (well, a table from which such a grid can be generated) of how many trials of U\+E\+S\+M\+A\+NN on every combination of binary boolean functions succeed.  
+
+
+{\ttfamily \#include \char`\"{}net\+Factory.\+hpp\char`\"{}}\\*
+Include dependency graph for gen\+Bool\+Map.\+cpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{genBoolMap_8cpp__incl}
+\end{center}
+\end{figure}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{genBoolMap_8cpp_a474df8706e878c90c5ec14ed7c438c8c}{N\+U\+M\+\_\+\+A\+T\+T\+E\+M\+P\+TS}~1000
+\begin{DoxyCompactList}\small\item\em How many networks to attempt for each pairing in gen\+Bool\+Map. \end{DoxyCompactList}\item 
+\#define \hyperlink{genBoolMap_8cpp_af77edc1f833593caecfc032dcc5953a6}{E\+TA}~0.\+1
+\begin{DoxyCompactList}\small\item\em the learning rate for gen\+Bool\+Map \end{DoxyCompactList}\item 
+\#define \hyperlink{genBoolMap_8cpp_ad455e60ecb4b0eba516ee2dd166bba1d}{E\+P\+O\+C\+HS}~75000
+\begin{DoxyCompactList}\small\item\em how many epochs to train each gen\+Bool\+Map network for -\/ at 8 examples per epoch, this is 600000 training iterations (single examples) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{genBoolMap_8cpp_a999d1cd10903ef96460e65a19ceed033}{bool\+Func} (int f, bool a, bool b)
+\begin{DoxyCompactList}\small\item\em given a function index, perform the appropriate boolean. The index is actually the truth table\+: four bits in order 00,01,10,11 \end{DoxyCompactList}\item 
+bool \hyperlink{genBoolMap_8cpp_ab5d473b9073b33be95ea8ff496ca656d}{success} (int f1, int f2, \hyperlink{classNet}{Net} $\ast$n)
+\begin{DoxyCompactList}\small\item\em test if a given network successfully performs a given pair of boolean functions, modulating from f1 to f2. The functions are indices into the simple\+Names array. \end{DoxyCompactList}\item 
+double \hyperlink{genBoolMap_8cpp_a96b7de6d6ec2f1abea0d9020ac9d567a}{do\+Pairing} (int f1, int f2)
+\begin{DoxyCompactList}\small\item\em Train a large number of networks to do a particular pairing of boolean functions (provided as indices into simple\+Names) and return what proportion successfully perform that pairing under modulation. \end{DoxyCompactList}\item 
+int \hyperlink{genBoolMap_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{main} (int argc, char $\ast$argv\mbox{[}$\,$\mbox{]})
+\begin{DoxyCompactList}\small\item\em The main function for gen\+Bool\+Map. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+double \hyperlink{genBoolMap_8cpp_a51a2dd7d027ac8d90d839c71af789138}{ins} \mbox{[}$\,$\mbox{]}\mbox{[}2\mbox{]}
+\begin{DoxyCompactList}\small\item\em possible inputs to boolean functions \end{DoxyCompactList}\item 
+const char $\ast$ \hyperlink{genBoolMap_8cpp_adbf85cc3625901a59a5908271a868add}{simple\+Names} \mbox{[}$\,$\mbox{]}
+\begin{DoxyCompactList}\small\item\em names of functions performed by \hyperlink{genBoolMap_8cpp_a999d1cd10903ef96460e65a19ceed033}{bool\+Func()} \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Generate a 2D grid (well, a table from which such a grid can be generated) of how many trials of U\+E\+S\+M\+A\+NN on every combination of binary boolean functions succeed. 
+
+This should (and does) generate approximately the same data as in Fig. 5.\+3a of the thesis (p.\+100). The variation is no greater than 0.\+001 (i.\+e. a single network) in each pairing tested. 
+
+\subsection{Macro Definition Documentation}
+\index{gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}!E\+P\+O\+C\+HS@{E\+P\+O\+C\+HS}}
+\index{E\+P\+O\+C\+HS@{E\+P\+O\+C\+HS}!gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}}
+\subsubsection[{\texorpdfstring{E\+P\+O\+C\+HS}{EPOCHS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define E\+P\+O\+C\+HS~75000}\hypertarget{genBoolMap_8cpp_ad455e60ecb4b0eba516ee2dd166bba1d}{}\label{genBoolMap_8cpp_ad455e60ecb4b0eba516ee2dd166bba1d}
+
+
+how many epochs to train each gen\+Bool\+Map network for -\/ at 8 examples per epoch, this is 600000 training iterations (single examples) 
+
+
+
+Definition at line 26 of file gen\+Bool\+Map.\+cpp.
+
+\index{gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}!E\+TA@{E\+TA}}
+\index{E\+TA@{E\+TA}!gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}}
+\subsubsection[{\texorpdfstring{E\+TA}{ETA}}]{\setlength{\rightskip}{0pt plus 5cm}\#define E\+TA~0.\+1}\hypertarget{genBoolMap_8cpp_af77edc1f833593caecfc032dcc5953a6}{}\label{genBoolMap_8cpp_af77edc1f833593caecfc032dcc5953a6}
+
+
+the learning rate for gen\+Bool\+Map 
+
+
+
+Definition at line 19 of file gen\+Bool\+Map.\+cpp.
+
+\index{gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}!N\+U\+M\+\_\+\+A\+T\+T\+E\+M\+P\+TS@{N\+U\+M\+\_\+\+A\+T\+T\+E\+M\+P\+TS}}
+\index{N\+U\+M\+\_\+\+A\+T\+T\+E\+M\+P\+TS@{N\+U\+M\+\_\+\+A\+T\+T\+E\+M\+P\+TS}!gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}}
+\subsubsection[{\texorpdfstring{N\+U\+M\+\_\+\+A\+T\+T\+E\+M\+P\+TS}{NUM_ATTEMPTS}}]{\setlength{\rightskip}{0pt plus 5cm}\#define N\+U\+M\+\_\+\+A\+T\+T\+E\+M\+P\+TS~1000}\hypertarget{genBoolMap_8cpp_a474df8706e878c90c5ec14ed7c438c8c}{}\label{genBoolMap_8cpp_a474df8706e878c90c5ec14ed7c438c8c}
+
+
+How many networks to attempt for each pairing in gen\+Bool\+Map. 
+
+
+
+Definition at line 16 of file gen\+Bool\+Map.\+cpp.
+
+
+
+\subsection{Function Documentation}
+\index{gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}!bool\+Func@{bool\+Func}}
+\index{bool\+Func@{bool\+Func}!gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}}
+\subsubsection[{\texorpdfstring{bool\+Func(int f, bool a, bool b)}{boolFunc(int f, bool a, bool b)}}]{\setlength{\rightskip}{0pt plus 5cm}bool bool\+Func (
+\begin{DoxyParamCaption}
+\item[{int}]{f, }
+\item[{bool}]{a, }
+\item[{bool}]{b}
+\end{DoxyParamCaption}
+)}\hypertarget{genBoolMap_8cpp_a999d1cd10903ef96460e65a19ceed033}{}\label{genBoolMap_8cpp_a999d1cd10903ef96460e65a19ceed033}
+
+
+given a function index, perform the appropriate boolean. The index is actually the truth table\+: four bits in order 00,01,10,11 
+
+
+
+Definition at line 50 of file gen\+Bool\+Map.\+cpp.
+
+\index{gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}!do\+Pairing@{do\+Pairing}}
+\index{do\+Pairing@{do\+Pairing}!gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}}
+\subsubsection[{\texorpdfstring{do\+Pairing(int f1, int f2)}{doPairing(int f1, int f2)}}]{\setlength{\rightskip}{0pt plus 5cm}double do\+Pairing (
+\begin{DoxyParamCaption}
+\item[{int}]{f1, }
+\item[{int}]{f2}
+\end{DoxyParamCaption}
+)}\hypertarget{genBoolMap_8cpp_a96b7de6d6ec2f1abea0d9020ac9d567a}{}\label{genBoolMap_8cpp_a96b7de6d6ec2f1abea0d9020ac9d567a}
+
+
+Train a large number of networks to do a particular pairing of boolean functions (provided as indices into simple\+Names) and return what proportion successfully perform that pairing under modulation. 
+
+
+
+Definition at line 110 of file gen\+Bool\+Map.\+cpp.
+
+\index{gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}!main@{main}}
+\index{main@{main}!gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}}
+\subsubsection[{\texorpdfstring{main(int argc, char $\ast$argv[])}{main(int argc, char *argv[])}}]{\setlength{\rightskip}{0pt plus 5cm}int main (
+\begin{DoxyParamCaption}
+\item[{int}]{argc, }
+\item[{char $\ast$}]{argv\mbox{[}$\,$\mbox{]}}
+\end{DoxyParamCaption}
+)}\hypertarget{genBoolMap_8cpp_a0ddf1224851353fc92bfbff6f499fa97}{}\label{genBoolMap_8cpp_a0ddf1224851353fc92bfbff6f499fa97}
+
+
+The main function for gen\+Bool\+Map. 
+
+
+
+Definition at line 160 of file gen\+Bool\+Map.\+cpp.
+
+\index{gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}!success@{success}}
+\index{success@{success}!gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}}
+\subsubsection[{\texorpdfstring{success(int f1, int f2, Net $\ast$n)}{success(int f1, int f2, Net *n)}}]{\setlength{\rightskip}{0pt plus 5cm}bool success (
+\begin{DoxyParamCaption}
+\item[{int}]{f1, }
+\item[{int}]{f2, }
+\item[{{\bf Net} $\ast$}]{n}
+\end{DoxyParamCaption}
+)}\hypertarget{genBoolMap_8cpp_ab5d473b9073b33be95ea8ff496ca656d}{}\label{genBoolMap_8cpp_ab5d473b9073b33be95ea8ff496ca656d}
+
+
+test if a given network successfully performs a given pair of boolean functions, modulating from f1 to f2. The functions are indices into the simple\+Names array. 
+
+
+
+Definition at line 80 of file gen\+Bool\+Map.\+cpp.
+
+
+
+\subsection{Variable Documentation}
+\index{gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}!ins@{ins}}
+\index{ins@{ins}!gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}}
+\subsubsection[{\texorpdfstring{ins}{ins}}]{\setlength{\rightskip}{0pt plus 5cm}double ins\mbox{[}$\,$\mbox{]}\mbox{[}2\mbox{]}}\hypertarget{genBoolMap_8cpp_a51a2dd7d027ac8d90d839c71af789138}{}\label{genBoolMap_8cpp_a51a2dd7d027ac8d90d839c71af789138}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+=\{
+    \{0,0\},
+    \{0,1\},
+    \{1,0\},
+    \{1,1\}\}
+\end{DoxyCode}
+
+
+possible inputs to boolean functions 
+
+
+
+Definition at line 32 of file gen\+Bool\+Map.\+cpp.
+
+\index{gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}!simple\+Names@{simple\+Names}}
+\index{simple\+Names@{simple\+Names}!gen\+Bool\+Map.\+cpp@{gen\+Bool\+Map.\+cpp}}
+\subsubsection[{\texorpdfstring{simple\+Names}{simpleNames}}]{\setlength{\rightskip}{0pt plus 5cm}const char$\ast$ simple\+Names\mbox{[}$\,$\mbox{]}}\hypertarget{genBoolMap_8cpp_adbf85cc3625901a59a5908271a868add}{}\label{genBoolMap_8cpp_adbf85cc3625901a59a5908271a868add}
+{\bfseries Initial value\+:}
+\begin{DoxyCode}
+= \{
+ \textcolor{stringliteral}{"f"},\textcolor{stringliteral}{"and"},\textcolor{stringliteral}{"x and !y"},\textcolor{stringliteral}{"x"},\textcolor{stringliteral}{"!x and y"},\textcolor{stringliteral}{"y"},\textcolor{stringliteral}{"xor"},\textcolor{stringliteral}{"or"},\textcolor{stringliteral}{"nor"},\textcolor{stringliteral}{"xnor"},
+    \textcolor{stringliteral}{"!y"},\textcolor{stringliteral}{"x or !y"},\textcolor{stringliteral}{"!x"},\textcolor{stringliteral}{"!x or y"},\textcolor{stringliteral}{"nand"},\textcolor{stringliteral}{"t"}\}
+\end{DoxyCode}
+
+
+names of functions performed by \hyperlink{genBoolMap_8cpp_a999d1cd10903ef96460e65a19ceed033}{bool\+Func()} 
+
+
+
+Definition at line 41 of file gen\+Bool\+Map.\+cpp.
+

@@ -1,0 +1,224 @@
+\hypertarget{classMNIST}{}\section{M\+N\+I\+ST Class Reference}
+\label{classMNIST}\index{M\+N\+I\+ST@{M\+N\+I\+ST}}
+
+
+This class encapsulates and loads data in the standard \hyperlink{classMNIST}{M\+N\+I\+ST} format. The data resides in two files, an image file and a label file.  
+
+
+
+
+{\ttfamily \#include $<$mnist.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classMNIST_a073d6d94e86b7ff7bfbac9fbb437c3fa}{M\+N\+I\+ST} (const char $\ast$label\+File, const char $\ast$img\+File, int start=0, int len=0)
+\begin{DoxyCompactList}\small\item\em constructor which loads the data from the given file, and can load only part of the data in a file. \end{DoxyCompactList}\item 
+\hyperlink{classMNIST_ac89c59ef390f3d253972025f99cabb35}{$\sim$\+M\+N\+I\+ST} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+int \hyperlink{classMNIST_aa88f6fd8a94bbb9a6de1027482e5f5e9}{get\+Count} () const 
+\begin{DoxyCompactList}\small\item\em returns the number of examples \end{DoxyCompactList}\item 
+int \hyperlink{classMNIST_a27b60339e8f13efab77091cc635fbc2b}{r} () const 
+\begin{DoxyCompactList}\small\item\em returns the number of rows in each image \end{DoxyCompactList}\item 
+int \hyperlink{classMNIST_a61776484e4ded23d1136d58083077dcd}{c} () const 
+\begin{DoxyCompactList}\small\item\em returns the number of columns in each image \end{DoxyCompactList}\item 
+uint8\+\_\+t \hyperlink{classMNIST_aff0f1f4328e8fe5b34f2f00d358eb49d}{get\+Label} (int n) const 
+\begin{DoxyCompactList}\small\item\em get the label for a given example \end{DoxyCompactList}\item 
+uint8\+\_\+t \hyperlink{classMNIST_a0e4ae7fe6a3096dc5c3a630263557961}{get\+Max\+Label} () const 
+\begin{DoxyCompactList}\small\item\em get the maximum label value (0 to 9 in the original data but different in other tests) \end{DoxyCompactList}\item 
+uint8\+\_\+t $\ast$ \hyperlink{classMNIST_ac328b08d95f5d62397e413ad0ae09558}{get\+Img} (int n) const 
+\begin{DoxyCompactList}\small\item\em get the bitmap for a given example \end{DoxyCompactList}\item 
+uint8\+\_\+t \hyperlink{classMNIST_a2ceee96654593e42a5f39e972116b735}{get\+Pix} (int n, int x, int y) const 
+\begin{DoxyCompactList}\small\item\em get a pixel for a given example \end{DoxyCompactList}\item 
+void \hyperlink{classMNIST_a0e940301d9f253a99282caea60e5c61a}{dump} (int i) const 
+\begin{DoxyCompactList}\small\item\em dump the image data to standard out \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class encapsulates and loads data in the standard \hyperlink{classMNIST}{M\+N\+I\+ST} format. The data resides in two files, an image file and a label file. 
+
+Definition at line 24 of file mnist.\+hpp.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{M\+N\+I\+ST@{M\+N\+I\+ST}!M\+N\+I\+ST@{M\+N\+I\+ST}}
+\index{M\+N\+I\+ST@{M\+N\+I\+ST}!M\+N\+I\+ST@{M\+N\+I\+ST}}
+\subsubsection[{\texorpdfstring{M\+N\+I\+S\+T(const char $\ast$label\+File, const char $\ast$img\+File, int start=0, int len=0)}{MNIST(const char *labelFile, const char *imgFile, int start=0, int len=0)}}]{\setlength{\rightskip}{0pt plus 5cm}M\+N\+I\+S\+T\+::\+M\+N\+I\+ST (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{label\+File, }
+\item[{const char $\ast$}]{img\+File, }
+\item[{int}]{start = {\ttfamily 0}, }
+\item[{int}]{len = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classMNIST_a073d6d94e86b7ff7bfbac9fbb437c3fa}{}\label{classMNIST_a073d6d94e86b7ff7bfbac9fbb437c3fa}
+
+
+constructor which loads the data from the given file, and can load only part of the data in a file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em label\+File} & the name of the file containing the labels \\
+\hline
+{\em img\+File} & the name of the file containing the image data \\
+\hline
+{\em start} & the image number to start loading from \\
+\hline
+{\em len} & how many images to load (0 means all) \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 35 of file mnist.\+hpp.
+
+\index{M\+N\+I\+ST@{M\+N\+I\+ST}!````~M\+N\+I\+ST@{$\sim$\+M\+N\+I\+ST}}
+\index{````~M\+N\+I\+ST@{$\sim$\+M\+N\+I\+ST}!M\+N\+I\+ST@{M\+N\+I\+ST}}
+\subsubsection[{\texorpdfstring{$\sim$\+M\+N\+I\+S\+T()}{~MNIST()}}]{\setlength{\rightskip}{0pt plus 5cm}M\+N\+I\+S\+T\+::$\sim$\+M\+N\+I\+ST (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classMNIST_ac89c59ef390f3d253972025f99cabb35}{}\label{classMNIST_ac89c59ef390f3d253972025f99cabb35}
+
+
+Destructor. 
+
+
+
+Definition at line 127 of file mnist.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\index{M\+N\+I\+ST@{M\+N\+I\+ST}!c@{c}}
+\index{c@{c}!M\+N\+I\+ST@{M\+N\+I\+ST}}
+\subsubsection[{\texorpdfstring{c() const }{c() const }}]{\setlength{\rightskip}{0pt plus 5cm}int M\+N\+I\+S\+T\+::c (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classMNIST_a61776484e4ded23d1136d58083077dcd}{}\label{classMNIST_a61776484e4ded23d1136d58083077dcd}
+
+
+returns the number of columns in each image 
+
+
+
+Definition at line 150 of file mnist.\+hpp.
+
+\index{M\+N\+I\+ST@{M\+N\+I\+ST}!dump@{dump}}
+\index{dump@{dump}!M\+N\+I\+ST@{M\+N\+I\+ST}}
+\subsubsection[{\texorpdfstring{dump(int i) const }{dump(int i) const }}]{\setlength{\rightskip}{0pt plus 5cm}void M\+N\+I\+S\+T\+::dump (
+\begin{DoxyParamCaption}
+\item[{int}]{i}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classMNIST_a0e940301d9f253a99282caea60e5c61a}{}\label{classMNIST_a0e940301d9f253a99282caea60e5c61a}
+
+
+dump the image data to standard out 
+
+
+
+Definition at line 192 of file mnist.\+hpp.
+
+\index{M\+N\+I\+ST@{M\+N\+I\+ST}!get\+Count@{get\+Count}}
+\index{get\+Count@{get\+Count}!M\+N\+I\+ST@{M\+N\+I\+ST}}
+\subsubsection[{\texorpdfstring{get\+Count() const }{getCount() const }}]{\setlength{\rightskip}{0pt plus 5cm}int M\+N\+I\+S\+T\+::get\+Count (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classMNIST_aa88f6fd8a94bbb9a6de1027482e5f5e9}{}\label{classMNIST_aa88f6fd8a94bbb9a6de1027482e5f5e9}
+
+
+returns the number of examples 
+
+
+
+Definition at line 135 of file mnist.\+hpp.
+
+\index{M\+N\+I\+ST@{M\+N\+I\+ST}!get\+Img@{get\+Img}}
+\index{get\+Img@{get\+Img}!M\+N\+I\+ST@{M\+N\+I\+ST}}
+\subsubsection[{\texorpdfstring{get\+Img(int n) const }{getImg(int n) const }}]{\setlength{\rightskip}{0pt plus 5cm}uint8\+\_\+t$\ast$ M\+N\+I\+S\+T\+::get\+Img (
+\begin{DoxyParamCaption}
+\item[{int}]{n}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classMNIST_ac328b08d95f5d62397e413ad0ae09558}{}\label{classMNIST_ac328b08d95f5d62397e413ad0ae09558}
+
+
+get the bitmap for a given example 
+
+\begin{DoxyReturn}{Returns}
+a pointer to the first pixel in the image 
+\end{DoxyReturn}
+
+
+Definition at line 175 of file mnist.\+hpp.
+
+\index{M\+N\+I\+ST@{M\+N\+I\+ST}!get\+Label@{get\+Label}}
+\index{get\+Label@{get\+Label}!M\+N\+I\+ST@{M\+N\+I\+ST}}
+\subsubsection[{\texorpdfstring{get\+Label(int n) const }{getLabel(int n) const }}]{\setlength{\rightskip}{0pt plus 5cm}uint8\+\_\+t M\+N\+I\+S\+T\+::get\+Label (
+\begin{DoxyParamCaption}
+\item[{int}]{n}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classMNIST_aff0f1f4328e8fe5b34f2f00d358eb49d}{}\label{classMNIST_aff0f1f4328e8fe5b34f2f00d358eb49d}
+
+
+get the label for a given example 
+
+
+
+Definition at line 158 of file mnist.\+hpp.
+
+\index{M\+N\+I\+ST@{M\+N\+I\+ST}!get\+Max\+Label@{get\+Max\+Label}}
+\index{get\+Max\+Label@{get\+Max\+Label}!M\+N\+I\+ST@{M\+N\+I\+ST}}
+\subsubsection[{\texorpdfstring{get\+Max\+Label() const }{getMaxLabel() const }}]{\setlength{\rightskip}{0pt plus 5cm}uint8\+\_\+t M\+N\+I\+S\+T\+::get\+Max\+Label (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classMNIST_a0e4ae7fe6a3096dc5c3a630263557961}{}\label{classMNIST_a0e4ae7fe6a3096dc5c3a630263557961}
+
+
+get the maximum label value (0 to 9 in the original data but different in other tests) 
+
+
+
+Definition at line 166 of file mnist.\+hpp.
+
+\index{M\+N\+I\+ST@{M\+N\+I\+ST}!get\+Pix@{get\+Pix}}
+\index{get\+Pix@{get\+Pix}!M\+N\+I\+ST@{M\+N\+I\+ST}}
+\subsubsection[{\texorpdfstring{get\+Pix(int n, int x, int y) const }{getPix(int n, int x, int y) const }}]{\setlength{\rightskip}{0pt plus 5cm}uint8\+\_\+t M\+N\+I\+S\+T\+::get\+Pix (
+\begin{DoxyParamCaption}
+\item[{int}]{n, }
+\item[{int}]{x, }
+\item[{int}]{y}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classMNIST_a2ceee96654593e42a5f39e972116b735}{}\label{classMNIST_a2ceee96654593e42a5f39e972116b735}
+
+
+get a pixel for a given example 
+
+\begin{DoxyReturn}{Returns}
+the pixel as a byte 
+\end{DoxyReturn}
+
+
+Definition at line 184 of file mnist.\+hpp.
+
+\index{M\+N\+I\+ST@{M\+N\+I\+ST}!r@{r}}
+\index{r@{r}!M\+N\+I\+ST@{M\+N\+I\+ST}}
+\subsubsection[{\texorpdfstring{r() const }{r() const }}]{\setlength{\rightskip}{0pt plus 5cm}int M\+N\+I\+S\+T\+::r (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classMNIST_a27b60339e8f13efab77091cc635fbc2b}{}\label{classMNIST_a27b60339e8f13efab77091cc635fbc2b}
+
+
+returns the number of rows in each image 
+
+
+
+Definition at line 142 of file mnist.\+hpp.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/travis/build/jimfinnis/uesmanncpp/\hyperlink{mnist_8hpp}{mnist.\+hpp}\end{DoxyCompactItemize}

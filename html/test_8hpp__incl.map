@@ -1,0 +1,11 @@
+<map id="/home/travis/build/jimfinnis/uesmanncpp/test.hpp" name="/home/travis/build/jimfinnis/uesmanncpp/test.hpp">
+<area shape="rect" id="node2" href="$netFactory_8hpp.html" title="I&#39;m not a fan of factories, but here&#39;s one &#45; this makes a network of the appropriate type which confo..." alt="" coords="206,109,315,136"/>
+<area shape="rect" id="node3" href="$bpnet_8hpp.html" title="This implements a plain backprop network. " alt="" coords="109,184,188,211"/>
+<area shape="rect" id="node17" href="$obnet_8hpp.html" title="Output blending network &#45; only works with 2 h&#45;levels, 0 and 1, and only with SGD. ..." alt="" coords="196,259,275,285"/>
+<area shape="rect" id="node18" href="$hinet_8hpp.html" title="h&#45;as&#45;input network &#45; only " alt="" coords="299,259,374,285"/>
+<area shape="rect" id="node19" href="$uesnet_8hpp.html" title="This file contains the implementation of the UESMANN network itself &#45; at least, those parts which are..." alt="" coords="324,184,411,211"/>
+<area shape="rect" id="node4" href="$net_8hpp.html" title="This is the abstract basic network class &#45; the training methods are in each subclass. " alt="" coords="107,259,172,285"/>
+<area shape="rect" id="node6" href="$netType_8hpp.html" title="Contains integer enum for network types. " alt="" coords="92,333,187,360"/>
+<area shape="rect" id="node7" href="$data_8hpp.html" title="Contains formats for example data. " alt="" coords="211,333,283,360"/>
+<area shape="rect" id="node10" href="$mnist_8hpp.html" title="Code for converting MNIST data into example sets. " alt="" coords="333,408,412,435"/>
+</map>

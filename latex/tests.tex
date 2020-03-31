@@ -1,0 +1,304 @@
+This page describes the various unit tests, some of which are more time-\/consuming than others. For this reason, only the {\bfseries basic} and {\bfseries booleans} suites are performed during the Travis build process. The test suites and tests are\+:
+
+
+\begin{DoxyItemize}
+\item {\bfseries basic} \+: suite for underlying functionality tests
+\begin{DoxyItemize}
+\item {\bfseries example} \+: test that \hyperlink{classExampleSet}{Example\+Set} can construct and retrieve example data.
+\item {\bfseries alt} \+: test that the \hyperlink{data_8hpp_a3f60001db133eff96da81b29a43cc8a4}{alternate()} function works.
+\item {\bfseries altex} \+: test \hyperlink{classExampleSet_afcdcdbc9a02c53864997e334d8bae33dacc61e53a68e337018a03252922ebc6b1}{Example\+Set\+::\+A\+L\+T\+E\+R\+N\+A\+TE} shuffling on examples.
+\item {\bfseries stride} \+: test \hyperlink{classExampleSet_afcdcdbc9a02c53864997e334d8bae33da7dfbbc7c9fb69bf8aacc556a1eaf4480}{Example\+Set\+::\+S\+T\+R\+I\+DE} shuffling.
+\item {\bfseries altex4} \+: test \hyperlink{classExampleSet_afcdcdbc9a02c53864997e334d8bae33dacc61e53a68e337018a03252922ebc6b1}{Example\+Set\+::\+A\+L\+T\+E\+R\+N\+A\+TE} with 4 modulator levels.
+\item {\bfseries testmse} \+: test mean squared error sum of outputs on a zero parameter net
+\item {\bfseries loadmnist} \+: test that \hyperlink{classMNIST}{M\+N\+I\+ST} data sets can be loaded. and confirm the M\+SE is low on training complete. This test is described in \href{##Addition}{\tt this section}.
+\end{DoxyItemize}
+\item {\bfseries basictrain} \+: test training of backprop nets
+\begin{DoxyItemize}
+\item {\bfseries trainparams} \+: test that we can train the identity function.
+\item {\bfseries trainparams2} \+: as trainparams, but with more examples and no crossvalidation; it aims to be identical to an existing program written using Angort.
+\item {\bfseries addition} \+: train a plain backprop network to perform addition.
+\item {\bfseries additionmod} \+: train a U\+E\+S\+M\+A\+NN network to perform addition and scaled addition\+: at {\itshape h}=0 the generated function will be {\itshape y}= {\itshape a} + {\itshape b}, while at {\itshape h}=1 it becomes {\itshape y}=0.\+3( {\itshape a} + {\itshape b} ).
+\item {\bfseries trainmnist} train a plain backpropagation network to recognise \hyperlink{classMNIST}{M\+N\+I\+ST} digits using a low number of iterations; we aim for a success rate of at least 85\%.
+\end{DoxyItemize}
+\item {\bfseries booleans} \+: test training of a boolean modulatory pairing (X\+O\+R/\+A\+ND) in all 3 modulatory network types -\/ the network should modulate from X\+OR to A\+ND as the modulator moves from 0 to 1.
+\begin{DoxyItemize}
+\item {\bfseries obxorand} \+: output blending
+\item {\bfseries hinxorand} \+: h-\/as-\/input
+\item {\bfseries uesmann} \+: U\+E\+S\+M\+A\+NN
+\end{DoxyItemize}
+\item {\bfseries saveload} \+: test that saving and loading the different network types leaves the parameters of the network unchanged. This is done by training a network on a single silly example, so it essentially has random parameters, then saving, then loading into a new network and comparing.
+\begin{DoxyItemize}
+\item {\bfseries saveloadplain} \+: plain backprop
+\item {\bfseries saveloadob} \+: output blending
+\item {\bfseries saveloadhin} \+: h-\/as-\/input
+\item {\bfseries saveloadues} \+: U\+E\+S\+M\+A\+NN
+\end{DoxyItemize}
+\end{DoxyItemize}
+
+\subsection*{Example code}
+
+Some of the tests are described below in more detail with commented source code. These should give you some idea of how to use the system.
+
+\subsubsection*{basictrain/addition}
+
+This test constructs an \hyperlink{classExampleSet}{Example\+Set} consisting of 1000 examples of pairs of random numbers as input with their sums as output. It then builds a \hyperlink{classBPNet}{B\+P\+Net} -\/ a plain multilayer perceptron, traininable by backpropagation with no modulation. This is done by calling \hyperlink{classNetFactory_abee207e81a04a7abf08e1f50bc2fe000}{Net\+Factory\+::make\+Net()} with the \hyperlink{netType_8hpp_a1526df0fc932ccf720aa26267f923213af62eb0bf5e5c72e80983fbbac1cb70e5}{Net\+Type\+::\+P\+L\+A\+IN} argument.
+
+A \hyperlink{structNet_1_1SGDParams}{Net\+::\+S\+G\+D\+Params} structure is set up with suitable training parameters for stochastic gradient descent, and the network is trained using this structure. The result is the mean squared error for all outputs\+: \[ \frac{1}{N\cdot N_{outs}}\sum^N_{e \in Examples} \sum_{i=0}^{N_{outs}} (e_o(i) - e_y(i))^2 \] where $N$ is the number of examples, $N_{outs}$ is the number of outputs, $e_o(i)$ is network\textquotesingle{}s output for example $e$, and $e_y(i)$ is the desired output for the same example.
+
+
+\begin{DoxyCodeInclude}
+
+\hyperlink{group__basictests_ga95e163533a64ba72e25fc8dfe7fbf065}{BOOST\_AUTO\_TEST\_CASE}(addition) \{
+    \textcolor{comment}{// 1000 examples, 2 inputs, 1 output, 1 modulator level (i.e. no modulation)}
+    \hyperlink{classExampleSet}{ExampleSet} e(1000,2,1,1);
+    
+    \textcolor{comment}{// initialise a PRNG}
+    drand48\_data rd;
+    srand48\_r(10,&rd);
+    
+    \textcolor{comment}{// create the examples}
+    \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i=0;i<1000;i++)\{
+        \textcolor{comment}{// get a pointer to the inputs for this example}
+        \textcolor{keywordtype}{double} *ins = e.getInputs(i);
+        \textcolor{comment}{// and a pointer to the outputs (only one of them in this case)}
+        \textcolor{keywordtype}{double} *out = e.getOutputs(i);
+        
+        \textcolor{comment}{// use the PRNG to generate the operands in the range [0,0.5) to ensure}
+        \textcolor{comment}{// that the result is <1.}
+        \textcolor{keywordtype}{double} a,b;
+        drand48\_r(&rd,&a);a*=0.5;
+        drand48\_r(&rd,&b);b*=0.5;
+        
+        \textcolor{comment}{// write the inputs and the output}
+        ins[0] = a;
+        ins[1] = b;
+        *out = a+b;
+    \}
+    
+    \textcolor{comment}{// create a plain backprop network}
+    \textcolor{comment}{// which conforms to those examples with 2 hidden nodes.}
+    \hyperlink{classNet}{Net} *net = \hyperlink{classNetFactory_abee207e81a04a7abf08e1f50bc2fe000}{NetFactory::makeNet}(\hyperlink{netType_8hpp_a1526df0fc932ccf720aa26267f923213af62eb0bf5e5c72e80983fbbac1cb70e5}{NetType::PLAIN},e,2);
+    
+    \textcolor{comment}{// set up training parameters:}
+    \textcolor{comment}{// eta=1, lots of  iterations}
+    \hyperlink{structNet_1_1SGDParams}{Net::SGDParams} params(1,10000000);
+    \textcolor{comment}{// cross validation etc.:}
+    \textcolor{comment}{// use half of the data as CV examples. This is divided into 10 slices,}
+    \textcolor{comment}{// and we do cross-validation 1000 times during the run.}
+    \textcolor{comment}{// Don't shuffle the CV examples on epoch. Also, store the best net}
+    \textcolor{comment}{// and make sure we end up with that. We also set a PRNG seed to}
+    \textcolor{comment}{// ensure reproducibility.}
+    params.crossValidation(e, \textcolor{comment}{// example set}
+                           0.5, \textcolor{comment}{// proportion of set to hold back for CV}
+                           1000, \textcolor{comment}{// number of CV cycles}
+                           10, \textcolor{comment}{// number of CV slices}
+                           \textcolor{keyword}{false} \textcolor{comment}{// don't shuffle the entire CV set on completing an epoch}
+                           )
+          .storeBest() \textcolor{comment}{// store the best net inside this param block}
+          .setSeed(0); \textcolor{comment}{// initialise PRNG for net, used for initial weights and shuffling.}
+    
+    \textcolor{comment}{// do the training and get the MSE of the best net, found by cross-validation.}
+    \textcolor{keywordtype}{double} mse = net->\hyperlink{classNet_a4e527a7773eed5fb071b78ef3a636c95}{trainSGD}(e,params);
+    printf(\textcolor{stringliteral}{"%f\(\backslash\)n"},mse);
+    \textcolor{comment}{// check the MSE}
+    BOOST\_REQUIRE(mse<0.03);
+    
+    \textcolor{comment}{// test the actual performance - loop through lots of pairs}
+    \textcolor{comment}{// of numbers <0.5 (the only numbers we can do given the range of the function)}
+    \textcolor{keywordflow}{for}(\textcolor{keywordtype}{double} a=0;a<0.5;a+=0.02)\{
+        \textcolor{keywordflow}{for}(\textcolor{keywordtype}{double} b=0;b<0.5;b+=0.02)\{
+            \textcolor{comment}{// set up an array holding the inputs}
+            \textcolor{keywordtype}{double} runIns[2];
+            runIns[0]=a;
+            runIns[1]=b;
+            \textcolor{comment}{// run the net and get the output}
+            \textcolor{keywordtype}{double} out = *(net->\hyperlink{classNet_a3f711482dd39b9653f4449304b853a79}{run}(runIns));
+            \textcolor{comment}{// check the difference (with a line commented out to print it)}
+            \textcolor{keywordtype}{double} diff = fabs(out-(a+b));
+\textcolor{comment}{//            printf("%f+%f=%f (%f)\(\backslash\)n",a,b,out,diff);}
+            BOOST\_REQUIRE(diff<0.05);
+        \}
+    \}
+    \textcolor{keyword}{delete} net;
+\}
+
+\end{DoxyCodeInclude}
+
+
+\subsubsection*{basictrain/additionmod}
+
+This test is similar to {\bfseries basictrain/addition}, but builds an \hyperlink{classExampleSet}{Example\+Set} consisting of 2000 examples. Evenly numbered examples are of {\itshape y}= {\itshape a} + {\itshape b}, and odd-\/numbered have {\itshape y}=0.\+3( {\itshape a} + {\itshape b} ). The modulator on each example is set at 0 for even and 1 for odd. Thus these should train a modulated network to transition from the former to the latter function as the modulator goes from 0 to 1.
+
+
+\begin{DoxyCodeInclude}
+
+\hyperlink{group__basictests_ga95e163533a64ba72e25fc8dfe7fbf065}{BOOST\_AUTO\_TEST\_CASE}(additionmod) \{
+    \textcolor{comment}{// 2000 examples, 2 inputs, 1 output, 2 modulator levels. We need to know}
+    \textcolor{comment}{// the number of modulator levels so that example shuffling will shuffle in}
+    \textcolor{comment}{// blocks of that count, or will shuffle normally and then fix up to ensure that}
+    \textcolor{comment}{// example modulator levels alternate in the net (ExampleSet::STRIDE and}
+    \textcolor{comment}{// ExampleNet::ALTERNATE respectively).}
+    
+    \hyperlink{classExampleSet}{ExampleSet} e(2000,2,1,2);
+    
+    \textcolor{comment}{// initialise a PRNG}
+    drand48\_data rd;
+    srand48\_r(10,&rd);
+    
+    \textcolor{comment}{// create the examples}
+    \textcolor{keywordtype}{int} idx=0; \textcolor{comment}{// example index}
+    \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i=0;i<1000;i++)\{
+        \textcolor{comment}{// use the PRNG to generate the operands in the range [0,0.5) to ensure}
+        \textcolor{comment}{// that the result is <1.}
+        \textcolor{keywordtype}{double} a,b;
+        drand48\_r(&rd,&a);a*=0.5;
+        drand48\_r(&rd,&b);b*=0.5;
+        
+        \textcolor{comment}{// get a pointer to the inputs for the h=0 example and write to it}
+        \textcolor{keywordtype}{double} *ins = e.getInputs(idx);
+        \textcolor{keywordtype}{double} *out = e.getOutputs(idx);
+        ins[0] = a;
+        ins[1] = b;
+        *out = a+b;
+        e.setH(idx,0); \textcolor{comment}{// set modulator for this example}
+        idx++; \textcolor{comment}{// increment the example index}
+        
+        \textcolor{comment}{// Do the same for the h=1 example, but here we're writing 0.3(a+b),}
+        \textcolor{comment}{// and the modulator is 1.}
+        ins = e.getInputs(idx);
+        out = e.getOutputs(idx);
+        ins[0] = a;
+        ins[1] = b;
+        *out = (a+b)*0.3;
+        e.setH(idx,1);
+        idx++;
+        
+    \}
+    
+    \textcolor{comment}{// create a UESMANN network which conforms to those examples with 2 hidden nodes.}
+    \hyperlink{classNet}{Net} *net = \hyperlink{classNetFactory_abee207e81a04a7abf08e1f50bc2fe000}{NetFactory::makeNet}(\hyperlink{netType_8hpp_a1526df0fc932ccf720aa26267f923213a9860f22cc29a7fcf38323883669eedcf}{NetType::UESMANN},e,2);
+    
+    \textcolor{comment}{// set up training parameters:}
+    \textcolor{comment}{// eta=1, lots of iterations}
+    \hyperlink{structNet_1_1SGDParams}{Net::SGDParams} params(1,1000000);
+    \textcolor{comment}{// cross validation etc.:}
+    \textcolor{comment}{// use half of the data as CV examples. This is divided into 10 slices,}
+    \textcolor{comment}{// and we do cross-validation 1000 times during the run.}
+    \textcolor{comment}{// DO shuffle the CV examples on epoch. Also, store the best net}
+    \textcolor{comment}{// and make sure we end up with that. We also set a PRNG seed to}
+    \textcolor{comment}{// ensure reproducibility.}
+    params.crossValidation(e, \textcolor{comment}{// example set}
+                           0.5, \textcolor{comment}{// proportion of set to hold back for CV}
+                           1000, \textcolor{comment}{// number of CV cycles}
+                           10, \textcolor{comment}{// number of CV slices}
+                           \textcolor{keyword}{true} \textcolor{comment}{// shuffle the entire CV set on completing an epoch}
+                           )
+          .storeBest() \textcolor{comment}{// store the best net inside this param block}
+          .setSeed(0); \textcolor{comment}{// initialise PRNG for net, used for initial weights and shuffling.}
+    
+    \textcolor{comment}{// do the training and get the MSE of the best net, found by cross-validation.}
+    \textcolor{keywordtype}{double} mse = net->\hyperlink{classNet_a4e527a7773eed5fb071b78ef3a636c95}{trainSGD}(e,params);
+    printf(\textcolor{stringliteral}{"%f\(\backslash\)n"},mse);
+    \textcolor{comment}{// check the MSE}
+    BOOST\_REQUIRE(mse<0.03);
+    
+    \textcolor{comment}{// test the actual performance - loop through lots of pairs}
+    \textcolor{comment}{// of numbers. We limit the range here; performance is known to fall}
+    \textcolor{comment}{// off at the ends due to node saturation (probably)}
+    \textcolor{keywordflow}{for}(\textcolor{keywordtype}{double} a=0.1;a<0.4;a+=0.02)\{
+        \textcolor{keywordflow}{for}(\textcolor{keywordtype}{double} b=0.1;b<0.4;b+=0.02)\{
+            \textcolor{comment}{// set up an array holding the inputs}
+            \textcolor{keywordtype}{double} runIns[2];
+            runIns[0]=a;
+            runIns[1]=b;
+            \textcolor{comment}{// check for H=0}
+            net->\hyperlink{classNet_a5a01870e21e29845252d6bec88b0c497}{setH}(0);
+            \textcolor{keywordtype}{double} out = *(net->\hyperlink{classNet_a3f711482dd39b9653f4449304b853a79}{run}(runIns));
+            \textcolor{comment}{// check the difference (with a line commented out to print it)}
+            \textcolor{keywordtype}{double} diff = fabs(out-(a+b));
+            printf(\textcolor{stringliteral}{"%f+%f=%f (%f)\(\backslash\)n"},a,b,out,diff);
+            BOOST\_REQUIRE(diff<0.07);
+            
+            \textcolor{comment}{// check for H=1}
+            net->\hyperlink{classNet_a5a01870e21e29845252d6bec88b0c497}{setH}(1);
+            out = *(net->\hyperlink{classNet_a3f711482dd39b9653f4449304b853a79}{run}(runIns));
+            diff = fabs(out-(a+b)*0.3);
+            printf(\textcolor{stringliteral}{"%f+%f=%f (%f)\(\backslash\)n"},a,b,out,diff);
+            BOOST\_REQUIRE(diff<0.07); 
+        \}
+    \}
+    \textcolor{keyword}{delete} net;
+\}
+\end{DoxyCodeInclude}
+
+
+\subsubsection*{basictrain/trainmnist}
+
+This test loads the M\+N\+I\+ST handwritten digits dataset and trains an ordinary unmodulated network to recognise them. It makes use of the \hyperlink{classMNIST}{M\+N\+I\+ST} class and the special M\+N\+I\+ST constructor for \hyperlink{classExampleSet}{Example\+Set}, and runs another test set through the network to see how well it performs.
+
+
+\begin{DoxyCodeInclude}
+
+\hyperlink{group__basictests_ga95e163533a64ba72e25fc8dfe7fbf065}{BOOST\_AUTO\_TEST\_CASE}(trainmnist)\{
+    \textcolor{comment}{// Create an MNIST object, which consists of labelled data in the standard MNIST}
+    \textcolor{comment}{// format (http://yann.lecun.com/exdb/mnist/). This is in two files, one containing}
+    \textcolor{comment}{// the images and one containing the data.}
+    
+    \hyperlink{classMNIST}{MNIST} m(\textcolor{stringliteral}{"../testdata/train-labels-idx1-ubyte"},\textcolor{stringliteral}{"../testdata/train-images-idx3-ubyte"});
+    
+    \textcolor{comment}{// This ExampleSet constructor builds the examples directly from the MNIST data,}
+    \textcolor{comment}{// with a large number of inputs (28x28) and a number of outputs equal to the maximum}
+    \textcolor{comment}{// label value + 1. The outputs of the examples are in a one-hot format: for handwritten}
+    \textcolor{comment}{// digits, there will be 10 in which the output corresponding to the label will}
+    \textcolor{comment}{// be 1 with the others 0.}
+    \hyperlink{classExampleSet}{ExampleSet} e(m);
+    
+    \textcolor{comment}{// create a plain MLP network conforming to the examples' input and output counts}
+    \textcolor{comment}{// with 16 hidden nodes}
+    \hyperlink{classNet}{Net} *n = \hyperlink{classNetFactory_abee207e81a04a7abf08e1f50bc2fe000}{NetFactory::makeNet}(\hyperlink{netType_8hpp_a1526df0fc932ccf720aa26267f923213af62eb0bf5e5c72e80983fbbac1cb70e5}{NetType::PLAIN},e,16);
+    
+    \textcolor{comment}{// set up the parameters}
+    \hyperlink{structNet_1_1SGDParams}{Net::SGDParams} params(0.1,10000); \textcolor{comment}{// eta,iterations}
+    
+    \textcolor{comment}{// use half of the data as CV examples, 1000 CV cycles, 10 slices.}
+    \textcolor{comment}{// Shuffle the CV examples on epoch. Also, store the best net}
+    \textcolor{comment}{// and make sure we end up with that. Set the seed to 10.}
+    \textcolor{comment}{// Shuffle mode is stride, the default (not that it matters here)}
+    
+    params.crossValidation(e,0.5,1000,10,\textcolor{keyword}{true})
+          .storeBest()
+          .setSeed(10);
+    
+    \textcolor{comment}{// train and get the MSE, and test it is low.}
+    \textcolor{keywordtype}{double} mse = n->\hyperlink{classNet_a4e527a7773eed5fb071b78ef3a636c95}{trainSGD}(e,params);
+    BOOST\_REQUIRE(mse<0.03);
+    
+    \textcolor{comment}{// now load the test set of 10000 images and labels and construct}
+    \textcolor{comment}{// examples in a similar way.}
+    \hyperlink{classMNIST}{MNIST} mtest(\textcolor{stringliteral}{"../testdata/t10k-labels-idx1-ubyte"},\textcolor{stringliteral}{"../testdata/t10k-images-idx3-ubyte"});
+    \hyperlink{classExampleSet}{ExampleSet} testSet(mtest);
+    
+    \textcolor{comment}{// and test against the test set, recording how many are good.}
+    \textcolor{keywordtype}{int} correct=0;
+    \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i=0;i<testSet.getCount();i++)\{
+        \textcolor{comment}{// for each test, get the inputs}
+        \textcolor{keywordtype}{double} *ins = testSet.getInputs(i);
+        \textcolor{comment}{// run them through the network and get the outputs}
+        \textcolor{keywordtype}{double} *o = n->\hyperlink{classNet_a3f711482dd39b9653f4449304b853a79}{run}(ins);
+        \textcolor{comment}{// find the correct label by getting the highest output in the example}
+        \textcolor{keywordtype}{int} correctLabel = getHighest(testSet.getOutputs(i),testSet.getOutputCount());
+        \textcolor{comment}{// find the network's result by getting its highest output }
+        \textcolor{keywordtype}{int} netLabel = getHighest(o,testSet.getOutputCount());
+        \textcolor{comment}{// and increment the count if they agree}
+        \textcolor{keywordflow}{if}(correctLabel==netLabel)correct++;
+    \}
+    
+    \textcolor{comment}{// get the ratio of correct answers -}
+    \textcolor{comment}{// we've not trained for long so this isn't going to be brilliant performance.}
+    \textcolor{keywordtype}{double} ratio = ((double)correct)/(double)testSet.getCount();
+    printf(\textcolor{stringliteral}{"MSE=%f, correct=%d/%d=%f\(\backslash\)n"},mse,correct,testSet.getCount(),ratio);
+    \textcolor{comment}{// assert that it's at least 85%}
+    BOOST\_REQUIRE(ratio>0.85);
+    \textcolor{keyword}{delete} n;
+\}
+\end{DoxyCodeInclude}

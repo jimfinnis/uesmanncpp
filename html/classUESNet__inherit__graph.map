@@ -1,0 +1,4 @@
+<map id="UESNet" name="UESNet">
+<area shape="rect" id="node2" href="$classBPNet.html" title="The &quot;basic&quot; back&#45;propagation network using a logistic sigmoid, as described by Rumelhart, Hinton and Williams (and many others). This class is used by output blending and h&#45;as&#45;input networks. " alt="" coords="10,80,71,107"/>
+<area shape="rect" id="node3" href="$classNet.html" title="The abstract network type upon which all others are based. It&#39;s not pure virtual, in that it encapsul..." alt="" coords="19,5,62,32"/>
+</map>

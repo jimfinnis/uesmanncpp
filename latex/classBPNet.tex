@@ -1,0 +1,765 @@
+\hypertarget{classBPNet}{}\section{B\+P\+Net Class Reference}
+\label{classBPNet}\index{B\+P\+Net@{B\+P\+Net}}
+
+
+The \char`\"{}basic\char`\"{} back-\/propagation network using a logistic sigmoid, as described by Rumelhart, Hinton and Williams (and many others). This class is used by output blending and h-\/as-\/input networks.  
+
+
+
+
+{\ttfamily \#include $<$bpnet.\+hpp$>$}
+
+
+
+Inheritance diagram for B\+P\+Net\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=214pt]{classBPNet__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for B\+P\+Net\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=126pt]{classBPNet__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classBPNet_acc0ad3e9fb7c706a4bc8676b3aaf47b8}{B\+P\+Net} (int nlayers, const int $\ast$layer\+Counts)
+\begin{DoxyCompactList}\small\item\em Constructor -\/ does not initialise the weights to random values so that we can reinitialise networks. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classBPNet_a98fa374aec169a3e741f2ce96fac7094}{setH} (double h)
+\begin{DoxyCompactList}\small\item\em Set the modulator level for subsequent runs and training of this network. \end{DoxyCompactList}\item 
+virtual double \hyperlink{classBPNet_aef1082e622022f25bee51013fab29aa0}{getH} () const 
+\begin{DoxyCompactList}\small\item\em get the modulator level \end{DoxyCompactList}\item 
+virtual \hyperlink{classBPNet_a7a452b3f05cc7e72b897a3546a38c010}{$\sim$\+B\+P\+Net} ()
+\begin{DoxyCompactList}\small\item\em destructor \end{DoxyCompactList}\item 
+virtual void \hyperlink{classBPNet_ad95c2a033ee8246637a6ce55e685429a}{set\+Inputs} (double $\ast$d)
+\begin{DoxyCompactList}\small\item\em Set the inputs to the network before running or training. \end{DoxyCompactList}\item 
+void \hyperlink{classBPNet_ae9e80dbedb62e973efdef21745a4a27a}{set\+Input} (int n, double d)
+\begin{DoxyCompactList}\small\item\em Used to set inputs manually, typically in \hyperlink{classHInputNet}{H\+Input\+Net}. \end{DoxyCompactList}\item 
+virtual double $\ast$ \hyperlink{classBPNet_adf9256df2239cdef0cb7ad3b45d0e06e}{get\+Outputs} () const 
+\begin{DoxyCompactList}\small\item\em Get the outputs after running. \end{DoxyCompactList}\item 
+virtual int \hyperlink{classBPNet_afbf10480c672d8a6e3cbf4071f447cc8}{get\+Layer\+Size} (int n) const 
+\begin{DoxyCompactList}\small\item\em Get the number of nodes in a given layer. \end{DoxyCompactList}\item 
+virtual int \hyperlink{classBPNet_af52311c47d488b0121ea59574e2b9c05}{get\+Layer\+Count} () const 
+\begin{DoxyCompactList}\small\item\em Get the number of layers. \end{DoxyCompactList}\item 
+virtual int \hyperlink{classBPNet_ab0071a9b17ba5d42959ce600d29a255c}{get\+Data\+Size} () const 
+\begin{DoxyCompactList}\small\item\em Get the length of the serialised data block for this network. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classBPNet_a7ef14370548350daecedcb275ba88c07}{save} (double $\ast$buf) const 
+\begin{DoxyCompactList}\small\item\em Serialize the data (not including any network type magic number or layer/node counts) to the given memory (which must be of sufficient size). \end{DoxyCompactList}\item 
+virtual void \hyperlink{classBPNet_a11724f2263de9dcbc0f9172b464732c7}{load} (double $\ast$buf)
+\begin{DoxyCompactList}\small\item\em Given that the pointer points to a data block of the correct size for the current network, copy the parameters from that data block into the current network overwriting the current parameters. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classBPNet_ad9b8ec22ef6319ebda7b3ac996b76f3e}{B\+P\+Net} ()
+\begin{DoxyCompactList}\small\item\em Special constructor for subclasses which need to manipulate layer count before initialisation (e.\+g. \hyperlink{classHInputNet}{H\+Input\+Net}). \end{DoxyCompactList}\item 
+void \hyperlink{classBPNet_ada480f784f72fb5de132ce368adde531}{init} (int nlayers, const int $\ast$layer\+Counts)
+\begin{DoxyCompactList}\small\item\em Initialiser for use by the main constructor and the ctors of those subclasses mentioned in \hyperlink{classBPNet_ad9b8ec22ef6319ebda7b3ac996b76f3e}{B\+P\+Net()} \end{DoxyCompactList}\item 
+virtual void \hyperlink{classBPNet_ae1b90b3c92f6be9af29005371da66543}{init\+Weights} (double initr)
+\begin{DoxyCompactList}\small\item\em initialise weights to random values \end{DoxyCompactList}\item 
+double \& \hyperlink{classBPNet_a20f1696c6c5449b79101dc4f345e599e}{getw} (int tolayer, int toneuron, int fromneuron) const 
+\begin{DoxyCompactList}\small\item\em get the value of a weight. \end{DoxyCompactList}\item 
+double \& \hyperlink{classBPNet_a1ffbe006ab858291ec96c503696c3131}{getb} (int layer, int neuron) const 
+\begin{DoxyCompactList}\small\item\em get the value of a bias \end{DoxyCompactList}\item 
+double \& \hyperlink{classBPNet_a48d88671bda131e1a6d0baab080b6df6}{getavggradw} (int tolayer, int toneuron, int fromneuron) const 
+\begin{DoxyCompactList}\small\item\em get the value of the gradient for a given weight \end{DoxyCompactList}\item 
+double \hyperlink{classBPNet_a916264dd0b58dcfae3d473231f7d0892}{getavggradb} (int l, int n) const 
+\begin{DoxyCompactList}\small\item\em get the value of a bias gradient \end{DoxyCompactList}\item 
+void \hyperlink{classBPNet_a98e5db7247f0358375c27d1bb091f6ab}{calc\+Error} (double $\ast$in, double $\ast$out)
+\begin{DoxyCompactList}\small\item\em run a single example and calculate the errors; used in training. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classBPNet_af60f5bfa6cb7dffd75a9a127b811a208}{update} ()
+\begin{DoxyCompactList}\small\item\em Run a single update of the network. \end{DoxyCompactList}\item 
+virtual double \hyperlink{classBPNet_a3f820464f3338ed7305e9de950cd2103}{train\+Batch} (\hyperlink{classExampleSet}{Example\+Set} \&ex, int start, int num, double eta)
+\begin{DoxyCompactList}\small\item\em Train a network for batch (or mini-\/batch) (or single example). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{classBPNet_aaabccfce85225083b21b02a3b3065c81}{num\+Layers}
+\begin{DoxyCompactList}\small\item\em number of layers, including input and output \end{DoxyCompactList}\item 
+int $\ast$ \hyperlink{classBPNet_a9f59cc3cc5e0972d473e26a4fb47b5c6}{layer\+Sizes}
+\begin{DoxyCompactList}\small\item\em array of layer sizes \end{DoxyCompactList}\item 
+int \hyperlink{classBPNet_a60c06f158b82c2ee8a95df4f0c46235d}{largest\+Layer\+Size}
+\begin{DoxyCompactList}\small\item\em number of nodes in largest layer \end{DoxyCompactList}\item 
+double $\ast$$\ast$ \hyperlink{classBPNet_aca57e8583a315a709a27e4dffeefd493}{weights}
+\begin{DoxyCompactList}\small\item\em Array of weights as \mbox{[}tolayer\mbox{]}\mbox{[}tonode+largest\+Layer\+Size$\ast$fromnode\mbox{]}. \end{DoxyCompactList}\item 
+double $\ast$$\ast$ \hyperlink{classBPNet_a2e41caf79f495792d03395b0c3eea560}{biases}
+\begin{DoxyCompactList}\small\item\em array of biases, stored as a rectangular array of \mbox{[}layer\mbox{]}\mbox{[}node\mbox{]} \end{DoxyCompactList}\item 
+double $\ast$$\ast$ \hyperlink{classBPNet_af2839f081e9f715b207fcc89789bfd0a}{outputs}
+\begin{DoxyCompactList}\small\item\em outputs of each layer\+: one array of doubles for each \end{DoxyCompactList}\item 
+double $\ast$$\ast$ \hyperlink{classBPNet_a6b60b49ea0c157bbe4d785f74fa3f208}{errors}
+\begin{DoxyCompactList}\small\item\em the error for each node, calculated by \hyperlink{classBPNet_a98e5db7247f0358375c27d1bb091f6ab}{calc\+Error()} \end{DoxyCompactList}\item 
+double $\ast$$\ast$ \hyperlink{classBPNet_a72567d85f25041df70225b5e98ae3b90}{grad\+Avgs\+Weights}
+\begin{DoxyCompactList}\small\item\em average gradient for each weight (built during training) \end{DoxyCompactList}\item 
+double $\ast$$\ast$ \hyperlink{classBPNet_a90e9fb8bde12a2520186d8084628109b}{grad\+Avgs\+Biases}
+\begin{DoxyCompactList}\small\item\em average gradient for each bias (built during training) \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+The \char`\"{}basic\char`\"{} back-\/propagation network using a logistic sigmoid, as described by Rumelhart, Hinton and Williams (and many others). This class is used by output blending and h-\/as-\/input networks. 
+
+Definition at line 18 of file bpnet.\+hpp.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{B\+P\+Net@{B\+P\+Net}!B\+P\+Net@{B\+P\+Net}}
+\index{B\+P\+Net@{B\+P\+Net}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{B\+P\+Net()}{BPNet()}}]{\setlength{\rightskip}{0pt plus 5cm}B\+P\+Net\+::\+B\+P\+Net (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}\hypertarget{classBPNet_ad9b8ec22ef6319ebda7b3ac996b76f3e}{}\label{classBPNet_ad9b8ec22ef6319ebda7b3ac996b76f3e}
+
+
+Special constructor for subclasses which need to manipulate layer count before initialisation (e.\+g. \hyperlink{classHInputNet}{H\+Input\+Net}). 
+
+
+
+Definition at line 24 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!B\+P\+Net@{B\+P\+Net}}
+\index{B\+P\+Net@{B\+P\+Net}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{B\+P\+Net(int nlayers, const int $\ast$layer\+Counts)}{BPNet(int nlayers, const int *layerCounts)}}]{\setlength{\rightskip}{0pt plus 5cm}B\+P\+Net\+::\+B\+P\+Net (
+\begin{DoxyParamCaption}
+\item[{int}]{nlayers, }
+\item[{const int $\ast$}]{layer\+Counts}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBPNet_acc0ad3e9fb7c706a4bc8676b3aaf47b8}{}\label{classBPNet_acc0ad3e9fb7c706a4bc8676b3aaf47b8}
+
+
+Constructor -\/ does not initialise the weights to random values so that we can reinitialise networks. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nlayers} & number of layers \\
+\hline
+{\em layer\+Counts} & array of layer counts \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 69 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!````~B\+P\+Net@{$\sim$\+B\+P\+Net}}
+\index{````~B\+P\+Net@{$\sim$\+B\+P\+Net}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{$\sim$\+B\+P\+Net()}{~BPNet()}}]{\setlength{\rightskip}{0pt plus 5cm}virtual B\+P\+Net\+::$\sim$\+B\+P\+Net (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classBPNet_a7a452b3f05cc7e72b897a3546a38c010}{}\label{classBPNet_a7a452b3f05cc7e72b897a3546a38c010}
+
+
+destructor 
+
+
+
+Definition at line 86 of file bpnet.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\index{B\+P\+Net@{B\+P\+Net}!calc\+Error@{calc\+Error}}
+\index{calc\+Error@{calc\+Error}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{calc\+Error(double $\ast$in, double $\ast$out)}{calcError(double *in, double *out)}}]{\setlength{\rightskip}{0pt plus 5cm}void B\+P\+Net\+::calc\+Error (
+\begin{DoxyParamCaption}
+\item[{double $\ast$}]{in, }
+\item[{double $\ast$}]{out}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}\hypertarget{classBPNet_a98e5db7247f0358375c27d1bb091f6ab}{}\label{classBPNet_a98e5db7247f0358375c27d1bb091f6ab}
+
+
+run a single example and calculate the errors; used in training. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em in} & inputs \\
+\hline
+{\em out} & required outputs \\
+\hline
+\end{DoxyParams}
+\begin{DoxyPostcond}{Postcondition}
+the errors will be in the errors variable 
+\end{DoxyPostcond}
+
+
+Definition at line 294 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!getavggradb@{getavggradb}}
+\index{getavggradb@{getavggradb}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{getavggradb(int l, int n) const }{getavggradb(int l, int n) const }}]{\setlength{\rightskip}{0pt plus 5cm}double B\+P\+Net\+::getavggradb (
+\begin{DoxyParamCaption}
+\item[{int}]{l, }
+\item[{int}]{n}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}\hypertarget{classBPNet_a916264dd0b58dcfae3d473231f7d0892}{}\label{classBPNet_a916264dd0b58dcfae3d473231f7d0892}
+
+
+get the value of a bias gradient 
+
+\begin{DoxyPrecond}{Precondition}
+gradients must have been calculated as part of training step 
+\end{DoxyPrecond}
+
+\begin{DoxyParams}{Parameters}
+{\em l} & index of layer \\
+\hline
+{\em n} & index of neuron within layer \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 283 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!getavggradw@{getavggradw}}
+\index{getavggradw@{getavggradw}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{getavggradw(int tolayer, int toneuron, int fromneuron) const }{getavggradw(int tolayer, int toneuron, int fromneuron) const }}]{\setlength{\rightskip}{0pt plus 5cm}double\& B\+P\+Net\+::getavggradw (
+\begin{DoxyParamCaption}
+\item[{int}]{tolayer, }
+\item[{int}]{toneuron, }
+\item[{int}]{fromneuron}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}\hypertarget{classBPNet_a48d88671bda131e1a6d0baab080b6df6}{}\label{classBPNet_a48d88671bda131e1a6d0baab080b6df6}
+
+
+get the value of the gradient for a given weight 
+
+\begin{DoxyPrecond}{Precondition}
+gradients must have been calculated as part of training step 
+\end{DoxyPrecond}
+
+\begin{DoxyParams}{Parameters}
+{\em tolayer} & the layer of the destination node (from is assumed to be previous layer) \\
+\hline
+{\em toneuron} & the index of the destination node in that layer \\
+\hline
+{\em fromneuron} & the index of the source node \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 272 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!getb@{getb}}
+\index{getb@{getb}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{getb(int layer, int neuron) const }{getb(int layer, int neuron) const }}]{\setlength{\rightskip}{0pt plus 5cm}double\& B\+P\+Net\+::getb (
+\begin{DoxyParamCaption}
+\item[{int}]{layer, }
+\item[{int}]{neuron}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}\hypertarget{classBPNet_a1ffbe006ab858291ec96c503696c3131}{}\label{classBPNet_a1ffbe006ab858291ec96c503696c3131}
+
+
+get the value of a bias 
+
+
+\begin{DoxyParams}{Parameters}
+{\em layer} & index of layer \\
+\hline
+{\em neuron} & index of neuron within layer \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 259 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!get\+Data\+Size@{get\+Data\+Size}}
+\index{get\+Data\+Size@{get\+Data\+Size}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{get\+Data\+Size() const }{getDataSize() const }}]{\setlength{\rightskip}{0pt plus 5cm}virtual int B\+P\+Net\+::get\+Data\+Size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classBPNet_ab0071a9b17ba5d42959ce600d29a255c}{}\label{classBPNet_ab0071a9b17ba5d42959ce600d29a255c}
+
+
+Get the length of the serialised data block for this network. 
+
+\begin{DoxyReturn}{Returns}
+the size in doubles 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{classNet_a18dfc4bbf338d5167e787edefef8cd43}{Net}.
+
+
+
+Definition at line 134 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!getH@{getH}}
+\index{getH@{getH}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{get\+H() const }{getH() const }}]{\setlength{\rightskip}{0pt plus 5cm}virtual double B\+P\+Net\+::getH (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classBPNet_aef1082e622022f25bee51013fab29aa0}{}\label{classBPNet_aef1082e622022f25bee51013fab29aa0}
+
+
+get the modulator level 
+
+
+
+Implements \hyperlink{classNet_afc3db6d4a7b1307b359f98da0b9b3bf2}{Net}.
+
+
+
+Reimplemented in \hyperlink{classHInputNet_aa79dc2d56582978e28661e0f6163d163}{H\+Input\+Net}, and \hyperlink{classUESNet_a421efc8741f28e65931e2b8affa7c149}{U\+E\+S\+Net}.
+
+
+
+Definition at line 77 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!get\+Layer\+Count@{get\+Layer\+Count}}
+\index{get\+Layer\+Count@{get\+Layer\+Count}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{get\+Layer\+Count() const }{getLayerCount() const }}]{\setlength{\rightskip}{0pt plus 5cm}virtual int B\+P\+Net\+::get\+Layer\+Count (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classBPNet_af52311c47d488b0121ea59574e2b9c05}{}\label{classBPNet_af52311c47d488b0121ea59574e2b9c05}
+
+
+Get the number of layers. 
+
+
+
+Implements \hyperlink{classNet_a84682330293fe317a8b483eed2987939}{Net}.
+
+
+
+Definition at line 128 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!get\+Layer\+Size@{get\+Layer\+Size}}
+\index{get\+Layer\+Size@{get\+Layer\+Size}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{get\+Layer\+Size(int n) const }{getLayerSize(int n) const }}]{\setlength{\rightskip}{0pt plus 5cm}virtual int B\+P\+Net\+::get\+Layer\+Size (
+\begin{DoxyParamCaption}
+\item[{int}]{n}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classBPNet_afbf10480c672d8a6e3cbf4071f447cc8}{}\label{classBPNet_afbf10480c672d8a6e3cbf4071f447cc8}
+
+
+Get the number of nodes in a given layer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & layer number \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classNet_a01aa05702b4cc818b9ae860675a6b219}{Net}.
+
+
+
+Reimplemented in \hyperlink{classHInputNet_a70a98f13c5a0ee60aaa28438dfc734f8}{H\+Input\+Net}.
+
+
+
+Definition at line 124 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!get\+Outputs@{get\+Outputs}}
+\index{get\+Outputs@{get\+Outputs}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{get\+Outputs() const }{getOutputs() const }}]{\setlength{\rightskip}{0pt plus 5cm}virtual double$\ast$ B\+P\+Net\+::get\+Outputs (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classBPNet_adf9256df2239cdef0cb7ad3b45d0e06e}{}\label{classBPNet_adf9256df2239cdef0cb7ad3b45d0e06e}
+
+
+Get the outputs after running. 
+
+\begin{DoxyReturn}{Returns}
+pointer to the output layer outputs 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{classNet_a38d901e18a4a269ca7ed3766cc4b4079}{Net}.
+
+
+
+Definition at line 120 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!getw@{getw}}
+\index{getw@{getw}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{getw(int tolayer, int toneuron, int fromneuron) const }{getw(int tolayer, int toneuron, int fromneuron) const }}]{\setlength{\rightskip}{0pt plus 5cm}double\& B\+P\+Net\+::getw (
+\begin{DoxyParamCaption}
+\item[{int}]{tolayer, }
+\item[{int}]{toneuron, }
+\item[{int}]{fromneuron}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}\hypertarget{classBPNet_a20f1696c6c5449b79101dc4f345e599e}{}\label{classBPNet_a20f1696c6c5449b79101dc4f345e599e}
+
+
+get the value of a weight. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em tolayer} & the layer of the destination node (from is assumed to be previous layer) \\
+\hline
+{\em toneuron} & the index of the destination node in that layer \\
+\hline
+{\em fromneuron} & the index of the source node \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 249 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!init@{init}}
+\index{init@{init}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{init(int nlayers, const int $\ast$layer\+Counts)}{init(int nlayers, const int *layerCounts)}}]{\setlength{\rightskip}{0pt plus 5cm}void B\+P\+Net\+::init (
+\begin{DoxyParamCaption}
+\item[{int}]{nlayers, }
+\item[{const int $\ast$}]{layer\+Counts}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}\hypertarget{classBPNet_ada480f784f72fb5de132ce368adde531}{}\label{classBPNet_ada480f784f72fb5de132ce368adde531}
+
+
+Initialiser for use by the main constructor and the ctors of those subclasses mentioned in \hyperlink{classBPNet_ad9b8ec22ef6319ebda7b3ac996b76f3e}{B\+P\+Net()} 
+
+
+
+Definition at line 32 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!init\+Weights@{init\+Weights}}
+\index{init\+Weights@{init\+Weights}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{init\+Weights(double initr)}{initWeights(double initr)}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void B\+P\+Net\+::init\+Weights (
+\begin{DoxyParamCaption}
+\item[{double}]{initr}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}\hypertarget{classBPNet_ae1b90b3c92f6be9af29005371da66543}{}\label{classBPNet_ae1b90b3c92f6be9af29005371da66543}
+
+
+initialise weights to random values 
+
+
+\begin{DoxyParams}{Parameters}
+{\em initr} & range of weights \mbox{[}-\/n,n\mbox{]}, or -\/1 for Bishop\textquotesingle{}s rule. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classNet_a5bbf19d2255b0c8418c9bd54930290cf}{Net}.
+
+
+
+Definition at line 218 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!load@{load}}
+\index{load@{load}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{load(double $\ast$buf)}{load(double *buf)}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void B\+P\+Net\+::load (
+\begin{DoxyParamCaption}
+\item[{double $\ast$}]{buf}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classBPNet_a11724f2263de9dcbc0f9172b464732c7}{}\label{classBPNet_a11724f2263de9dcbc0f9172b464732c7}
+
+
+Given that the pointer points to a data block of the correct size for the current network, copy the parameters from that data block into the current network overwriting the current parameters. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buf} & the buffer to load the data from, must be at least \hyperlink{classBPNet_ab0071a9b17ba5d42959ce600d29a255c}{get\+Data\+Size()} doubles \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classNet_a6fc4cac6c8e32acc1d3567defcce9b8c}{Net}.
+
+
+
+Definition at line 170 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!save@{save}}
+\index{save@{save}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{save(double $\ast$buf) const }{save(double *buf) const }}]{\setlength{\rightskip}{0pt plus 5cm}virtual void B\+P\+Net\+::save (
+\begin{DoxyParamCaption}
+\item[{double $\ast$}]{buf}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classBPNet_a7ef14370548350daecedcb275ba88c07}{}\label{classBPNet_a7ef14370548350daecedcb275ba88c07}
+
+
+Serialize the data (not including any network type magic number or layer/node counts) to the given memory (which must be of sufficient size). 
+
+
+\begin{DoxyParams}{Parameters}
+{\em buf} & the buffer to save the data, must be at least \hyperlink{classBPNet_ab0071a9b17ba5d42959ce600d29a255c}{get\+Data\+Size()} doubles \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classNet_ad1178bdda5ebb1dc1bb57dc3da727fce}{Net}.
+
+
+
+Definition at line 151 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!setH@{setH}}
+\index{setH@{setH}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{set\+H(double h)}{setH(double h)}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void B\+P\+Net\+::setH (
+\begin{DoxyParamCaption}
+\item[{double}]{h}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classBPNet_a98fa374aec169a3e741f2ce96fac7094}{}\label{classBPNet_a98fa374aec169a3e741f2ce96fac7094}
+
+
+Set the modulator level for subsequent runs and training of this network. 
+
+
+
+Implements \hyperlink{classNet_a5a01870e21e29845252d6bec88b0c497}{Net}.
+
+
+
+Reimplemented in \hyperlink{classHInputNet_a3ac18a3e39fc58647052518e507ae378}{H\+Input\+Net}, and \hyperlink{classUESNet_ad05de4582dd40ae714fce3f9b0d3d2ca}{U\+E\+S\+Net}.
+
+
+
+Definition at line 73 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!set\+Input@{set\+Input}}
+\index{set\+Input@{set\+Input}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{set\+Input(int n, double d)}{setInput(int n, double d)}}]{\setlength{\rightskip}{0pt plus 5cm}void B\+P\+Net\+::set\+Input (
+\begin{DoxyParamCaption}
+\item[{int}]{n, }
+\item[{double}]{d}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classBPNet_ae9e80dbedb62e973efdef21745a4a27a}{}\label{classBPNet_ae9e80dbedb62e973efdef21745a4a27a}
+
+
+Used to set inputs manually, typically in \hyperlink{classHInputNet}{H\+Input\+Net}. 
+
+
+
+Definition at line 115 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!set\+Inputs@{set\+Inputs}}
+\index{set\+Inputs@{set\+Inputs}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{set\+Inputs(double $\ast$d)}{setInputs(double *d)}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void B\+P\+Net\+::set\+Inputs (
+\begin{DoxyParamCaption}
+\item[{double $\ast$}]{d}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classBPNet_ad95c2a033ee8246637a6ce55e685429a}{}\label{classBPNet_ad95c2a033ee8246637a6ce55e685429a}
+
+
+Set the inputs to the network before running or training. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em d} & array of doubles, the size of the input layer \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classNet_a3c41ce6877aa3b04e5c19943bc78d007}{Net}.
+
+
+
+Reimplemented in \hyperlink{classHInputNet_a2c463ec5781f9e84865747e8bb085065}{H\+Input\+Net}.
+
+
+
+Definition at line 104 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!train\+Batch@{train\+Batch}}
+\index{train\+Batch@{train\+Batch}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{train\+Batch(\+Example\+Set \&ex, int start, int num, double eta)}{trainBatch(ExampleSet &ex, int start, int num, double eta)}}]{\setlength{\rightskip}{0pt plus 5cm}virtual double B\+P\+Net\+::train\+Batch (
+\begin{DoxyParamCaption}
+\item[{{\bf Example\+Set} \&}]{ex, }
+\item[{int}]{start, }
+\item[{int}]{num, }
+\item[{double}]{eta}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}\hypertarget{classBPNet_a3f820464f3338ed7305e9de950cd2103}{}\label{classBPNet_a3f820464f3338ed7305e9de950cd2103}
+
+
+Train a network for batch (or mini-\/batch) (or single example). 
+
+This will
+\begin{DoxyItemize}
+\item zero the average gradient variables for all weights and biases
+\item zero the total error
+\item for each example
+\begin{DoxyItemize}
+\item calculate the error with \hyperlink{classBPNet_a98e5db7247f0358375c27d1bb091f6ab}{calc\+Error()} which itself calls \hyperlink{classBPNet_af60f5bfa6cb7dffd75a9a127b811a208}{update()}
+\item add to the total mean squared error (see N\+O\+TE below)
+\end{DoxyItemize}
+\item for each weight and bias
+\begin{DoxyItemize}
+\item calculate the means across all provided examples
+\item apply the mean to the weight or bias
+\end{DoxyItemize}
+\item return the mean squared error (N\+O\+TE\+: different from original, which returned mean absolute error) for all outputs and examples\+: \[ \frac{1}{N\cdot N_{outs}}\sum^N_{e \in Examples} \sum_{i=0}^{N_{outs}} (e_o(i) - e_y(i))^2 \] where $N$ is the number of examples, $N_{outs}$ is the number of outputs, $e_o(i)$ is network\textquotesingle{}s output for example $e$, and $e_y(i)$ is the desired output for the same example. 
+\begin{DoxyParams}{Parameters}
+{\em ex} & example set \\
+\hline
+{\em start} & index of first example to use \\
+\hline
+{\em num} & number of examples. For a single example, you\textquotesingle{}d just use 1. \\
+\hline
+{\em eta} & learning rate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the sum of mean squared errors in the output layer (see formula in method documentation) 
+\end{DoxyReturn}
+
+\end{DoxyItemize}
+
+Implements \hyperlink{classNet_a6ac1fa9f916aa77906581af9140b8175}{Net}.
+
+
+
+Reimplemented in \hyperlink{classUESNet_ac27da7319d8be1507ea80506e69437e5}{U\+E\+S\+Net}.
+
+
+
+Definition at line 332 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!update@{update}}
+\index{update@{update}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{update()}{update()}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void B\+P\+Net\+::update (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}\hypertarget{classBPNet_af60f5bfa6cb7dffd75a9a127b811a208}{}\label{classBPNet_af60f5bfa6cb7dffd75a9a127b811a208}
+
+
+Run a single update of the network. 
+
+\begin{DoxyPrecond}{Precondition}
+input layer must be filled with values 
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+output layer contains result 
+\end{DoxyPostcond}
+
+
+Implements \hyperlink{classNet_ad02198e219d3ba060c88d764ce54b905}{Net}.
+
+
+
+Reimplemented in \hyperlink{classUESNet_a1d05fcd3ce9f188db8841a9d6fc6c56c}{U\+E\+S\+Net}.
+
+
+
+Definition at line 320 of file bpnet.\+hpp.
+
+
+
+\subsection{Member Data Documentation}
+\index{B\+P\+Net@{B\+P\+Net}!biases@{biases}}
+\index{biases@{biases}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{biases}{biases}}]{\setlength{\rightskip}{0pt plus 5cm}double$\ast$$\ast$ B\+P\+Net\+::biases\hspace{0.3cm}{\ttfamily [protected]}}\hypertarget{classBPNet_a2e41caf79f495792d03395b0c3eea560}{}\label{classBPNet_a2e41caf79f495792d03395b0c3eea560}
+
+
+array of biases, stored as a rectangular array of \mbox{[}layer\mbox{]}\mbox{[}node\mbox{]} 
+
+
+
+Definition at line 208 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!errors@{errors}}
+\index{errors@{errors}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{errors}{errors}}]{\setlength{\rightskip}{0pt plus 5cm}double$\ast$$\ast$ B\+P\+Net\+::errors\hspace{0.3cm}{\ttfamily [protected]}}\hypertarget{classBPNet_a6b60b49ea0c157bbe4d785f74fa3f208}{}\label{classBPNet_a6b60b49ea0c157bbe4d785f74fa3f208}
+
+
+the error for each node, calculated by \hyperlink{classBPNet_a98e5db7247f0358375c27d1bb091f6ab}{calc\+Error()} 
+
+
+
+Definition at line 213 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!grad\+Avgs\+Biases@{grad\+Avgs\+Biases}}
+\index{grad\+Avgs\+Biases@{grad\+Avgs\+Biases}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{grad\+Avgs\+Biases}{gradAvgsBiases}}]{\setlength{\rightskip}{0pt plus 5cm}double$\ast$$\ast$ B\+P\+Net\+::grad\+Avgs\+Biases\hspace{0.3cm}{\ttfamily [protected]}}\hypertarget{classBPNet_a90e9fb8bde12a2520186d8084628109b}{}\label{classBPNet_a90e9fb8bde12a2520186d8084628109b}
+
+
+average gradient for each bias (built during training) 
+
+
+
+Definition at line 216 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!grad\+Avgs\+Weights@{grad\+Avgs\+Weights}}
+\index{grad\+Avgs\+Weights@{grad\+Avgs\+Weights}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{grad\+Avgs\+Weights}{gradAvgsWeights}}]{\setlength{\rightskip}{0pt plus 5cm}double$\ast$$\ast$ B\+P\+Net\+::grad\+Avgs\+Weights\hspace{0.3cm}{\ttfamily [protected]}}\hypertarget{classBPNet_a72567d85f25041df70225b5e98ae3b90}{}\label{classBPNet_a72567d85f25041df70225b5e98ae3b90}
+
+
+average gradient for each weight (built during training) 
+
+
+
+Definition at line 215 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!largest\+Layer\+Size@{largest\+Layer\+Size}}
+\index{largest\+Layer\+Size@{largest\+Layer\+Size}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{largest\+Layer\+Size}{largestLayerSize}}]{\setlength{\rightskip}{0pt plus 5cm}int B\+P\+Net\+::largest\+Layer\+Size\hspace{0.3cm}{\ttfamily [protected]}}\hypertarget{classBPNet_a60c06f158b82c2ee8a95df4f0c46235d}{}\label{classBPNet_a60c06f158b82c2ee8a95df4f0c46235d}
+
+
+number of nodes in largest layer 
+
+
+
+Definition at line 192 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!layer\+Sizes@{layer\+Sizes}}
+\index{layer\+Sizes@{layer\+Sizes}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{layer\+Sizes}{layerSizes}}]{\setlength{\rightskip}{0pt plus 5cm}int$\ast$ B\+P\+Net\+::layer\+Sizes\hspace{0.3cm}{\ttfamily [protected]}}\hypertarget{classBPNet_a9f59cc3cc5e0972d473e26a4fb47b5c6}{}\label{classBPNet_a9f59cc3cc5e0972d473e26a4fb47b5c6}
+
+
+array of layer sizes 
+
+
+
+Definition at line 191 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!num\+Layers@{num\+Layers}}
+\index{num\+Layers@{num\+Layers}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{num\+Layers}{numLayers}}]{\setlength{\rightskip}{0pt plus 5cm}int B\+P\+Net\+::num\+Layers\hspace{0.3cm}{\ttfamily [protected]}}\hypertarget{classBPNet_aaabccfce85225083b21b02a3b3065c81}{}\label{classBPNet_aaabccfce85225083b21b02a3b3065c81}
+
+
+number of layers, including input and output 
+
+
+
+Definition at line 190 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!outputs@{outputs}}
+\index{outputs@{outputs}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{outputs}{outputs}}]{\setlength{\rightskip}{0pt plus 5cm}double$\ast$$\ast$ B\+P\+Net\+::outputs\hspace{0.3cm}{\ttfamily [protected]}}\hypertarget{classBPNet_af2839f081e9f715b207fcc89789bfd0a}{}\label{classBPNet_af2839f081e9f715b207fcc89789bfd0a}
+
+
+outputs of each layer\+: one array of doubles for each 
+
+
+
+Definition at line 212 of file bpnet.\+hpp.
+
+\index{B\+P\+Net@{B\+P\+Net}!weights@{weights}}
+\index{weights@{weights}!B\+P\+Net@{B\+P\+Net}}
+\subsubsection[{\texorpdfstring{weights}{weights}}]{\setlength{\rightskip}{0pt plus 5cm}double$\ast$$\ast$ B\+P\+Net\+::weights\hspace{0.3cm}{\ttfamily [protected]}}\hypertarget{classBPNet_aca57e8583a315a709a27e4dffeefd493}{}\label{classBPNet_aca57e8583a315a709a27e4dffeefd493}
+
+
+Array of weights as \mbox{[}tolayer\mbox{]}\mbox{[}tonode+largest\+Layer\+Size$\ast$fromnode\mbox{]}. 
+
+Weights are stored as a square matrix, even though less than half is used. Less than that, if not all layers are the same size, since the dimension of the matrix must be the size of the largest layer. Each array has its own matrix, so index by \mbox{[}layer\mbox{]}\mbox{[}i+largest\+Layer\+Size$\ast$j\mbox{]}, where
+\begin{DoxyItemize}
+\item layer is the \char`\"{}\+T\+O\char`\"{} layer
+\item layer-\/1 is the F\+R\+OM layer
+\item i is the TO neuron (i.\+e. the end of the connection)
+\item j is the F\+R\+OM neuron (the start) 
+\end{DoxyItemize}
+
+Definition at line 205 of file bpnet.\+hpp.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/travis/build/jimfinnis/uesmanncpp/\hyperlink{bpnet_8hpp}{bpnet.\+hpp}\end{DoxyCompactItemize}

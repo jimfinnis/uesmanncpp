@@ -1,0 +1,77 @@
+\subsection*{Introduction}
+
+This is the new C++ implementation of U\+E\+S\+M\+A\+NN, based on the original code used in my thesis. That code was written as a {\ttfamily .angso} library for the Angort language, and has evolved to become rather unwieldly (as well as being intended for use from a language no-\/one but me uses).
+
+The code is very simplistic, using scalar as opposed to matrix operations and no G\+PU acceleration. This is to make the code as clear as possible, as befits a reference implementation, and also to match the implementation used in the thesis. There are no dependencies on any libraries beyond those found in a standard C++ install, and libboost-\/test for testing. You may find the code somewhat lacking in modern C++ style because I\textquotesingle{}m an 80\textquotesingle{}s coder.
+
+I originally intended to write use Keras/\+Tensorflow, but would have been limited to using the low-\/level Tensorflow operations because of the somewhat peculiar nature of optimisation in U\+E\+S\+M\+A\+NN\+: we descend the gradient relative to the weights for one function, and the gradient relative to the weights times some constant for the other. A Keras/\+Tensorflow implementation is planned.
+
+Implementations of the other network types mentioned in the thesis are also included.
+
+The top level class is \hyperlink{classNet}{Net}, which is an virtual type describing the neural net interface and performing some basic operations. Other classes are\+:
+
+
+\begin{DoxyItemize}
+\item \hyperlink{classNetFactory}{Net\+Factory}, which creates, loads and saves these concrete subclasses of \hyperlink{classNet}{Net}\+:
+\begin{DoxyItemize}
+\item \hyperlink{classBPNet}{B\+P\+Net}, a plain, unmodulated M\+LP trained with backprop
+\item \hyperlink{classOutputBlendingNet}{Output\+Blending\+Net} and \hyperlink{classHInputNet}{H\+Input\+Net}, which are alternative modulatory networks described below
+\item \hyperlink{classUESNet}{U\+E\+S\+Net}, the U\+E\+S\+M\+A\+NN network
+\end{DoxyItemize}
+\item \hyperlink{classExampleSet}{Example\+Set}, which is a set of examples for training networks
+\item \hyperlink{structNet_1_1SGDParams}{Net\+::\+S\+G\+D\+Params}, which controls how training is performed (including crossvalidation and hyperparameters)
+\item \hyperlink{classMNIST}{M\+N\+I\+ST}, which encapsulates M\+N\+I\+S\+T-\/format data sets and from which \hyperlink{classExampleSet}{Example\+Set} instances can be generated.
+\end{DoxyItemize}
+
+\subsection*{The library and test executables}
+
+The entire library is include-\/only, just include \hyperlink{netFactory_8hpp}{net\+Factory.\+hpp} to get everything. The provided C\+Make\+Lists.\+txt builds two executables\+:
+
+
+\begin{DoxyItemize}
+\item {\bfseries uesmann-\/test} runs a set of test suites written using the Boost test framework.
+\item {\bfseries gen\+Bool\+Grid} trains 1000 U\+E\+S\+M\+A\+NN networks for every possible binary boolean function pairing and calculates how many perform the required function (this test was designed to ensure that the library\textquotesingle{}s output matched that from equivalent code used in the thesis).
+\end{DoxyItemize}
+
+\subsection*{The network}
+
+The network implemented is a modified version of the basic Rumelhart, Hinton and Williams multilayer perceptron with a logistic sigmoid activation function, and is trained using stochastic gradient descent by the back-\/propagation of errors. The modification consists of a modulatory factor $h$, which essentially doubles all the weights at 1, while leaving them at their nominal values at 0. Each node has the following function\+:
+
+\[ y = \sigma\left(b+(h+1)\sum_i w_i x_i\right), \]
+
+where
+
+
+\begin{DoxyItemize}
+\item $y$ is the node output,
+\item $\sigma$ is the \char`\"{}standard\char`\"{} logistic sigmoid activation $\sigma(x) = \frac{1}{1+e^{-x}}$
+\item $b$ is the node bias,
+\item $h$ is the modulator,
+\item $w_i$ are the node weights,
+\item $x_i$ are the node inputs.
+\end{DoxyItemize}
+
+The network is trained to perform different functions at different modulator levels, currently two different functions at h=0 and h=1. This is done by modifying the back-\/propagation equations to find the gradient $\frac{\partial C}{\partial w_i(1+h) }$ (i.\+e. the cost gradient with respect to the modulated weight). Each example is tagged with the appropriate modulator value, and the network is trained by presenting examples for alternating modulator levels so that the mean gradient followed will find a compromise between the solutions at the two levels.
+
+It works surprisingly well, and shows interesting transition behaviour as the modulator changes. In the thesis, it has been tested on\+:
+
+
+\begin{DoxyItemize}
+\item boolean functions\+: all possible pairings of binary boolean functions can be performed in the same parameter space as a single boolean function (i.\+e. two hidden nodes);
+\item image classification\+: it performs well on line recognition tasks, modulating between horizontal and vertical line recognition in noisy images; and on the \hyperlink{classMNIST}{M\+N\+I\+ST} handwriting recognition task, modulating between recognising digits with their nominal labelling and an alternate labelling with a maximal Hamming distance;
+\item robot control\+: in a homeostatic robot task, a real robot transitioned between exploration and phototaxis as simulated battery charge (which provided the modulator) fell.
+\end{DoxyItemize}
+
+The performance of U\+E\+S\+M\+A\+NN was tested against\+:
+
+
+\begin{DoxyItemize}
+\item output blending\+: performing modulation by training two networks, one for each modulation level, and interpolating between the outputs using the modulator
+\item h-\/as-\/input\+: providing the the modulator h as as extra input to a plain M\+LP and training accordingly.
+\end{DoxyItemize}
+
+No enhancements of any kind were used in either U\+E\+S\+M\+A\+NN or the other networks to provide a baseline performance with no confounding factors. This means no regularisation, no adaptive learning rate, not even momentum (Nesterov or otherwise).
+
+\subsection*{Examples}
+
+The files named {\bfseries test..} have various unit tests in them which can be useful examples. The \hyperlink{tests}{Tests} page shows some of these tests in more detail. 

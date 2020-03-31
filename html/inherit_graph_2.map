@@ -1,0 +1,7 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="node1" href="$classNet.html" title="The abstract network type upon which all others are based. It&#39;s not pure virtual, in that it encapsul..." alt="" coords="5,56,48,83"/>
+<area shape="rect" id="node2" href="$classBPNet.html" title="The &quot;basic&quot; back&#45;propagation network using a logistic sigmoid, as described by Rumelhart, Hinton and Williams (and many others). This class is used by output blending and h&#45;as&#45;input networks. " alt="" coords="131,31,193,57"/>
+<area shape="rect" id="node5" href="$classOutputBlendingNet.html" title="A modulatory network architecture which uses two plain backprop networks, each of which is trained se..." alt="" coords="96,81,228,108"/>
+<area shape="rect" id="node3" href="$classHInputNet.html" title="A modulatory network architecture which uses a plain backprop network with an extra input to carry th..." alt="" coords="276,5,359,32"/>
+<area shape="rect" id="node4" href="$classUESNet.html" title="The UESMANN network, which it itself based on the BPNet code as it has the same architecture as the p..." alt="" coords="282,56,353,83"/>
+</map>

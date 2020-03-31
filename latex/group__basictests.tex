@@ -1,0 +1,195 @@
+\hypertarget{group__basictests}{}\section{Core functionality tests}
+\label{group__basictests}\index{Core functionality tests@{Core functionality tests}}
+Collaboration diagram for Core functionality tests\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=268pt]{group__basictests}
+\end{center}
+\end{figure}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{group__basictests_ga95e163533a64ba72e25fc8dfe7fbf065}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (example)
+\begin{DoxyCompactList}\small\item\em Test the basic example. \end{DoxyCompactList}\item 
+\hyperlink{group__basictests_gacb115fa45cafc60a423957cc29f5052d}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (subset)
+\begin{DoxyCompactList}\small\item\em Test that subsetting examples works. \end{DoxyCompactList}\item 
+{\footnotesize template$<$class T $>$ }\\void \hyperlink{group__basictests_ga71cbfe9af5a01401f34e7a7ad89237ca}{sshuffle} (T $\ast$x, int ct)
+\begin{DoxyCompactList}\small\item\em simple shuffle for testing -\/ performs a Fisher-\/\+Yates shuffle on an array of items of class T. \end{DoxyCompactList}\item 
+\hyperlink{group__basictests_gae8675ed7eae8be5e0b3d6b187768c544}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (alt)
+\begin{DoxyCompactList}\small\item\em Test the \hyperlink{data_8hpp_a3f60001db133eff96da81b29a43cc8a4}{alternate()} function. \end{DoxyCompactList}\item 
+\hyperlink{group__basictests_ga04099944bd3fcadcfd7e5bc9b4a7f12f}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (altex)
+\begin{DoxyCompactList}\small\item\em Test the alternation function on examples, simple version. \end{DoxyCompactList}\item 
+\hyperlink{group__basictests_gaa493d8803a27251657f4d4ec1e50bfd9}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (stride)
+\begin{DoxyCompactList}\small\item\em test strided example shuffle, 4 different modulator levels \end{DoxyCompactList}\item 
+\hyperlink{group__basictests_gaef74c48a74c8dde77a98b18c1e0cd9b3}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (altex4)
+\begin{DoxyCompactList}\small\item\em test strided example shuffle, 4 different modulator levels \end{DoxyCompactList}\item 
+void \hyperlink{group__basictests_ga74ab1bd4f33a7d4671010710c83baa74}{zero} (\hyperlink{classNet}{Net} $\ast$n)
+\begin{DoxyCompactList}\small\item\em set all parameters (weights and biases) in a network to zero \end{DoxyCompactList}\item 
+\hyperlink{group__basictests_ga24b757533cad8c65d523f3d3f552c8a6}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (testmse)
+\begin{DoxyCompactList}\small\item\em Test mean sum squared error of outputs. This test finds the mean of the sum of the squared errors on the outputs across all examples in the test set, in the case of a network where all the parameters are zero. In this case, all outputs will be 0.\+5 given the logistic sigmoid activation function. We test for the correct value determined by lots of print statements during development. \end{DoxyCompactList}\item 
+\hyperlink{group__basictests_ga90ac9b7ee58da02fed518568d5fb8bc2}{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE} (loadmnist)
+\begin{DoxyCompactList}\small\item\em Loading \hyperlink{classMNIST}{M\+N\+I\+ST} data and converting to an example set. Ensure we can load \hyperlink{classMNIST}{M\+N\+I\+ST} data into an example set, and that the image and its label are correct. The former is hard to test automatically, so I\textquotesingle{}ll rely on having eyeballed it. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+
+
+\subsection{Function Documentation}
+\index{Core functionality tests@{Core functionality tests}!B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}}
+\index{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}!Core functionality tests@{Core functionality tests}}
+\subsubsection[{\texorpdfstring{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+S\+E(example)}{BOOST_AUTO_TEST_CASE(example)}}]{\setlength{\rightskip}{0pt plus 5cm}B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE (
+\begin{DoxyParamCaption}
+\item[{example}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__basictests_ga95e163533a64ba72e25fc8dfe7fbf065}{}\label{group__basictests_ga95e163533a64ba72e25fc8dfe7fbf065}
+
+
+Test the basic example. 
+
+
+
+Definition at line 57 of file test\+Basic.\+cpp.
+
+\index{Core functionality tests@{Core functionality tests}!B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}}
+\index{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}!Core functionality tests@{Core functionality tests}}
+\subsubsection[{\texorpdfstring{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+S\+E(subset)}{BOOST_AUTO_TEST_CASE(subset)}}]{\setlength{\rightskip}{0pt plus 5cm}B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE (
+\begin{DoxyParamCaption}
+\item[{subset}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__basictests_gacb115fa45cafc60a423957cc29f5052d}{}\label{group__basictests_gacb115fa45cafc60a423957cc29f5052d}
+
+
+Test that subsetting examples works. 
+
+
+
+Definition at line 76 of file test\+Basic.\+cpp.
+
+\index{Core functionality tests@{Core functionality tests}!B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}}
+\index{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}!Core functionality tests@{Core functionality tests}}
+\subsubsection[{\texorpdfstring{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+S\+E(alt)}{BOOST_AUTO_TEST_CASE(alt)}}]{\setlength{\rightskip}{0pt plus 5cm}B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE (
+\begin{DoxyParamCaption}
+\item[{alt}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__basictests_gae8675ed7eae8be5e0b3d6b187768c544}{}\label{group__basictests_gae8675ed7eae8be5e0b3d6b187768c544}
+
+
+Test the \hyperlink{data_8hpp_a3f60001db133eff96da81b29a43cc8a4}{alternate()} function. 
+
+
+
+Definition at line 120 of file test\+Basic.\+cpp.
+
+\index{Core functionality tests@{Core functionality tests}!B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}}
+\index{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}!Core functionality tests@{Core functionality tests}}
+\subsubsection[{\texorpdfstring{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+S\+E(altex)}{BOOST_AUTO_TEST_CASE(altex)}}]{\setlength{\rightskip}{0pt plus 5cm}B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE (
+\begin{DoxyParamCaption}
+\item[{altex}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__basictests_ga04099944bd3fcadcfd7e5bc9b4a7f12f}{}\label{group__basictests_ga04099944bd3fcadcfd7e5bc9b4a7f12f}
+
+
+Test the alternation function on examples, simple version. 
+
+
+
+Definition at line 154 of file test\+Basic.\+cpp.
+
+\index{Core functionality tests@{Core functionality tests}!B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}}
+\index{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}!Core functionality tests@{Core functionality tests}}
+\subsubsection[{\texorpdfstring{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+S\+E(stride)}{BOOST_AUTO_TEST_CASE(stride)}}]{\setlength{\rightskip}{0pt plus 5cm}B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE (
+\begin{DoxyParamCaption}
+\item[{stride}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__basictests_gaa493d8803a27251657f4d4ec1e50bfd9}{}\label{group__basictests_gaa493d8803a27251657f4d4ec1e50bfd9}
+
+
+test strided example shuffle, 4 different modulator levels 
+
+
+
+Definition at line 172 of file test\+Basic.\+cpp.
+
+\index{Core functionality tests@{Core functionality tests}!B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}}
+\index{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}!Core functionality tests@{Core functionality tests}}
+\subsubsection[{\texorpdfstring{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+S\+E(altex4)}{BOOST_AUTO_TEST_CASE(altex4)}}]{\setlength{\rightskip}{0pt plus 5cm}B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE (
+\begin{DoxyParamCaption}
+\item[{altex4}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__basictests_gaef74c48a74c8dde77a98b18c1e0cd9b3}{}\label{group__basictests_gaef74c48a74c8dde77a98b18c1e0cd9b3}
+
+
+test strided example shuffle, 4 different modulator levels 
+
+
+
+Definition at line 222 of file test\+Basic.\+cpp.
+
+\index{Core functionality tests@{Core functionality tests}!B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}}
+\index{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}!Core functionality tests@{Core functionality tests}}
+\subsubsection[{\texorpdfstring{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+S\+E(testmse)}{BOOST_AUTO_TEST_CASE(testmse)}}]{\setlength{\rightskip}{0pt plus 5cm}B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE (
+\begin{DoxyParamCaption}
+\item[{testmse}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__basictests_ga24b757533cad8c65d523f3d3f552c8a6}{}\label{group__basictests_ga24b757533cad8c65d523f3d3f552c8a6}
+
+
+Test mean sum squared error of outputs. This test finds the mean of the sum of the squared errors on the outputs across all examples in the test set, in the case of a network where all the parameters are zero. In this case, all outputs will be 0.\+5 given the logistic sigmoid activation function. We test for the correct value determined by lots of print statements during development. 
+
+
+
+Definition at line 299 of file test\+Basic.\+cpp.
+
+\index{Core functionality tests@{Core functionality tests}!B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}}
+\index{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE@{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE}!Core functionality tests@{Core functionality tests}}
+\subsubsection[{\texorpdfstring{B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+S\+E(loadmnist)}{BOOST_AUTO_TEST_CASE(loadmnist)}}]{\setlength{\rightskip}{0pt plus 5cm}B\+O\+O\+S\+T\+\_\+\+A\+U\+T\+O\+\_\+\+T\+E\+S\+T\+\_\+\+C\+A\+SE (
+\begin{DoxyParamCaption}
+\item[{loadmnist}]{}
+\end{DoxyParamCaption}
+)}\hypertarget{group__basictests_ga90ac9b7ee58da02fed518568d5fb8bc2}{}\label{group__basictests_ga90ac9b7ee58da02fed518568d5fb8bc2}
+
+
+Loading \hyperlink{classMNIST}{M\+N\+I\+ST} data and converting to an example set. Ensure we can load \hyperlink{classMNIST}{M\+N\+I\+ST} data into an example set, and that the image and its label are correct. The former is hard to test automatically, so I\textquotesingle{}ll rely on having eyeballed it. 
+
+
+
+Definition at line 322 of file test\+Basic.\+cpp.
+
+\index{Core functionality tests@{Core functionality tests}!sshuffle@{sshuffle}}
+\index{sshuffle@{sshuffle}!Core functionality tests@{Core functionality tests}}
+\subsubsection[{\texorpdfstring{sshuffle(\+T $\ast$x, int ct)}{sshuffle(T *x, int ct)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void sshuffle (
+\begin{DoxyParamCaption}
+\item[{T $\ast$}]{x, }
+\item[{int}]{ct}
+\end{DoxyParamCaption}
+)}\hypertarget{group__basictests_ga71cbfe9af5a01401f34e7a7ad89237ca}{}\label{group__basictests_ga71cbfe9af5a01401f34e7a7ad89237ca}
+
+
+simple shuffle for testing -\/ performs a Fisher-\/\+Yates shuffle on an array of items of class T. 
+
+
+
+Definition at line 104 of file test\+Basic.\+cpp.
+
+\index{Core functionality tests@{Core functionality tests}!zero@{zero}}
+\index{zero@{zero}!Core functionality tests@{Core functionality tests}}
+\subsubsection[{\texorpdfstring{zero(\+Net $\ast$n)}{zero(Net *n)}}]{\setlength{\rightskip}{0pt plus 5cm}void zero (
+\begin{DoxyParamCaption}
+\item[{{\bf Net} $\ast$}]{n}
+\end{DoxyParamCaption}
+)}\hypertarget{group__basictests_ga74ab1bd4f33a7d4671010710c83baa74}{}\label{group__basictests_ga74ab1bd4f33a7d4671010710c83baa74}
+
+
+set all parameters (weights and biases) in a network to zero 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & the network to zero \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 282 of file test\+Basic.\+cpp.
+

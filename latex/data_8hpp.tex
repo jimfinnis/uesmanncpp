@@ -1,0 +1,62 @@
+\hypertarget{data_8hpp}{}\section{/home/travis/build/jimfinnis/uesmanncpp/data.hpp File Reference}
+\label{data_8hpp}\index{/home/travis/build/jimfinnis/uesmanncpp/data.\+hpp@{/home/travis/build/jimfinnis/uesmanncpp/data.\+hpp}}
+
+
+Contains formats for example data.  
+
+
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+{\ttfamily \#include $<$stdint.\+h$>$}\\*
+{\ttfamily \#include \char`\"{}mnist.\+hpp\char`\"{}}\\*
+Include dependency graph for data.\+hpp\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{data_8hpp__incl}
+\end{center}
+\end{figure}
+This graph shows which files directly or indirectly include this file\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=350pt]{data_8hpp__dep__incl}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classExampleSet}{Example\+Set}
+\begin{DoxyCompactList}\small\item\em A set of example data. Each datum consists of hormone (i.\+e. modulator value), inputs and outputs. The data is stored as a single double array, with each example made up of inputs, followed by outputs, followed by modulator value (h). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class T , class Test\+Func $>$ }\\void \hyperlink{data_8hpp_a3f60001db133eff96da81b29a43cc8a4}{alternate} (T $\ast$arr, int nitems, int cycle, Test\+Func f)
+\begin{DoxyCompactList}\small\item\em Ensure array has cycling values of some function f mod n. Given an array, this function will rearrange the values to ensure that the integer function passed in has values which cycle. For example, if a cycle length of four is specified, the values will be made to run 0,1,2,3,0,1,2,3. This is done in-\/place. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Contains formats for example data. 
+
+
+
+\subsection{Function Documentation}
+\index{data.\+hpp@{data.\+hpp}!alternate@{alternate}}
+\index{alternate@{alternate}!data.\+hpp@{data.\+hpp}}
+\subsubsection[{\texorpdfstring{alternate(\+T $\ast$arr, int nitems, int cycle, Test\+Func f)}{alternate(T *arr, int nitems, int cycle, TestFunc f)}}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T , class Test\+Func $>$ void alternate (
+\begin{DoxyParamCaption}
+\item[{T $\ast$}]{arr, }
+\item[{int}]{nitems, }
+\item[{int}]{cycle, }
+\item[{Test\+Func}]{f}
+\end{DoxyParamCaption}
+)}\hypertarget{data_8hpp_a3f60001db133eff96da81b29a43cc8a4}{}\label{data_8hpp_a3f60001db133eff96da81b29a43cc8a4}
+
+
+Ensure array has cycling values of some function f mod n. Given an array, this function will rearrange the values to ensure that the integer function passed in has values which cycle. For example, if a cycle length of four is specified, the values will be made to run 0,1,2,3,0,1,2,3. This is done in-\/place. 
+
+The input function has the signature (int)(T). In the shuffling code we use it takes a pointer to the data of the example. 
+
+Definition at line 26 of file data.\+hpp.
+

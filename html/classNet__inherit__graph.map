@@ -1,0 +1,6 @@
+<map id="Net" name="Net">
+<area shape="rect" id="node2" href="$classBPNet.html" title="The &quot;basic&quot; back&#45;propagation network using a logistic sigmoid, as described by Rumelhart, Hinton and Williams (and many others). This class is used by output blending and h&#45;as&#45;input networks. " alt="" coords="67,80,128,107"/>
+<area shape="rect" id="node5" href="$classOutputBlendingNet.html" title="A modulatory network architecture which uses two plain backprop networks, each of which is trained se..." alt="" coords="153,80,285,107"/>
+<area shape="rect" id="node3" href="$classHInputNet.html" title="A modulatory network architecture which uses a plain backprop network with an extra input to carry th..." alt="" coords="5,155,88,181"/>
+<area shape="rect" id="node4" href="$classUESNet.html" title="The UESMANN network, which it itself based on the BPNet code as it has the same architecture as the p..." alt="" coords="113,155,183,181"/>
+</map>

@@ -1,0 +1,17 @@
+\form#0:\[ \frac{1}{N\cdot N_{outs}}\sum^N_{e \in Examples} \sum_{i=0}^{N_{outs}} (e_o(i) - e_y(i))^2 \]
+\form#1:$N$
+\form#2:$N_{outs}$
+\form#3:$e_o(i)$
+\form#4:$e$
+\form#5:$e_y(i)$
+\form#6:$y=a+b$
+\form#7:$y=(a+b)*0.3$
+\form#8:$h$
+\form#9:\[ y = \sigma\left(b+(h+1)\sum_i w_i x_i\right), \]
+\form#10:$y$
+\form#11:$\sigma$
+\form#12:$\sigma(x) = \frac{1}{1+e^{-x}}$
+\form#13:$b$
+\form#14:$w_i$
+\form#15:$x_i$
+\form#16:$\frac{\partial C}{\partial w_i(1+h) }$

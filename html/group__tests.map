@@ -1,0 +1,6 @@
+<map id="Unit tests" name="Unit tests">
+<area shape="rect" id="node2" href="$group__saveloadtests.html" title="save and load tests." alt="" coords="156,5,296,32"/>
+<area shape="rect" id="node3" href="$group__booleantests.html" title="Testing modulatory\l networks transitioning\l from XOR to AND" alt="" coords="149,56,303,112"/>
+<area shape="rect" id="node4" href="$group__basictests.html" title="Core functionality\l tests" alt="" coords="164,135,288,177"/>
+<area shape="rect" id="node5" href="$group__testtrainbasic.html" title="Training a plain unmodulated\l network" alt="" coords="132,201,320,242"/>
+</map>

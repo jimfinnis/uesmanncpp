@@ -1,0 +1,189 @@
+\hypertarget{classHInputNet}{}\section{H\+Input\+Net Class Reference}
+\label{classHInputNet}\index{H\+Input\+Net@{H\+Input\+Net}}
+
+
+A modulatory network architecture which uses a plain backprop network with an extra input to carry the modulator.  
+
+
+
+
+{\ttfamily \#include $<$hinet.\+hpp$>$}
+
+
+
+Inheritance diagram for H\+Input\+Net\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=142pt]{classHInputNet__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for H\+Input\+Net\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=142pt]{classHInputNet__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classHInputNet_ab2690ea39a7b4b1c532fc01eac9bfc10}{H\+Input\+Net} (int nlayers, const int $\ast$layer\+Counts)
+\begin{DoxyCompactList}\small\item\em Constructor -\/ does not initialise the weights to random values so that we can reinitialise networks. Uses the non-\/initialising constructor \hyperlink{classBPNet_ad9b8ec22ef6319ebda7b3ac996b76f3e}{B\+P\+Net\+::\+B\+P\+Net()}, changes the layer count and initialises. \end{DoxyCompactList}\item 
+virtual \hyperlink{classHInputNet_aa8446ceabf8f34187ee08d61d22db6f7}{$\sim$\+H\+Input\+Net} ()
+\begin{DoxyCompactList}\small\item\em destructor \end{DoxyCompactList}\item 
+virtual int \hyperlink{classHInputNet_a70a98f13c5a0ee60aaa28438dfc734f8}{get\+Layer\+Size} (int n) const 
+\begin{DoxyCompactList}\small\item\em Get the number of nodes in a given layer. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classHInputNet_a3ac18a3e39fc58647052518e507ae378}{setH} (double h)
+\begin{DoxyCompactList}\small\item\em Set the modulator level for subsequent runs and training of this network. \end{DoxyCompactList}\item 
+virtual double \hyperlink{classHInputNet_aa79dc2d56582978e28661e0f6163d163}{getH} () const 
+\begin{DoxyCompactList}\small\item\em get the modulator level \end{DoxyCompactList}\item 
+virtual void \hyperlink{classHInputNet_a2c463ec5781f9e84865747e8bb085065}{set\+Inputs} (double $\ast$d)
+\begin{DoxyCompactList}\small\item\em Set the inputs to the network before running or training. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+A modulatory network architecture which uses a plain backprop network with an extra input to carry the modulator. 
+
+Definition at line 17 of file hinet.\+hpp.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{H\+Input\+Net@{H\+Input\+Net}!H\+Input\+Net@{H\+Input\+Net}}
+\index{H\+Input\+Net@{H\+Input\+Net}!H\+Input\+Net@{H\+Input\+Net}}
+\subsubsection[{\texorpdfstring{H\+Input\+Net(int nlayers, const int $\ast$layer\+Counts)}{HInputNet(int nlayers, const int *layerCounts)}}]{\setlength{\rightskip}{0pt plus 5cm}H\+Input\+Net\+::\+H\+Input\+Net (
+\begin{DoxyParamCaption}
+\item[{int}]{nlayers, }
+\item[{const int $\ast$}]{layer\+Counts}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classHInputNet_ab2690ea39a7b4b1c532fc01eac9bfc10}{}\label{classHInputNet_ab2690ea39a7b4b1c532fc01eac9bfc10}
+
+
+Constructor -\/ does not initialise the weights to random values so that we can reinitialise networks. Uses the non-\/initialising constructor \hyperlink{classBPNet_ad9b8ec22ef6319ebda7b3ac996b76f3e}{B\+P\+Net\+::\+B\+P\+Net()}, changes the layer count and initialises. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em nlayers} & number of layers \\
+\hline
+{\em layer\+Counts} & array of layer counts \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 32 of file hinet.\+hpp.
+
+\index{H\+Input\+Net@{H\+Input\+Net}!````~H\+Input\+Net@{$\sim$\+H\+Input\+Net}}
+\index{````~H\+Input\+Net@{$\sim$\+H\+Input\+Net}!H\+Input\+Net@{H\+Input\+Net}}
+\subsubsection[{\texorpdfstring{$\sim$\+H\+Input\+Net()}{~HInputNet()}}]{\setlength{\rightskip}{0pt plus 5cm}virtual H\+Input\+Net\+::$\sim$\+H\+Input\+Net (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classHInputNet_aa8446ceabf8f34187ee08d61d22db6f7}{}\label{classHInputNet_aa8446ceabf8f34187ee08d61d22db6f7}
+
+
+destructor 
+
+
+
+Definition at line 54 of file hinet.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\index{H\+Input\+Net@{H\+Input\+Net}!getH@{getH}}
+\index{getH@{getH}!H\+Input\+Net@{H\+Input\+Net}}
+\subsubsection[{\texorpdfstring{get\+H() const }{getH() const }}]{\setlength{\rightskip}{0pt plus 5cm}virtual double H\+Input\+Net\+::getH (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classHInputNet_aa79dc2d56582978e28661e0f6163d163}{}\label{classHInputNet_aa79dc2d56582978e28661e0f6163d163}
+
+
+get the modulator level 
+
+
+
+Reimplemented from \hyperlink{classBPNet_aef1082e622022f25bee51013fab29aa0}{B\+P\+Net}.
+
+
+
+Definition at line 68 of file hinet.\+hpp.
+
+\index{H\+Input\+Net@{H\+Input\+Net}!get\+Layer\+Size@{get\+Layer\+Size}}
+\index{get\+Layer\+Size@{get\+Layer\+Size}!H\+Input\+Net@{H\+Input\+Net}}
+\subsubsection[{\texorpdfstring{get\+Layer\+Size(int n) const }{getLayerSize(int n) const }}]{\setlength{\rightskip}{0pt plus 5cm}virtual int H\+Input\+Net\+::get\+Layer\+Size (
+\begin{DoxyParamCaption}
+\item[{int}]{n}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classHInputNet_a70a98f13c5a0ee60aaa28438dfc734f8}{}\label{classHInputNet_a70a98f13c5a0ee60aaa28438dfc734f8}
+
+
+Get the number of nodes in a given layer. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & layer number \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classBPNet_afbf10480c672d8a6e3cbf4071f447cc8}{B\+P\+Net}.
+
+
+
+Definition at line 57 of file hinet.\+hpp.
+
+\index{H\+Input\+Net@{H\+Input\+Net}!setH@{setH}}
+\index{setH@{setH}!H\+Input\+Net@{H\+Input\+Net}}
+\subsubsection[{\texorpdfstring{set\+H(double h)}{setH(double h)}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void H\+Input\+Net\+::setH (
+\begin{DoxyParamCaption}
+\item[{double}]{h}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classHInputNet_a3ac18a3e39fc58647052518e507ae378}{}\label{classHInputNet_a3ac18a3e39fc58647052518e507ae378}
+
+
+Set the modulator level for subsequent runs and training of this network. 
+
+
+
+Reimplemented from \hyperlink{classBPNet_a98fa374aec169a3e741f2ce96fac7094}{B\+P\+Net}.
+
+
+
+Definition at line 64 of file hinet.\+hpp.
+
+\index{H\+Input\+Net@{H\+Input\+Net}!set\+Inputs@{set\+Inputs}}
+\index{set\+Inputs@{set\+Inputs}!H\+Input\+Net@{H\+Input\+Net}}
+\subsubsection[{\texorpdfstring{set\+Inputs(double $\ast$d)}{setInputs(double *d)}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void H\+Input\+Net\+::set\+Inputs (
+\begin{DoxyParamCaption}
+\item[{double $\ast$}]{d}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classHInputNet_a2c463ec5781f9e84865747e8bb085065}{}\label{classHInputNet_a2c463ec5781f9e84865747e8bb085065}
+
+
+Set the inputs to the network before running or training. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em d} & array of doubles, the size of the input layer \\
+\hline
+\end{DoxyParams}
+
+
+Reimplemented from \hyperlink{classBPNet_ad95c2a033ee8246637a6ce55e685429a}{B\+P\+Net}.
+
+
+
+Definition at line 72 of file hinet.\+hpp.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/travis/build/jimfinnis/uesmanncpp/\hyperlink{hinet_8hpp}{hinet.\+hpp}\end{DoxyCompactItemize}

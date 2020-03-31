@@ -1,0 +1,6 @@
+<map id="/home/travis/build/jimfinnis/uesmanncpp/test.hpp" name="/home/travis/build/jimfinnis/uesmanncpp/test.hpp">
+<area shape="rect" id="node2" href="$testBasic_8cpp.html" title="Basic tests of underlying functionality, or things which only take a short time to run! ..." alt="" coords="5,109,157,165"/>
+<area shape="rect" id="node3" href="$testSaveLoad_8cpp.html" title="Tests of loading and saving. These work by generating random networks, running them, and load/save cycling them to see if the params are the same. " alt="" coords="181,109,333,165"/>
+<area shape="rect" id="node4" href="$testTrainBasic_8cpp.html" title="Tests of basic training. " alt="" coords="357,109,509,165"/>
+<area shape="rect" id="node5" href="$testTrainBooleans_8cpp.html" title="Simple boolean tests for modulation. " alt="" coords="534,109,690,165"/>
+</map>

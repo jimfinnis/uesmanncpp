@@ -1,0 +1,210 @@
+\hypertarget{classUESNet}{}\section{U\+E\+S\+Net Class Reference}
+\label{classUESNet}\index{U\+E\+S\+Net@{U\+E\+S\+Net}}
+
+
+The U\+E\+S\+M\+A\+NN network, which it itself based on the \hyperlink{classBPNet}{B\+P\+Net} code as it has the same architecture as the plain M\+LP.  
+
+
+
+
+{\ttfamily \#include $<$uesnet.\+hpp$>$}
+
+
+
+Inheritance diagram for U\+E\+S\+Net\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=133pt]{classUESNet__inherit__graph}
+\end{center}
+\end{figure}
+
+
+Collaboration diagram for U\+E\+S\+Net\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=133pt]{classUESNet__coll__graph}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classUESNet_a8ce49ce5f9785756347b67e2ab4f7d1e}{U\+E\+S\+Net} (int nlayers, const int $\ast$layer\+Counts)
+\begin{DoxyCompactList}\small\item\em The constructor is mostly identical to the \hyperlink{classBPNet}{B\+P\+Net} constructor. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classUESNet_ad05de4582dd40ae714fce3f9b0d3d2ca}{setH} (double h)
+\begin{DoxyCompactList}\small\item\em Set the modulator level for subsequent runs and training of this network. \end{DoxyCompactList}\item 
+virtual double \hyperlink{classUESNet_a421efc8741f28e65931e2b8affa7c149}{getH} () const 
+\begin{DoxyCompactList}\small\item\em get the modulator level \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Protected Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classUESNet_afce4ee930898f0b93c147167adc9bac6}{calc\+Error} (double $\ast$in, double $\ast$out)
+\item 
+virtual void \hyperlink{classUESNet_a1d05fcd3ce9f188db8841a9d6fc6c56c}{update} ()
+\begin{DoxyCompactList}\small\item\em Run a single update of the network. \end{DoxyCompactList}\item 
+virtual double \hyperlink{classUESNet_ac27da7319d8be1507ea80506e69437e5}{train\+Batch} (\hyperlink{classExampleSet}{Example\+Set} \&ex, int start, int num, double eta)
+\begin{DoxyCompactList}\small\item\em Train a network for batch (or mini-\/batch) (or single example). \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Additional Inherited Members}
+
+
+\subsection{Detailed Description}
+The U\+E\+S\+M\+A\+NN network, which it itself based on the \hyperlink{classBPNet}{B\+P\+Net} code as it has the same architecture as the plain M\+LP. 
+
+Definition at line 17 of file uesnet.\+hpp.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{U\+E\+S\+Net@{U\+E\+S\+Net}!U\+E\+S\+Net@{U\+E\+S\+Net}}
+\index{U\+E\+S\+Net@{U\+E\+S\+Net}!U\+E\+S\+Net@{U\+E\+S\+Net}}
+\subsubsection[{\texorpdfstring{U\+E\+S\+Net(int nlayers, const int $\ast$layer\+Counts)}{UESNet(int nlayers, const int *layerCounts)}}]{\setlength{\rightskip}{0pt plus 5cm}U\+E\+S\+Net\+::\+U\+E\+S\+Net (
+\begin{DoxyParamCaption}
+\item[{int}]{nlayers, }
+\item[{const int $\ast$}]{layer\+Counts}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{classUESNet_a8ce49ce5f9785756347b67e2ab4f7d1e}{}\label{classUESNet_a8ce49ce5f9785756347b67e2ab4f7d1e}
+
+
+The constructor is mostly identical to the \hyperlink{classBPNet}{B\+P\+Net} constructor. 
+
+
+
+Definition at line 28 of file uesnet.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\index{U\+E\+S\+Net@{U\+E\+S\+Net}!calc\+Error@{calc\+Error}}
+\index{calc\+Error@{calc\+Error}!U\+E\+S\+Net@{U\+E\+S\+Net}}
+\subsubsection[{\texorpdfstring{calc\+Error(double $\ast$in, double $\ast$out)}{calcError(double *in, double *out)}}]{\setlength{\rightskip}{0pt plus 5cm}void U\+E\+S\+Net\+::calc\+Error (
+\begin{DoxyParamCaption}
+\item[{double $\ast$}]{in, }
+\item[{double $\ast$}]{out}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}}\hypertarget{classUESNet_afce4ee930898f0b93c147167adc9bac6}{}\label{classUESNet_afce4ee930898f0b93c147167adc9bac6}
+
+
+Definition at line 46 of file uesnet.\+hpp.
+
+\index{U\+E\+S\+Net@{U\+E\+S\+Net}!getH@{getH}}
+\index{getH@{getH}!U\+E\+S\+Net@{U\+E\+S\+Net}}
+\subsubsection[{\texorpdfstring{get\+H() const }{getH() const }}]{\setlength{\rightskip}{0pt plus 5cm}virtual double U\+E\+S\+Net\+::getH (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+) const\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classUESNet_a421efc8741f28e65931e2b8affa7c149}{}\label{classUESNet_a421efc8741f28e65931e2b8affa7c149}
+
+
+get the modulator level 
+
+
+
+Reimplemented from \hyperlink{classBPNet_aef1082e622022f25bee51013fab29aa0}{B\+P\+Net}.
+
+
+
+Definition at line 40 of file uesnet.\+hpp.
+
+\index{U\+E\+S\+Net@{U\+E\+S\+Net}!setH@{setH}}
+\index{setH@{setH}!U\+E\+S\+Net@{U\+E\+S\+Net}}
+\subsubsection[{\texorpdfstring{set\+H(double h)}{setH(double h)}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void U\+E\+S\+Net\+::setH (
+\begin{DoxyParamCaption}
+\item[{double}]{h}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\hypertarget{classUESNet_ad05de4582dd40ae714fce3f9b0d3d2ca}{}\label{classUESNet_ad05de4582dd40ae714fce3f9b0d3d2ca}
+
+
+Set the modulator level for subsequent runs and training of this network. 
+
+
+
+Reimplemented from \hyperlink{classBPNet_a98fa374aec169a3e741f2ce96fac7094}{B\+P\+Net}.
+
+
+
+Definition at line 36 of file uesnet.\+hpp.
+
+\index{U\+E\+S\+Net@{U\+E\+S\+Net}!train\+Batch@{train\+Batch}}
+\index{train\+Batch@{train\+Batch}!U\+E\+S\+Net@{U\+E\+S\+Net}}
+\subsubsection[{\texorpdfstring{train\+Batch(\+Example\+Set \&ex, int start, int num, double eta)}{trainBatch(ExampleSet &ex, int start, int num, double eta)}}]{\setlength{\rightskip}{0pt plus 5cm}virtual double U\+E\+S\+Net\+::train\+Batch (
+\begin{DoxyParamCaption}
+\item[{{\bf Example\+Set} \&}]{ex, }
+\item[{int}]{start, }
+\item[{int}]{num, }
+\item[{double}]{eta}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}\hypertarget{classUESNet_ac27da7319d8be1507ea80506e69437e5}{}\label{classUESNet_ac27da7319d8be1507ea80506e69437e5}
+
+
+Train a network for batch (or mini-\/batch) (or single example). 
+
+This will
+\begin{DoxyItemize}
+\item zero the average gradient variables for all weights and biases
+\item zero the total error
+\item for each example
+\begin{DoxyItemize}
+\item calculate the error with \hyperlink{classUESNet_afce4ee930898f0b93c147167adc9bac6}{calc\+Error()} which itself calls \hyperlink{classUESNet_a1d05fcd3ce9f188db8841a9d6fc6c56c}{update()}
+\item add to the total mean squared error (see N\+O\+TE below)
+\end{DoxyItemize}
+\item for each weight and bias
+\begin{DoxyItemize}
+\item calculate the means across all provided examples
+\item apply the mean to the weight or bias
+\end{DoxyItemize}
+\item return the mean squared error (N\+O\+TE\+: different from original, which returned mean absolute error) for all outputs and examples\+: \[ \frac{1}{N\cdot N_{outs}}\sum^N_{e \in Examples} \sum_{i=0}^{N_{outs}} (e_o(i) - e_y(i))^2 \] where $N$ is the number of examples, $N_{outs}$ is the number of outputs, $e_o(i)$ is network\textquotesingle{}s output for example $e$, and $e_y(i)$ is the desired output for the same example. 
+\begin{DoxyParams}{Parameters}
+{\em ex} & example set \\
+\hline
+{\em start} & index of first example to use \\
+\hline
+{\em num} & number of examples. For a single example, you\textquotesingle{}d just use 1. \\
+\hline
+{\em eta} & learning rate \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the sum of mean squared errors in the output layer (see formula in method documentation) 
+\end{DoxyReturn}
+
+\end{DoxyItemize}
+
+Reimplemented from \hyperlink{classBPNet_a3f820464f3338ed7305e9de950cd2103}{B\+P\+Net}.
+
+
+
+Definition at line 90 of file uesnet.\+hpp.
+
+\index{U\+E\+S\+Net@{U\+E\+S\+Net}!update@{update}}
+\index{update@{update}!U\+E\+S\+Net@{U\+E\+S\+Net}}
+\subsubsection[{\texorpdfstring{update()}{update()}}]{\setlength{\rightskip}{0pt plus 5cm}virtual void U\+E\+S\+Net\+::update (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [protected]}, {\ttfamily [virtual]}}\hypertarget{classUESNet_a1d05fcd3ce9f188db8841a9d6fc6c56c}{}\label{classUESNet_a1d05fcd3ce9f188db8841a9d6fc6c56c}
+
+
+Run a single update of the network. 
+
+\begin{DoxyPrecond}{Precondition}
+input layer must be filled with values 
+\end{DoxyPrecond}
+\begin{DoxyPostcond}{Postcondition}
+output layer contains result 
+\end{DoxyPostcond}
+
+
+Reimplemented from \hyperlink{classBPNet_af60f5bfa6cb7dffd75a9a127b811a208}{B\+P\+Net}.
+
+
+
+Definition at line 76 of file uesnet.\+hpp.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/travis/build/jimfinnis/uesmanncpp/\hyperlink{uesnet_8hpp}{uesnet.\+hpp}\end{DoxyCompactItemize}

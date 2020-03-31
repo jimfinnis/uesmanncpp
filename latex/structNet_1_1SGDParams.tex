@@ -1,0 +1,432 @@
+\hypertarget{structNet_1_1SGDParams}{}\section{Net\+:\+:S\+G\+D\+Params Struct Reference}
+\label{structNet_1_1SGDParams}\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+
+
+Training parameters for \hyperlink{classNet_a4e527a7773eed5fb071b78ef3a636c95}{train\+S\+G\+D()}. This structure holds the parameters for the \hyperlink{classNet_a4e527a7773eed5fb071b78ef3a636c95}{train\+S\+G\+D()} method, and serves as a better way of passing them than a long parameter list. All values have defaults set up by the constructor, which are given as constants. You can set parameters by hand, but there are fluent (chainable) setters for many members.  
+
+
+
+
+{\ttfamily \#include $<$net.\+hpp$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{structNet_1_1SGDParams}{S\+G\+D\+Params} \& \hyperlink{structNet_1_1SGDParams_a12b0553a033fdfcdb966ec47279f98eb}{cross\+Validation\+Manual} (int slices, int nperslice, int interval)
+\begin{DoxyCompactList}\small\item\em fluent setter for cross-\/validation parameters manually; consider using cross\+Validation instead \end{DoxyCompactList}\item 
+\hyperlink{structNet_1_1SGDParams}{S\+G\+D\+Params} \& \hyperlink{structNet_1_1SGDParams_a2eceadbbd44c7658f953d0ca44a06345}{set\+Shuffle} (\hyperlink{classExampleSet_afcdcdbc9a02c53864997e334d8bae33d}{Example\+Set\+::\+Shuffle\+Mode} m)
+\begin{DoxyCompactList}\small\item\em fluent setter for preserve\+H\+Alternation \end{DoxyCompactList}\item 
+\hyperlink{structNet_1_1SGDParams}{S\+G\+D\+Params} \& \hyperlink{structNet_1_1SGDParams_ab705e0fa2d8775534c4cdfa89a299fce}{set\+Select\+Best\+With\+CV} (bool v=true)
+\begin{DoxyCompactList}\small\item\em fluent setter for select\+Best\+With\+CV \end{DoxyCompactList}\item 
+\hyperlink{structNet_1_1SGDParams}{S\+G\+D\+Params} \& \hyperlink{structNet_1_1SGDParams_ae5a768a4f9b457617f181f026cd8769e}{set\+C\+V\+Shuffle} (bool v=true)
+\begin{DoxyCompactList}\small\item\em fluent setter for cv\+Shuffle \end{DoxyCompactList}\item 
+\hyperlink{structNet_1_1SGDParams}{S\+G\+D\+Params} \& \hyperlink{structNet_1_1SGDParams_a1fc17f8b602dc5364423216f28b2642c}{set\+Init\+Range} (double range=-\/1)
+\begin{DoxyCompactList}\small\item\em fluent setter for initrange \end{DoxyCompactList}\item 
+\hyperlink{structNet_1_1SGDParams}{S\+G\+D\+Params} \& \hyperlink{structNet_1_1SGDParams_aaa6dc6375f537218c24124a099877011}{set\+Seed} (long v)
+\begin{DoxyCompactList}\small\item\em fluent setter for seed \end{DoxyCompactList}\item 
+\hyperlink{structNet_1_1SGDParams_a54c15623be2b308f0bb012039ed55a66}{S\+G\+D\+Params} (double \+\_\+eta, int \+\_\+iters)
+\begin{DoxyCompactList}\small\item\em Constructor which sets up defaults with no information about examples -\/ cross-\/validation is not set up by default, but can be done by calling \hyperlink{structNet_1_1SGDParams_a1e613f79f5f6e86acd5cc4b5d306d314}{cross\+Validation()} or \hyperlink{structNet_1_1SGDParams_a12b0553a033fdfcdb966ec47279f98eb}{cross\+Validation\+Manual()}. \end{DoxyCompactList}\item 
+\hyperlink{structNet_1_1SGDParams_a50ddf804d1214087ca428d19fa3a5a67}{S\+G\+D\+Params} (double \+\_\+eta, const \hyperlink{classExampleSet}{Example\+Set} \&examples, int \+\_\+iters)
+\item 
+\hyperlink{structNet_1_1SGDParams_afcb9a8760902fad34d0f5fd59974bbf5}{$\sim$\+S\+G\+D\+Params} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+\hyperlink{structNet_1_1SGDParams}{S\+G\+D\+Params} \& \hyperlink{structNet_1_1SGDParams_a1e613f79f5f6e86acd5cc4b5d306d314}{cross\+Validation} (const \hyperlink{classExampleSet}{Example\+Set} \&examples, double prop\+CV, int cv\+Count, int cv\+Slices, bool cv\+Shuf=true)
+\begin{DoxyCompactList}\small\item\em Set up the cross-\/validation parameters given the full training set, the proportion to be used for CV, the number of CV events in the training run, and the number of CV slices to use. \end{DoxyCompactList}\item 
+\hyperlink{structNet_1_1SGDParams}{S\+G\+D\+Params} \& \hyperlink{structNet_1_1SGDParams_a471378bcdc9310b7b03f3245649939ce}{store\+Best} ()
+\begin{DoxyCompactList}\small\item\em set up a \char`\"{}best net buffer\char`\"{} to store the best network found, to which the network will be set on completion of training. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{structNet_1_1SGDParams_a6bcf8009821f63ec9b7564f51cdeb5e9}{iterations}
+\begin{DoxyCompactList}\small\item\em number of iterations to run\+: an iteration is the presentation of a single example, N\+OT an epoch (or occasionally pair-\/presentation) as is the case in the thesis when discussing the modulatory network types. \end{DoxyCompactList}\item 
+double \hyperlink{structNet_1_1SGDParams_a2a092a8727e9f04f40f9c037b7594e53}{eta}
+\item 
+int \hyperlink{structNet_1_1SGDParams_ad2881fd1737b7eca70fcc243b3d8f3e1}{n\+Slices}
+\begin{DoxyCompactList}\small\item\em The number of cross-\/validation slices to use. \end{DoxyCompactList}\item 
+int \hyperlink{structNet_1_1SGDParams_a99878fc2d2ab3a0a70de52d9c04b1a64}{n\+Per\+Slice}
+\begin{DoxyCompactList}\small\item\em the number of example per cross-\/validation slice \end{DoxyCompactList}\item 
+int \hyperlink{structNet_1_1SGDParams_abef7604394b7eac401efac3075f0445b}{cv\+Interval}
+\begin{DoxyCompactList}\small\item\em how often to cross-\/validate given as the interval between CV events\+: 1 is every iteration, 2 is every other iteration and so on. \end{DoxyCompactList}\item 
+\hyperlink{classExampleSet_afcdcdbc9a02c53864997e334d8bae33d}{Example\+Set\+::\+Shuffle\+Mode} \hyperlink{structNet_1_1SGDParams_add028f3b43c05649c3fb7dc0fa5f1658}{shuffle\+Mode}
+\begin{DoxyCompactList}\small\item\em The shuffle mode to use -\/ see the \hyperlink{classExampleSet_afcdcdbc9a02c53864997e334d8bae33d}{Example\+Set\+::\+Shuffle\+Mode} enum for details. \end{DoxyCompactList}\item 
+bool \hyperlink{structNet_1_1SGDParams_afc048bab4c4091714af1d1e8453a340f}{select\+Best\+With\+CV}
+\begin{DoxyCompactList}\small\item\em if true, use the minimum CV error to find the best net, otherwise use the training error. Note that if true, networks will only be tested when the cross-\/validation runs. \end{DoxyCompactList}\item 
+bool \hyperlink{structNet_1_1SGDParams_abe9b79b9386b8c16c6e8eb4e2f623f49}{cv\+Shuffle}
+\begin{DoxyCompactList}\small\item\em if true, shuffle the entire CV data set when all slices have been done so that the cross-\/validation has (effectively) a new set of slices each time. \end{DoxyCompactList}\item 
+int \hyperlink{structNet_1_1SGDParams_a72a223aa181553352d9f607522448925}{initrange}
+\begin{DoxyCompactList}\small\item\em range of initial weights/biases \mbox{[}-\/n,n\mbox{]}, or -\/1 for Bishop\textquotesingle{}s rule. \end{DoxyCompactList}\item 
+long \hyperlink{structNet_1_1SGDParams_a66a44dda4f26cb33c3f787383a2a493b}{seed}
+\begin{DoxyCompactList}\small\item\em seed for random number generator used to initialise weights and also perform shuffling \end{DoxyCompactList}\item 
+double $\ast$ \hyperlink{structNet_1_1SGDParams_a2372741f5e570248863ca0cc254fb1c1}{best\+Net\+Buffer}
+\begin{DoxyCompactList}\small\item\em a buffer of at least \hyperlink{classNet_a18dfc4bbf338d5167e787edefef8cd43}{get\+Data\+Size()} bytes for the best network. If N\+U\+LL, the best network is not saved. \end{DoxyCompactList}\item 
+bool \hyperlink{structNet_1_1SGDParams_a518755a6c39fa50f2e5683c3f495f1d0}{store\+Best\+Net}
+\begin{DoxyCompactList}\small\item\em true if we should store the best net data \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{structNet_1_1SGDParams_a18aff2af13a58cdbdf65a107df14ec07}{Net}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Training parameters for \hyperlink{classNet_a4e527a7773eed5fb071b78ef3a636c95}{train\+S\+G\+D()}. This structure holds the parameters for the \hyperlink{classNet_a4e527a7773eed5fb071b78ef3a636c95}{train\+S\+G\+D()} method, and serves as a better way of passing them than a long parameter list. All values have defaults set up by the constructor, which are given as constants. You can set parameters by hand, but there are fluent (chainable) setters for many members. 
+
+Definition at line 173 of file net.\+hpp.
+
+
+
+\subsection{Constructor \& Destructor Documentation}
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!S\+G\+D\+Params@{S\+G\+D\+Params}}
+\index{S\+G\+D\+Params@{S\+G\+D\+Params}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{S\+G\+D\+Params(double \+\_\+eta, int \+\_\+iters)}{SGDParams(double _eta, int _iters)}}]{\setlength{\rightskip}{0pt plus 5cm}Net\+::\+S\+G\+D\+Params\+::\+S\+G\+D\+Params (
+\begin{DoxyParamCaption}
+\item[{double}]{\+\_\+eta, }
+\item[{int}]{\+\_\+iters}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structNet_1_1SGDParams_a54c15623be2b308f0bb012039ed55a66}{}\label{structNet_1_1SGDParams_a54c15623be2b308f0bb012039ed55a66}
+
+
+Constructor which sets up defaults with no information about examples -\/ cross-\/validation is not set up by default, but can be done by calling \hyperlink{structNet_1_1SGDParams_a1e613f79f5f6e86acd5cc4b5d306d314}{cross\+Validation()} or \hyperlink{structNet_1_1SGDParams_a12b0553a033fdfcdb966ec47279f98eb}{cross\+Validation\+Manual()}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+eta} & learning rate to use \\
+\hline
+{\em \+\_\+iters} & number of iterations to run\+: an iteration is the presentation of a single example, N\+OT a pair-\/presentation as is the case in the thesis when discussing the modulatory network types. \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 323 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!S\+G\+D\+Params@{S\+G\+D\+Params}}
+\index{S\+G\+D\+Params@{S\+G\+D\+Params}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{S\+G\+D\+Params(double \+\_\+eta, const Example\+Set \&examples, int \+\_\+iters)}{SGDParams(double _eta, const ExampleSet &examples, int _iters)}}]{\setlength{\rightskip}{0pt plus 5cm}Net\+::\+S\+G\+D\+Params\+::\+S\+G\+D\+Params (
+\begin{DoxyParamCaption}
+\item[{double}]{\+\_\+eta, }
+\item[{const {\bf Example\+Set} \&}]{examples, }
+\item[{int}]{\+\_\+iters}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structNet_1_1SGDParams_a50ddf804d1214087ca428d19fa3a5a67}{}\label{structNet_1_1SGDParams_a50ddf804d1214087ca428d19fa3a5a67}
+Alternative constructor which uses the examples to calculate the number of iterations from an epoch count 
+
+Definition at line 332 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!````~S\+G\+D\+Params@{$\sim$\+S\+G\+D\+Params}}
+\index{````~S\+G\+D\+Params@{$\sim$\+S\+G\+D\+Params}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{$\sim$\+S\+G\+D\+Params()}{~SGDParams()}}]{\setlength{\rightskip}{0pt plus 5cm}Net\+::\+S\+G\+D\+Params\+::$\sim$\+S\+G\+D\+Params (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structNet_1_1SGDParams_afcb9a8760902fad34d0f5fd59974bbf5}{}\label{structNet_1_1SGDParams_afcb9a8760902fad34d0f5fd59974bbf5}
+
+
+Destructor. 
+
+
+
+Definition at line 340 of file net.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!cross\+Validation@{cross\+Validation}}
+\index{cross\+Validation@{cross\+Validation}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{cross\+Validation(const Example\+Set \&examples, double prop\+C\+V, int cv\+Count, int cv\+Slices, bool cv\+Shuf=true)}{crossValidation(const ExampleSet &examples, double propCV, int cvCount, int cvSlices, bool cvShuf=true)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf S\+G\+D\+Params}\& Net\+::\+S\+G\+D\+Params\+::cross\+Validation (
+\begin{DoxyParamCaption}
+\item[{const {\bf Example\+Set} \&}]{examples, }
+\item[{double}]{prop\+CV, }
+\item[{int}]{cv\+Count, }
+\item[{int}]{cv\+Slices, }
+\item[{bool}]{cv\+Shuf = {\ttfamily true}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structNet_1_1SGDParams_a1e613f79f5f6e86acd5cc4b5d306d314}{}\label{structNet_1_1SGDParams_a1e613f79f5f6e86acd5cc4b5d306d314}
+
+
+Set up the cross-\/validation parameters given the full training set, the proportion to be used for CV, the number of CV events in the training run, and the number of CV slices to use. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em examples} & the example set we will train with \\
+\hline
+{\em prop\+CV} & the proportion of the training set to use for cross-\/validation \\
+\hline
+{\em cv\+Count} & the desired number of cross-\/validation events across the training run \\
+\hline
+{\em cv\+Slices} & the desired number of cross-\/validation slices \\
+\hline
+{\em cv\+Shuf} & should cv\+Shuffle be true? \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a reference to this, so we can do fluent chains. 
+\end{DoxyReturn}
+
+
+Definition at line 356 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!cross\+Validation\+Manual@{cross\+Validation\+Manual}}
+\index{cross\+Validation\+Manual@{cross\+Validation\+Manual}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{cross\+Validation\+Manual(int slices, int nperslice, int interval)}{crossValidationManual(int slices, int nperslice, int interval)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf S\+G\+D\+Params}\& Net\+::\+S\+G\+D\+Params\+::cross\+Validation\+Manual (
+\begin{DoxyParamCaption}
+\item[{int}]{slices, }
+\item[{int}]{nperslice, }
+\item[{int}]{interval}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structNet_1_1SGDParams_a12b0553a033fdfcdb966ec47279f98eb}{}\label{structNet_1_1SGDParams_a12b0553a033fdfcdb966ec47279f98eb}
+
+
+fluent setter for cross-\/validation parameters manually; consider using cross\+Validation instead 
+
+
+\begin{DoxyParams}{Parameters}
+{\em slices} & number of slices \\
+\hline
+{\em nperslice} & number of examples per slice \\
+\hline
+{\em interval} & iteration interval for cross-\/validation events \\
+\hline
+\end{DoxyParams}
+
+
+Definition at line 210 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!set\+C\+V\+Shuffle@{set\+C\+V\+Shuffle}}
+\index{set\+C\+V\+Shuffle@{set\+C\+V\+Shuffle}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{set\+C\+V\+Shuffle(bool v=true)}{setCVShuffle(bool v=true)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf S\+G\+D\+Params}\& Net\+::\+S\+G\+D\+Params\+::set\+C\+V\+Shuffle (
+\begin{DoxyParamCaption}
+\item[{bool}]{v = {\ttfamily true}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structNet_1_1SGDParams_ae5a768a4f9b457617f181f026cd8769e}{}\label{structNet_1_1SGDParams_ae5a768a4f9b457617f181f026cd8769e}
+
+
+fluent setter for cv\+Shuffle 
+
+
+
+Definition at line 252 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!set\+Init\+Range@{set\+Init\+Range}}
+\index{set\+Init\+Range@{set\+Init\+Range}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{set\+Init\+Range(double range=-\/1)}{setInitRange(double range=-1)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf S\+G\+D\+Params}\& Net\+::\+S\+G\+D\+Params\+::set\+Init\+Range (
+\begin{DoxyParamCaption}
+\item[{double}]{range = {\ttfamily -\/1}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structNet_1_1SGDParams_a1fc17f8b602dc5364423216f28b2642c}{}\label{structNet_1_1SGDParams_a1fc17f8b602dc5364423216f28b2642c}
+
+
+fluent setter for initrange 
+
+
+
+Definition at line 263 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!set\+Seed@{set\+Seed}}
+\index{set\+Seed@{set\+Seed}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{set\+Seed(long v)}{setSeed(long v)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf S\+G\+D\+Params}\& Net\+::\+S\+G\+D\+Params\+::set\+Seed (
+\begin{DoxyParamCaption}
+\item[{long}]{v}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structNet_1_1SGDParams_aaa6dc6375f537218c24124a099877011}{}\label{structNet_1_1SGDParams_aaa6dc6375f537218c24124a099877011}
+
+
+fluent setter for seed 
+
+
+
+Definition at line 275 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!set\+Select\+Best\+With\+CV@{set\+Select\+Best\+With\+CV}}
+\index{set\+Select\+Best\+With\+CV@{set\+Select\+Best\+With\+CV}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{set\+Select\+Best\+With\+C\+V(bool v=true)}{setSelectBestWithCV(bool v=true)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf S\+G\+D\+Params}\& Net\+::\+S\+G\+D\+Params\+::set\+Select\+Best\+With\+CV (
+\begin{DoxyParamCaption}
+\item[{bool}]{v = {\ttfamily true}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structNet_1_1SGDParams_ab705e0fa2d8775534c4cdfa89a299fce}{}\label{structNet_1_1SGDParams_ab705e0fa2d8775534c4cdfa89a299fce}
+
+
+fluent setter for select\+Best\+With\+CV 
+
+
+
+Definition at line 239 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!set\+Shuffle@{set\+Shuffle}}
+\index{set\+Shuffle@{set\+Shuffle}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{set\+Shuffle(\+Example\+Set\+::\+Shuffle\+Mode m)}{setShuffle(ExampleSet::ShuffleMode m)}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf S\+G\+D\+Params}\& Net\+::\+S\+G\+D\+Params\+::set\+Shuffle (
+\begin{DoxyParamCaption}
+\item[{{\bf Example\+Set\+::\+Shuffle\+Mode}}]{m}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structNet_1_1SGDParams_a2eceadbbd44c7658f953d0ca44a06345}{}\label{structNet_1_1SGDParams_a2eceadbbd44c7658f953d0ca44a06345}
+
+
+fluent setter for preserve\+H\+Alternation 
+
+
+
+Definition at line 224 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!store\+Best@{store\+Best}}
+\index{store\+Best@{store\+Best}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{store\+Best()}{storeBest()}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf S\+G\+D\+Params}\& Net\+::\+S\+G\+D\+Params\+::store\+Best (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\hypertarget{structNet_1_1SGDParams_a471378bcdc9310b7b03f3245649939ce}{}\label{structNet_1_1SGDParams_a471378bcdc9310b7b03f3245649939ce}
+
+
+set up a \char`\"{}best net buffer\char`\"{} to store the best network found, to which the network will be set on completion of training. 
+
+\begin{DoxyReturn}{Returns}
+a reference to this, so we can do fluent chains. 
+\end{DoxyReturn}
+
+
+Definition at line 394 of file net.\+hpp.
+
+
+
+\subsection{Friends And Related Function Documentation}
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!Net@{Net}}
+\index{Net@{Net}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{Net}{Net}}]{\setlength{\rightskip}{0pt plus 5cm}friend class {\bf Net}\hspace{0.3cm}{\ttfamily [friend]}}\hypertarget{structNet_1_1SGDParams_a18aff2af13a58cdbdf65a107df14ec07}{}\label{structNet_1_1SGDParams_a18aff2af13a58cdbdf65a107df14ec07}
+
+
+Definition at line 174 of file net.\+hpp.
+
+
+
+\subsection{Member Data Documentation}
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!best\+Net\+Buffer@{best\+Net\+Buffer}}
+\index{best\+Net\+Buffer@{best\+Net\+Buffer}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{best\+Net\+Buffer}{bestNetBuffer}}]{\setlength{\rightskip}{0pt plus 5cm}double$\ast$ Net\+::\+S\+G\+D\+Params\+::best\+Net\+Buffer}\hypertarget{structNet_1_1SGDParams_a2372741f5e570248863ca0cc254fb1c1}{}\label{structNet_1_1SGDParams_a2372741f5e570248863ca0cc254fb1c1}
+
+
+a buffer of at least \hyperlink{classNet_a18dfc4bbf338d5167e787edefef8cd43}{get\+Data\+Size()} bytes for the best network. If N\+U\+LL, the best network is not saved. 
+
+
+
+Definition at line 284 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!cv\+Interval@{cv\+Interval}}
+\index{cv\+Interval@{cv\+Interval}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{cv\+Interval}{cvInterval}}]{\setlength{\rightskip}{0pt plus 5cm}int Net\+::\+S\+G\+D\+Params\+::cv\+Interval}\hypertarget{structNet_1_1SGDParams_abef7604394b7eac401efac3075f0445b}{}\label{structNet_1_1SGDParams_abef7604394b7eac401efac3075f0445b}
+
+
+how often to cross-\/validate given as the interval between CV events\+: 1 is every iteration, 2 is every other iteration and so on. 
+
+
+
+Definition at line 203 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!cv\+Shuffle@{cv\+Shuffle}}
+\index{cv\+Shuffle@{cv\+Shuffle}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{cv\+Shuffle}{cvShuffle}}]{\setlength{\rightskip}{0pt plus 5cm}bool Net\+::\+S\+G\+D\+Params\+::cv\+Shuffle}\hypertarget{structNet_1_1SGDParams_abe9b79b9386b8c16c6e8eb4e2f623f49}{}\label{structNet_1_1SGDParams_abe9b79b9386b8c16c6e8eb4e2f623f49}
+
+
+if true, shuffle the entire CV data set when all slices have been done so that the cross-\/validation has (effectively) a new set of slices each time. 
+
+
+
+Definition at line 249 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!eta@{eta}}
+\index{eta@{eta}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{eta}{eta}}]{\setlength{\rightskip}{0pt plus 5cm}double Net\+::\+S\+G\+D\+Params\+::eta}\hypertarget{structNet_1_1SGDParams_a2a092a8727e9f04f40f9c037b7594e53}{}\label{structNet_1_1SGDParams_a2a092a8727e9f04f40f9c037b7594e53}
+The learning rate to use 
+
+Definition at line 186 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!initrange@{initrange}}
+\index{initrange@{initrange}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{initrange}{initrange}}]{\setlength{\rightskip}{0pt plus 5cm}int Net\+::\+S\+G\+D\+Params\+::initrange}\hypertarget{structNet_1_1SGDParams_a72a223aa181553352d9f607522448925}{}\label{structNet_1_1SGDParams_a72a223aa181553352d9f607522448925}
+
+
+range of initial weights/biases \mbox{[}-\/n,n\mbox{]}, or -\/1 for Bishop\textquotesingle{}s rule. 
+
+
+
+Definition at line 260 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!iterations@{iterations}}
+\index{iterations@{iterations}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{iterations}{iterations}}]{\setlength{\rightskip}{0pt plus 5cm}int Net\+::\+S\+G\+D\+Params\+::iterations}\hypertarget{structNet_1_1SGDParams_a6bcf8009821f63ec9b7564f51cdeb5e9}{}\label{structNet_1_1SGDParams_a6bcf8009821f63ec9b7564f51cdeb5e9}
+
+
+number of iterations to run\+: an iteration is the presentation of a single example, N\+OT an epoch (or occasionally pair-\/presentation) as is the case in the thesis when discussing the modulatory network types. 
+
+
+
+Definition at line 181 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!n\+Per\+Slice@{n\+Per\+Slice}}
+\index{n\+Per\+Slice@{n\+Per\+Slice}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{n\+Per\+Slice}{nPerSlice}}]{\setlength{\rightskip}{0pt plus 5cm}int Net\+::\+S\+G\+D\+Params\+::n\+Per\+Slice}\hypertarget{structNet_1_1SGDParams_a99878fc2d2ab3a0a70de52d9c04b1a64}{}\label{structNet_1_1SGDParams_a99878fc2d2ab3a0a70de52d9c04b1a64}
+
+
+the number of example per cross-\/validation slice 
+
+
+
+Definition at line 197 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!n\+Slices@{n\+Slices}}
+\index{n\+Slices@{n\+Slices}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{n\+Slices}{nSlices}}]{\setlength{\rightskip}{0pt plus 5cm}int Net\+::\+S\+G\+D\+Params\+::n\+Slices}\hypertarget{structNet_1_1SGDParams_ad2881fd1737b7eca70fcc243b3d8f3e1}{}\label{structNet_1_1SGDParams_ad2881fd1737b7eca70fcc243b3d8f3e1}
+
+
+The number of cross-\/validation slices to use. 
+
+
+
+Definition at line 192 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!seed@{seed}}
+\index{seed@{seed}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{seed}{seed}}]{\setlength{\rightskip}{0pt plus 5cm}long Net\+::\+S\+G\+D\+Params\+::seed}\hypertarget{structNet_1_1SGDParams_a66a44dda4f26cb33c3f787383a2a493b}{}\label{structNet_1_1SGDParams_a66a44dda4f26cb33c3f787383a2a493b}
+
+
+seed for random number generator used to initialise weights and also perform shuffling 
+
+
+
+Definition at line 272 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!select\+Best\+With\+CV@{select\+Best\+With\+CV}}
+\index{select\+Best\+With\+CV@{select\+Best\+With\+CV}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{select\+Best\+With\+CV}{selectBestWithCV}}]{\setlength{\rightskip}{0pt plus 5cm}bool Net\+::\+S\+G\+D\+Params\+::select\+Best\+With\+CV}\hypertarget{structNet_1_1SGDParams_afc048bab4c4091714af1d1e8453a340f}{}\label{structNet_1_1SGDParams_afc048bab4c4091714af1d1e8453a340f}
+
+
+if true, use the minimum CV error to find the best net, otherwise use the training error. Note that if true, networks will only be tested when the cross-\/validation runs. 
+
+
+
+Definition at line 236 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!shuffle\+Mode@{shuffle\+Mode}}
+\index{shuffle\+Mode@{shuffle\+Mode}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{shuffle\+Mode}{shuffleMode}}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Example\+Set\+::\+Shuffle\+Mode} Net\+::\+S\+G\+D\+Params\+::shuffle\+Mode}\hypertarget{structNet_1_1SGDParams_add028f3b43c05649c3fb7dc0fa5f1658}{}\label{structNet_1_1SGDParams_add028f3b43c05649c3fb7dc0fa5f1658}
+
+
+The shuffle mode to use -\/ see the \hyperlink{classExampleSet_afcdcdbc9a02c53864997e334d8bae33d}{Example\+Set\+::\+Shuffle\+Mode} enum for details. 
+
+
+
+Definition at line 221 of file net.\+hpp.
+
+\index{Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}!store\+Best\+Net@{store\+Best\+Net}}
+\index{store\+Best\+Net@{store\+Best\+Net}!Net\+::\+S\+G\+D\+Params@{Net\+::\+S\+G\+D\+Params}}
+\subsubsection[{\texorpdfstring{store\+Best\+Net}{storeBestNet}}]{\setlength{\rightskip}{0pt plus 5cm}bool Net\+::\+S\+G\+D\+Params\+::store\+Best\+Net}\hypertarget{structNet_1_1SGDParams_a518755a6c39fa50f2e5683c3f495f1d0}{}\label{structNet_1_1SGDParams_a518755a6c39fa50f2e5683c3f495f1d0}
+
+
+true if we should store the best net data 
+
+
+
+Definition at line 289 of file net.\+hpp.
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/travis/build/jimfinnis/uesmanncpp/\hyperlink{net_8hpp}{net.\+hpp}\end{DoxyCompactItemize}

@@ -1,0 +1,98 @@
+\hypertarget{classNetFactory}{}\section{Net\+Factory Class Reference}
+\label{classNetFactory}\index{Net\+Factory@{Net\+Factory}}
+
+
+This class -\/ really a namespace -\/ contains functions which create, load or save networks of all types.  
+
+
+
+
+{\ttfamily \#include $<$net\+Factory.\+hpp$>$}
+
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static \hyperlink{classNet}{Net} $\ast$ \hyperlink{classNetFactory_abee207e81a04a7abf08e1f50bc2fe000}{make\+Net} (\hyperlink{netType_8hpp_a1526df0fc932ccf720aa26267f923213}{Net\+Type} t, \hyperlink{classExampleSet}{Example\+Set} \&e, int hnodes)
+\begin{DoxyCompactList}\small\item\em Construct a single hidden layer network of a given type which conforms to the example set. \end{DoxyCompactList}\item 
+static \hyperlink{classNet}{Net} $\ast$ \hyperlink{classNetFactory_acfea78d60ab00b1921e4abc83dcb774e}{make\+Net} (\hyperlink{netType_8hpp_a1526df0fc932ccf720aa26267f923213}{Net\+Type} t, int layercount, int $\ast$layers)
+\item 
+static \hyperlink{classNet}{Net} $\ast$ \hyperlink{classNetFactory_a58df46a362afbe6739a49c07fac08455}{load} (const char $\ast$fn)
+\begin{DoxyCompactList}\small\item\em Load a network of any type from a file -\/ note, endianness not checked! \end{DoxyCompactList}\item 
+static void \hyperlink{classNetFactory_ae31873d8b18faf8a2af58772d171bc97}{save} (const char $\ast$fn, \hyperlink{classNet}{Net} $\ast$n)
+\begin{DoxyCompactList}\small\item\em Save a net of any type to a file -\/ note, endianness not checked! \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class -\/ really a namespace -\/ contains functions which create, load or save networks of all types. 
+
+Definition at line 24 of file net\+Factory.\+hpp.
+
+
+
+\subsection{Member Function Documentation}
+\index{Net\+Factory@{Net\+Factory}!load@{load}}
+\index{load@{load}!Net\+Factory@{Net\+Factory}}
+\subsubsection[{\texorpdfstring{load(const char $\ast$fn)}{load(const char *fn)}}]{\setlength{\rightskip}{0pt plus 5cm}static {\bf Net}$\ast$ Net\+Factory\+::load (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{fn}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\hypertarget{classNetFactory_a58df46a362afbe6739a49c07fac08455}{}\label{classNetFactory_a58df46a362afbe6739a49c07fac08455}
+
+
+Load a network of any type from a file -\/ note, endianness not checked! 
+
+
+
+Definition at line 61 of file net\+Factory.\+hpp.
+
+\index{Net\+Factory@{Net\+Factory}!make\+Net@{make\+Net}}
+\index{make\+Net@{make\+Net}!Net\+Factory@{Net\+Factory}}
+\subsubsection[{\texorpdfstring{make\+Net(\+Net\+Type t, Example\+Set \&e, int hnodes)}{makeNet(NetType t, ExampleSet &e, int hnodes)}}]{\setlength{\rightskip}{0pt plus 5cm}static {\bf Net}$\ast$ Net\+Factory\+::make\+Net (
+\begin{DoxyParamCaption}
+\item[{{\bf Net\+Type}}]{t, }
+\item[{{\bf Example\+Set} \&}]{e, }
+\item[{int}]{hnodes}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\hypertarget{classNetFactory_abee207e81a04a7abf08e1f50bc2fe000}{}\label{classNetFactory_abee207e81a04a7abf08e1f50bc2fe000}
+
+
+Construct a single hidden layer network of a given type which conforms to the example set. 
+
+
+
+Definition at line 32 of file net\+Factory.\+hpp.
+
+\index{Net\+Factory@{Net\+Factory}!make\+Net@{make\+Net}}
+\index{make\+Net@{make\+Net}!Net\+Factory@{Net\+Factory}}
+\subsubsection[{\texorpdfstring{make\+Net(\+Net\+Type t, int layercount, int $\ast$layers)}{makeNet(NetType t, int layercount, int *layers)}}]{\setlength{\rightskip}{0pt plus 5cm}static {\bf Net}$\ast$ Net\+Factory\+::make\+Net (
+\begin{DoxyParamCaption}
+\item[{{\bf Net\+Type}}]{t, }
+\item[{int}]{layercount, }
+\item[{int $\ast$}]{layers}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\hypertarget{classNetFactory_acfea78d60ab00b1921e4abc83dcb774e}{}\label{classNetFactory_acfea78d60ab00b1921e4abc83dcb774e}
+
+
+Definition at line 43 of file net\+Factory.\+hpp.
+
+\index{Net\+Factory@{Net\+Factory}!save@{save}}
+\index{save@{save}!Net\+Factory@{Net\+Factory}}
+\subsubsection[{\texorpdfstring{save(const char $\ast$fn, Net $\ast$n)}{save(const char *fn, Net *n)}}]{\setlength{\rightskip}{0pt plus 5cm}static void Net\+Factory\+::save (
+\begin{DoxyParamCaption}
+\item[{const char $\ast$}]{fn, }
+\item[{{\bf Net} $\ast$}]{n}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\hypertarget{classNetFactory_ae31873d8b18faf8a2af58772d171bc97}{}\label{classNetFactory_ae31873d8b18faf8a2af58772d171bc97}
+
+
+Save a net of any type to a file -\/ note, endianness not checked! 
+
+
+
+Definition at line 119 of file net\+Factory.\+hpp.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+/home/travis/build/jimfinnis/uesmanncpp/\hyperlink{netFactory_8hpp}{net\+Factory.\+hpp}\end{DoxyCompactItemize}
